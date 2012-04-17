@@ -1,0 +1,33 @@
+﻿生成启动时间为 2012-4-13 17:50:39。
+     1>项目“D:\xudayong\Program\TrafficaIMEI\TrafficaIMEI\TrafficaIMEI.vcxproj”在节点 2 上(rebuild 个目标)。
+     1>_PrepareForClean:
+         正在删除文件“x64\Release\TrafficaIMEI.lastbuildstate”。
+       InitializeBuildStatus:
+         正在对“x64\Release\TrafficaIMEI.unsuccessfulbuild”执行 Touch 任务。
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHa /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Yc"StdAfx.h" /Fp"x64\Release\TrafficaIMEI.pch" /Fo"x64\Release\\" /Fd"x64\Release\vc100.pdb" /Gd /TP /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHa /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /openmp /Yu"StdAfx.h" /Fp"x64\Release\TrafficaIMEI.pch" /Fo"x64\Release\\" /Fd"x64\Release\vc100.pdb" /Gd /TP /errorReport:prompt FileReadModule.cpp IMEIStatistic.cpp Main.cpp TACStatistics.cpp
+         FileReadModule.cpp
+         IMEIStatistic.cpp
+         Main.cpp
+         TACStatistics.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\xudayong\Program\TrafficaIMEI\x64\Release\TrafficaIMEI.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"x64\Release\TrafficaIMEI.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"D:\xudayong\Program\TrafficaIMEI\x64\Release\TrafficaIMEI.pdb" /SUBSYSTEM:CONSOLE /LARGEADDRESSAWARE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\xudayong\Program\TrafficaIMEI\x64\Release\TrafficaIMEI.lib" /MACHINE:X64 x64\Release\FileReadModule.obj
+         x64\Release\IMEIStatistic.obj
+         x64\Release\stdafx.obj
+         x64\Release\Main.obj
+         x64\Release\TACStatistics.obj
+         正在生成代码
+         已完成代码的生成
+         TrafficaIMEI.vcxproj -> D:\xudayong\Program\TrafficaIMEI\x64\Release\TrafficaIMEI.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"D:\xudayong\Program\TrafficaIMEI\x64\Release\TrafficaIMEI.exe;#1" /manifest x64\Release\TrafficaIMEI.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         正在删除文件“x64\Release\TrafficaIMEI.unsuccessfulbuild”。
+         正在对“x64\Release\TrafficaIMEI.lastbuildstate”执行 Touch 任务。
+     1>已完成生成项目“D:\xudayong\Program\TrafficaIMEI\TrafficaIMEI\TrafficaIMEI.vcxproj”(rebuild 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:11.31
