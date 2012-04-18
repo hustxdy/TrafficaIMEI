@@ -26,8 +26,40 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				for(int cr=0;cr<imeicdrfile[fn][temp_hash].size();cr++){
 					if(imeicdrfile[fn][temp_hash][cr].timeSection==cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection&&imeicdrfile[fn][temp_hash][cr].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI&&imeicdrfile[fn][temp_hash][cr].cellid==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_cell&&imeicdrfile[fn][temp_hash][cr].network=="GSM"){
 						isExistAcallendGSM=true;
-				
-						if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause==0){
+						
+						bool isExistCause=false;
+						for(int i=0;i<imeicdrfile[fn][temp_hash][cr].A_BSSMAP_Cause.size();i++){
+							if(imeicdrfile[fn][temp_hash][cr].A_BSSMAP_Cause[i].cause_id==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause){
+								isExistCause=true;
+								imeicdrfile[fn][temp_hash][cr].A_BSSMAP_Cause[i].cause_num++;
+								break;
+							}
+						}
+						if(isExistCause==false&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause!=DEFAULT_CAUSE_VALUE){
+							//需要新加入一个cause计数单元
+							CAUSE_TYPE tempcause;
+							tempcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause;
+							tempcause.cause_num=1;
+							imeicdrfile[fn][temp_hash][cr].A_BSSMAP_Cause.push_back(tempcause);
+						}
+
+						bool isExistDXCause=false;
+						for(int i=0;i<imeicdrfile[fn][temp_hash][cr].DX_Cause.size();i++){
+							if(imeicdrfile[fn][temp_hash][cr].DX_Cause[i].cause_id==cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause){
+								isExistDXCause=true;
+								imeicdrfile[fn][temp_hash][cr].DX_Cause[i].cause_num++;
+								break;
+							}
+						}
+						if(isExistDXCause==false&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause!=DEFAULT_CAUSE_VALUE){
+							//需要新加入一个cause计数单元
+							CAUSE_TYPE tempcause;
+							tempcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause;
+							tempcause.cause_num=1;
+							imeicdrfile[fn][temp_hash][cr].DX_Cause.push_back(tempcause);
+						}
+
+						/*if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause==0){
 							imeicdrfile[fn][temp_hash][cr].A_cause0++;
 							imeicdrfile[fn][temp_hash][cr].A_causeGSM++;
 						}
@@ -42,7 +74,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause==60){
 							imeicdrfile[fn][temp_hash][cr].A_cause60++;
 							imeicdrfile[fn][temp_hash][cr].A_causeGSM++;
-						}
+						}*/
 						break;
 					}
 				}
@@ -54,8 +86,37 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				for(int cr=0;cr<imeicdrfile[fn][temp_hash].size();cr++){
 					if(imeicdrfile[fn][temp_hash][cr].timeSection==cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection&&imeicdrfile[fn][temp_hash][cr].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI&&imeicdrfile[fn][temp_hash][cr].cellid==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_sac&&imeicdrfile[fn][temp_hash][cr].network=="TD"){
 						isExistAcallendTD=true;
-				
-						if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext==46){
+						bool isExistCause=false;
+						for(int i=0;i<imeicdrfile[fn][temp_hash][cr].A_RANAP_Cause.size();i++){
+							if(imeicdrfile[fn][temp_hash][cr].A_RANAP_Cause[i].cause_id==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext){
+								imeicdrfile[fn][temp_hash][cr].A_RANAP_Cause[i].cause_num++;
+								break;
+							}
+						}
+						if(isExistCause==false&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext!=DEFAULT_CAUSE_VALUE){
+							//需要新加入一个cause计数单元
+							CAUSE_TYPE tempcause;
+							tempcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext;
+							tempcause.cause_num=1;
+							imeicdrfile[fn][temp_hash][cr].A_RANAP_Cause.push_back(tempcause);
+						}
+
+						bool isExistDXCause=false;
+						for(int i=0;i<imeicdrfile[fn][temp_hash][cr].DX_Cause.size();i++){
+							if(imeicdrfile[fn][temp_hash][cr].DX_Cause[i].cause_id==cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause){
+								isExistDXCause=true;
+								imeicdrfile[fn][temp_hash][cr].DX_Cause[i].cause_num++;
+								break;
+							}
+						}
+						if(isExistDXCause==false&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause!=DEFAULT_CAUSE_VALUE){
+							//需要新加入一个cause计数单元
+							CAUSE_TYPE tempcause;
+							tempcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause;
+							tempcause.cause_num=1;
+							imeicdrfile[fn][temp_hash][cr].DX_Cause.push_back(tempcause);
+						}
+						/*if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext==46){
 							imeicdrfile[fn][temp_hash][cr].A_causeTD46++;
 							imeicdrfile[fn][temp_hash][cr].A_causeTDRadioNetwork++;
 							imeicdrfile[fn][temp_hash][cr].A_causeTD++;
@@ -107,7 +168,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext!=176&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext!=192&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext!=209&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext!=239&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext>=129&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext<=256){
 							imeicdrfile[fn][temp_hash][cr].A_causeTDNonStandard++;
 							imeicdrfile[fn][temp_hash][cr].A_causeTD++;
-						}
+						}*/
 						break;
 					}
 				}
@@ -175,23 +236,54 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				for(int cr=0;cr<imeicdrfile[fn][temp_hash].size();cr++){
 					if(imeicdrfile[fn][temp_hash][cr].timeSection==cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection&&imeicdrfile[fn][temp_hash][cr].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI&&imeicdrfile[fn][temp_hash][cr].cellid==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_cell&&imeicdrfile[fn][temp_hash][cr].network=="GSM"){
 						isExistBcallendGSM=true;
-					
-						if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause==0){
-							imeicdrfile[fn][temp_hash][cr].B_cause0++;
-							imeicdrfile[fn][temp_hash][cr].B_causeGSM++;
+						
+						bool isExistCause=false;
+						for(int i=0;i<imeicdrfile[fn][temp_hash][cr].B_BSSMAP_Cause.size();i++){
+							if(imeicdrfile[fn][temp_hash][cr].B_BSSMAP_Cause[i].cause_id==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause){
+								isExistCause=true;
+								imeicdrfile[fn][temp_hash][cr].B_BSSMAP_Cause[i].cause_num++;
+								break;
+							}
 						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause==1){
-							imeicdrfile[fn][temp_hash][cr].B_cause1++;
-							imeicdrfile[fn][temp_hash][cr].B_causeGSM++;
+						if(isExistCause==false&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause!=DEFAULT_CAUSE_VALUE){
+							//需要新加入一个cause计数单元
+							CAUSE_TYPE tempcause;
+							tempcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause;
+							tempcause.cause_num=1;
+							imeicdrfile[fn][temp_hash][cr].B_BSSMAP_Cause.push_back(tempcause);
 						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause==20){
-							imeicdrfile[fn][temp_hash][cr].B_cause20++;
-							imeicdrfile[fn][temp_hash][cr].B_causeGSM++;
+
+						bool isExistDXCause=false;
+						for(int i=0;i<imeicdrfile[fn][temp_hash][cr].DX_Cause.size();i++){
+							if(imeicdrfile[fn][temp_hash][cr].DX_Cause[i].cause_id==cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause){
+								isExistDXCause=true;
+								imeicdrfile[fn][temp_hash][cr].DX_Cause[i].cause_num++;
+								break;
+							}
 						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause==60){
-							imeicdrfile[fn][temp_hash][cr].B_cause60++;
-							imeicdrfile[fn][temp_hash][cr].B_causeGSM++;
+						if(isExistDXCause==false&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause!=DEFAULT_CAUSE_VALUE){
+							//需要新加入一个cause计数单元
+							CAUSE_TYPE tempcause;
+							tempcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause;
+							tempcause.cause_num=1;
+							imeicdrfile[fn][temp_hash][cr].DX_Cause.push_back(tempcause);
 						}
+						//if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause==0){
+						//	imeicdrfile[fn][temp_hash][cr].B_cause0++;
+						//	imeicdrfile[fn][temp_hash][cr].B_causeGSM++;
+						//}
+						//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause==1){
+						//	imeicdrfile[fn][temp_hash][cr].B_cause1++;
+						//	imeicdrfile[fn][temp_hash][cr].B_causeGSM++;
+						//}
+						//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause==20){
+						//	imeicdrfile[fn][temp_hash][cr].B_cause20++;
+						//	imeicdrfile[fn][temp_hash][cr].B_causeGSM++;
+						//}
+						//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause==60){
+						//	imeicdrfile[fn][temp_hash][cr].B_cause60++;
+						//	imeicdrfile[fn][temp_hash][cr].B_causeGSM++;
+						//}
 						break;
 					}
 				}
@@ -203,8 +295,38 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				for(int cr=0;cr<imeicdrfile[fn][temp_hash].size();cr++){
 					if(imeicdrfile[fn][temp_hash][cr].timeSection==cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection&&imeicdrfile[fn][temp_hash][cr].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI&&imeicdrfile[fn][temp_hash][cr].cellid==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_sac&&imeicdrfile[fn][temp_hash][cr].network=="TD"){
 						isExistBcallendTD=true;
-					
-						if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==46){
+						bool isExistCause=false;
+						for(int i=0;i<imeicdrfile[fn][temp_hash][cr].B_RANAP_Cause.size();i++){
+							if(imeicdrfile[fn][temp_hash][cr].B_RANAP_Cause[i].cause_id==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext){
+								isExistCause=true;
+								imeicdrfile[fn][temp_hash][cr].B_RANAP_Cause[i].cause_num++;
+								break;
+							}
+						}
+						if(isExistCause==false&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=DEFAULT_CAUSE_VALUE){
+							//需要新加入一个cause计数单元
+							CAUSE_TYPE tempcause;
+							tempcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext;
+							tempcause.cause_num=1;
+							imeicdrfile[fn][temp_hash][cr].B_RANAP_Cause.push_back(tempcause);
+						}
+
+						bool isExistDXCause=false;
+						for(int i=0;i<imeicdrfile[fn][temp_hash][cr].DX_Cause.size();i++){
+							if(imeicdrfile[fn][temp_hash][cr].DX_Cause[i].cause_id==cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause){
+								isExistDXCause=true;
+								imeicdrfile[fn][temp_hash][cr].DX_Cause[i].cause_num++;
+								break;
+							}
+						}
+						if(isExistDXCause==false&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause!=DEFAULT_CAUSE_VALUE){
+							//需要新加入一个cause计数单元
+							CAUSE_TYPE tempcause;
+							tempcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause;
+							tempcause.cause_num=1;
+							imeicdrfile[fn][temp_hash][cr].DX_Cause.push_back(tempcause);
+						}
+						/*if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==46){
 							imeicdrfile[fn][temp_hash][cr].B_causeTD46++;
 							imeicdrfile[fn][temp_hash][cr].B_causeTDRadioNetwork++;
 							imeicdrfile[fn][temp_hash][cr].B_causeTD++;
@@ -256,7 +378,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=176&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=192&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=209&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=239&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=129&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=256){
 							imeicdrfile[fn][temp_hash][cr].B_causeTDNonStandard++;
 							imeicdrfile[fn][temp_hash][cr].B_causeTD++;
-						}
+						}*/
 						break;
 					}
 				}
@@ -321,81 +443,35 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.A_call_attempt=0;
 			tempcdrstat.A_call_attempt_GSM=0;
 			tempcdrstat.A_call_attempt_TD=0;
-			tempcdrstat.A_causeTD=0;
-			tempcdrstat.A_causeTDMisc=0;
-			tempcdrstat.A_causeTD46=0;
-			tempcdrstat.A_causeTD176=0;
-			tempcdrstat.A_causeTD192=0;
-			tempcdrstat.A_causeTD209=0;
-			tempcdrstat.A_causeTD239=0;
-			tempcdrstat.A_causeTDNAS=0;
-			tempcdrstat.A_causeTDNonStandard=0;
-			tempcdrstat.A_causeTDProtocol=0;
-			tempcdrstat.A_causeTDRadioNetwork=0;
-			tempcdrstat.A_causeTDTransport=0;
+			tempcdrstat.A_BSSMAP_Cause.clear();
+			tempcdrstat.B_BSSMAP_Cause.clear();
+			tempcdrstat.A_RANAP_Cause.clear();
+			tempcdrstat.B_RANAP_Cause.clear();
+			tempcdrstat.DX_Cause.clear();
 			tempcdrstat.A_shortcall_1=0;
 			tempcdrstat.A_shortcall_2=0;
 			tempcdrstat.A_shortcall_3=0;
 			tempcdrstat.B_call_attempt=0;
 			tempcdrstat.B_call_attempt_GSM=0;
 			tempcdrstat.B_call_attempt_TD=0;
-			tempcdrstat.B_cause0=0;
-			tempcdrstat.B_cause1=0;
-			tempcdrstat.B_cause20=0;
-			tempcdrstat.B_cause60=0;
-			tempcdrstat.B_causeGSM=0;
-			tempcdrstat.B_causeTD=0;
-			tempcdrstat.B_causeTD46=0;
-			tempcdrstat.B_causeTD176=0;
-			tempcdrstat.B_causeTD192=0;
-			tempcdrstat.B_causeTD209=0;
-			tempcdrstat.B_causeTD239=0;
-			tempcdrstat.B_causeTDMisc=0;
-			tempcdrstat.B_causeTDNAS=0;
-			tempcdrstat.B_causeTDNonStandard=0;
-			tempcdrstat.B_causeTDProtocol=0;
-			tempcdrstat.B_causeTDRadioNetwork=0;
-			tempcdrstat.B_causeTDTransport=0;
 			tempcdrstat.B_shortcall_1=0;
 			tempcdrstat.B_shortcall_2=0;
 			tempcdrstat.B_shortcall_3=0;
 
-			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause==0){
-				tempcdrstat.A_cause0=1;
-				tempcdrstat.A_causeGSM=1;
-				tempcdrstat.A_cause1=0;
-				tempcdrstat.A_cause20=0;
-				tempcdrstat.A_cause60=0;
+			CAUSE_TYPE tempcause;
+			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause!=DEFAULT_CAUSE_VALUE){
+				tempcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause;
+				tempcause.cause_num=1;
+				tempcdrstat.A_BSSMAP_Cause.push_back(tempcause);
 			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause==1){
-				tempcdrstat.A_cause1=1;
-				tempcdrstat.A_causeGSM=1;
-				tempcdrstat.A_cause0=0;
-				tempcdrstat.A_cause20=0;
-				tempcdrstat.A_cause60=0;
+
+			CAUSE_TYPE tempDXcause;
+			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause!=DEFAULT_CAUSE_VALUE){
+				tempDXcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause;
+				tempDXcause.cause_num=1;
+				tempcdrstat.DX_Cause.push_back(tempDXcause);
 			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause==20){
-				tempcdrstat.A_cause20=1;
-				tempcdrstat.A_causeGSM=1;
-				tempcdrstat.A_cause1=0;
-				tempcdrstat.A_cause0=0;
-				tempcdrstat.A_cause60=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause==60){
-				tempcdrstat.A_cause60=1;
-				tempcdrstat.A_causeGSM=1;
-				tempcdrstat.A_cause1=0;
-				tempcdrstat.A_cause20=0;
-				tempcdrstat.A_cause0=0;
-			}
-			else{
-				tempcdrstat.A_cause60=0;
-				tempcdrstat.A_causeGSM=0;
-				tempcdrstat.A_cause1=0;
-				tempcdrstat.A_cause20=0;
-				tempcdrstat.A_cause0=0;
-			}
-			
+
 			int temp_hash=(int)pow((double)10,HASH_NUM_CELLID)*atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str())+cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_cell%((int)pow((double)10,HASH_NUM_CELLID));
 			imeicdrfile[fn][temp_hash].push_back(tempcdrstat);
 		}
@@ -411,39 +487,35 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.A_call_attempt=0;
 			tempcdrstat.A_call_attempt_GSM=0;
 			tempcdrstat.A_call_attempt_TD=0;
-			tempcdrstat.A_cause0=0;
-			tempcdrstat.A_cause1=0;
-			tempcdrstat.A_cause20=0;
-			tempcdrstat.A_cause60=0;
-			tempcdrstat.A_causeGSM=0;
+			tempcdrstat.A_BSSMAP_Cause.clear();
+			tempcdrstat.B_BSSMAP_Cause.clear();
+			tempcdrstat.A_RANAP_Cause.clear();
+			tempcdrstat.B_RANAP_Cause.clear();
+			tempcdrstat.DX_Cause.clear();
 			tempcdrstat.A_shortcall_1=0;
 			tempcdrstat.A_shortcall_2=0;
 			tempcdrstat.A_shortcall_3=0;
 			tempcdrstat.B_call_attempt=0;
 			tempcdrstat.B_call_attempt_GSM=0;
 			tempcdrstat.B_call_attempt_TD=0;
-			tempcdrstat.B_cause0=0;
-			tempcdrstat.B_cause1=0;
-			tempcdrstat.B_cause20=0;
-			tempcdrstat.B_cause60=0;
-			tempcdrstat.B_causeGSM=0;
-			tempcdrstat.B_causeTD=0;
-			tempcdrstat.B_causeTD46=0;
-			tempcdrstat.B_causeTD176=0;
-			tempcdrstat.B_causeTD192=0;
-			tempcdrstat.B_causeTD209=0;
-			tempcdrstat.B_causeTD239=0;
-			tempcdrstat.B_causeTDMisc=0;
-			tempcdrstat.B_causeTDNAS=0;
-			tempcdrstat.B_causeTDNonStandard=0;
-			tempcdrstat.B_causeTDProtocol=0;
-			tempcdrstat.B_causeTDRadioNetwork=0;
-			tempcdrstat.B_causeTDTransport=0;
 			tempcdrstat.B_shortcall_1=0;
 			tempcdrstat.B_shortcall_2=0;
 			tempcdrstat.B_shortcall_3=0;
 
-			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext==46){
+			CAUSE_TYPE tempcause;
+			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext!=DEFAULT_CAUSE_VALUE){
+				tempcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext;
+				tempcause.cause_num=1;
+				tempcdrstat.A_RANAP_Cause.push_back(tempcause);
+			}
+
+			CAUSE_TYPE tempDXcause;
+			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause!=DEFAULT_CAUSE_VALUE){
+				tempDXcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause;
+				tempDXcause.cause_num=1;
+				tempcdrstat.DX_Cause.push_back(tempDXcause);
+			}
+			/*if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext==46){
 				tempcdrstat.A_causeTD46=1;
 				tempcdrstat.A_causeTD176=0;
 				tempcdrstat.A_causeTD192=0;
@@ -624,7 +696,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				tempcdrstat.A_causeTDNAS=0;
 				tempcdrstat.A_causeTDProtocol=0;
 				tempcdrstat.A_causeTDTransport=0;
-			}
+			}*/
 			int temp_hash=(int)pow((double)10,HASH_NUM_CELLID)*atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str())+cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_sac%((int)pow((double)10,HASH_NUM_CELLID));
 			imeicdrfile[fn][temp_hash].push_back(tempcdrstat);
 		}
@@ -640,43 +712,14 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.A_call_attempt=1;
 			tempcdrstat.A_call_attempt_GSM=1;
 			tempcdrstat.A_call_attempt_TD=0;
-			tempcdrstat.A_cause0=0;
-			tempcdrstat.A_cause1=0;
-			tempcdrstat.A_cause20=0;
-			tempcdrstat.A_cause60=0;
-			tempcdrstat.A_causeGSM=0;
-			tempcdrstat.A_causeTDNonStandard=0;
-			tempcdrstat.A_causeTD=0;
-			tempcdrstat.A_causeTDRadioNetwork=0;
-			tempcdrstat.A_causeTD46=0;
-			tempcdrstat.A_causeTD176=0;
-			tempcdrstat.A_causeTD192=0;
-			tempcdrstat.A_causeTD209=0;
-			tempcdrstat.A_causeTD239=0;
-			tempcdrstat.A_causeTDMisc=0;
-			tempcdrstat.A_causeTDNAS=0;
-			tempcdrstat.A_causeTDProtocol=0;
-			tempcdrstat.A_causeTDTransport=0;
+			tempcdrstat.A_BSSMAP_Cause.clear();
+			tempcdrstat.B_BSSMAP_Cause.clear();
+			tempcdrstat.A_RANAP_Cause.clear();
+			tempcdrstat.B_RANAP_Cause.clear();
+			tempcdrstat.DX_Cause.clear();
 			tempcdrstat.B_call_attempt=0;
 			tempcdrstat.B_call_attempt_GSM=0;
 			tempcdrstat.B_call_attempt_TD=0;
-			tempcdrstat.B_cause0=0;
-			tempcdrstat.B_cause1=0;
-			tempcdrstat.B_cause20=0;
-			tempcdrstat.B_cause60=0;
-			tempcdrstat.B_causeGSM=0;
-			tempcdrstat.B_causeTD=0;
-			tempcdrstat.B_causeTD46=0;
-			tempcdrstat.B_causeTD176=0;
-			tempcdrstat.B_causeTD192=0;
-			tempcdrstat.B_causeTD209=0;
-			tempcdrstat.B_causeTD239=0;
-			tempcdrstat.B_causeTDMisc=0;
-			tempcdrstat.B_causeTDNAS=0;
-			tempcdrstat.B_causeTDNonStandard=0;
-			tempcdrstat.B_causeTDProtocol=0;
-			tempcdrstat.B_causeTDRadioNetwork=0;
-			tempcdrstat.B_causeTDTransport=0;
 			tempcdrstat.B_shortcall_1=0;
 			tempcdrstat.B_shortcall_2=0;
 			tempcdrstat.B_shortcall_3=0;
@@ -716,43 +759,14 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.A_call_attempt=1;
 			tempcdrstat.A_call_attempt_GSM=0;
 			tempcdrstat.A_call_attempt_TD=1;
-			tempcdrstat.A_cause0=0;
-			tempcdrstat.A_cause1=0;
-			tempcdrstat.A_cause20=0;
-			tempcdrstat.A_cause60=0;
-			tempcdrstat.A_causeGSM=0;
-			tempcdrstat.A_causeTDNonStandard=0;
-			tempcdrstat.A_causeTD=0;
-			tempcdrstat.A_causeTDRadioNetwork=0;
-			tempcdrstat.A_causeTD46=0;
-			tempcdrstat.A_causeTD176=0;
-			tempcdrstat.A_causeTD192=0;
-			tempcdrstat.A_causeTD209=0;
-			tempcdrstat.A_causeTD239=0;
-			tempcdrstat.A_causeTDMisc=0;
-			tempcdrstat.A_causeTDNAS=0;
-			tempcdrstat.A_causeTDProtocol=0;
-			tempcdrstat.A_causeTDTransport=0;
+			tempcdrstat.A_BSSMAP_Cause.clear();
+			tempcdrstat.B_BSSMAP_Cause.clear();
+			tempcdrstat.A_RANAP_Cause.clear();
+			tempcdrstat.B_RANAP_Cause.clear();
+			tempcdrstat.DX_Cause.clear();
 			tempcdrstat.B_call_attempt=0;
 			tempcdrstat.B_call_attempt_GSM=0;
 			tempcdrstat.B_call_attempt_TD=0;
-			tempcdrstat.B_cause0=0;
-			tempcdrstat.B_cause1=0;
-			tempcdrstat.B_cause20=0;
-			tempcdrstat.B_cause60=0;
-			tempcdrstat.B_causeGSM=0;
-			tempcdrstat.B_causeTD=0;
-			tempcdrstat.B_causeTD46=0;
-			tempcdrstat.B_causeTD176=0;
-			tempcdrstat.B_causeTD192=0;
-			tempcdrstat.B_causeTD209=0;
-			tempcdrstat.B_causeTD239=0;
-			tempcdrstat.B_causeTDMisc=0;
-			tempcdrstat.B_causeTDNAS=0;
-			tempcdrstat.B_causeTDNonStandard=0;
-			tempcdrstat.B_causeTDProtocol=0;
-			tempcdrstat.B_causeTDRadioNetwork=0;
-			tempcdrstat.B_causeTDTransport=0;
 			tempcdrstat.B_shortcall_1=0;
 			tempcdrstat.B_shortcall_2=0;
 			tempcdrstat.B_shortcall_3=0;
@@ -792,46 +806,35 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.A_call_attempt=0;
 			tempcdrstat.A_call_attempt_GSM=0;
 			tempcdrstat.A_call_attempt_TD=0;
-			tempcdrstat.A_cause0=0;
-			tempcdrstat.A_cause1=0;
-			tempcdrstat.A_cause20=0;
-			tempcdrstat.A_cause60=0;
-			tempcdrstat.A_causeGSM=0;
-			tempcdrstat.A_causeTD=0;
-			tempcdrstat.A_causeTDMisc=0;
-			tempcdrstat.A_causeTD46=0;
-			tempcdrstat.A_causeTD176=0;
-			tempcdrstat.A_causeTD192=0;
-			tempcdrstat.A_causeTD209=0;
-			tempcdrstat.A_causeTD239=0;
-			tempcdrstat.A_causeTDNAS=0;
-			tempcdrstat.A_causeTDNonStandard=0;
-			tempcdrstat.A_causeTDProtocol=0;
-			tempcdrstat.A_causeTDRadioNetwork=0;
-			tempcdrstat.A_causeTDTransport=0;
+			tempcdrstat.A_BSSMAP_Cause.clear();
+			tempcdrstat.B_BSSMAP_Cause.clear();
+			tempcdrstat.A_RANAP_Cause.clear();
+			tempcdrstat.B_RANAP_Cause.clear();
+			tempcdrstat.DX_Cause.clear();
 			tempcdrstat.A_shortcall_1=0;
 			tempcdrstat.A_shortcall_2=0;
 			tempcdrstat.A_shortcall_3=0;
 			tempcdrstat.B_call_attempt=0;
 			tempcdrstat.B_call_attempt_GSM=0;
 			tempcdrstat.B_call_attempt_TD=0;
-			tempcdrstat.B_causeTD=0;
-			tempcdrstat.B_causeTD46=0;
-			tempcdrstat.B_causeTD176=0;
-			tempcdrstat.B_causeTD192=0;
-			tempcdrstat.B_causeTD209=0;
-			tempcdrstat.B_causeTD239=0;
-			tempcdrstat.B_causeTDMisc=0;
-			tempcdrstat.B_causeTDNAS=0;
-			tempcdrstat.B_causeTDNonStandard=0;
-			tempcdrstat.B_causeTDProtocol=0;
-			tempcdrstat.B_causeTDRadioNetwork=0;
-			tempcdrstat.B_causeTDTransport=0;
 			tempcdrstat.B_shortcall_1=0;
 			tempcdrstat.B_shortcall_2=0;
 			tempcdrstat.B_shortcall_3=0;
 
-			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause==0){
+			CAUSE_TYPE tempcause;
+			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause!=DEFAULT_CAUSE_VALUE){
+				tempcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause;
+				tempcause.cause_num=1;
+				tempcdrstat.B_BSSMAP_Cause.push_back(tempcause);
+			}
+
+			CAUSE_TYPE tempDXcause;
+			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause!=DEFAULT_CAUSE_VALUE){
+				tempDXcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause;
+				tempDXcause.cause_num=1;
+				tempcdrstat.DX_Cause.push_back(tempDXcause);
+			}
+			/*if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause==0){
 				tempcdrstat.B_cause0=1;
 				tempcdrstat.B_causeGSM=1;
 				tempcdrstat.B_cause1=0;
@@ -865,7 +868,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				tempcdrstat.B_cause1=0;
 				tempcdrstat.B_cause20=0;
 				tempcdrstat.B_cause0=0;
-			}
+			}*/
 			
 			int temp_hash=(int)pow((double)10,HASH_NUM_CELLID)*atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str())+cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_cell%((int)pow((double)10,HASH_NUM_CELLID));
 			imeicdrfile[fn][temp_hash].push_back(tempcdrstat);
@@ -882,220 +885,216 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.A_call_attempt=0;
 			tempcdrstat.A_call_attempt_GSM=0;
 			tempcdrstat.A_call_attempt_TD=0;
-			tempcdrstat.A_cause0=0;
-			tempcdrstat.A_cause1=0;
-			tempcdrstat.A_cause20=0;
-			tempcdrstat.A_cause60=0;
-			tempcdrstat.A_causeGSM=0;
-			tempcdrstat.A_causeTD=0;
-			tempcdrstat.A_causeTD46=0;
-			tempcdrstat.A_causeTD176=0;
-			tempcdrstat.A_causeTD192=0;
-			tempcdrstat.A_causeTD209=0;
-			tempcdrstat.A_causeTD239=0;
-			tempcdrstat.A_causeTDMisc=0;
-			tempcdrstat.A_causeTDNAS=0;
-			tempcdrstat.A_causeTDNonStandard=0;
-			tempcdrstat.A_causeTDProtocol=0;
-			tempcdrstat.A_causeTDRadioNetwork=0;
-			tempcdrstat.A_causeTDTransport=0;
+			tempcdrstat.A_BSSMAP_Cause.clear();
+			tempcdrstat.B_BSSMAP_Cause.clear();
+			tempcdrstat.A_RANAP_Cause.clear();
+			tempcdrstat.B_RANAP_Cause.clear();
+			tempcdrstat.DX_Cause.clear();
 			tempcdrstat.A_shortcall_1=0;
 			tempcdrstat.A_shortcall_2=0;
 			tempcdrstat.A_shortcall_3=0;
 			tempcdrstat.B_call_attempt=0;
 			tempcdrstat.B_call_attempt_GSM=0;
-			tempcdrstat.B_call_attempt_TD=0;
-			tempcdrstat.B_cause0=0;
-			tempcdrstat.B_cause1=0;
-			tempcdrstat.B_cause20=0;
-			tempcdrstat.B_cause60=0;
-			tempcdrstat.B_causeGSM=0;			
+			tempcdrstat.B_call_attempt_TD=0;		
 			tempcdrstat.B_shortcall_1=0;
 			tempcdrstat.B_shortcall_2=0;
 			tempcdrstat.B_shortcall_3=0;
+			
+			CAUSE_TYPE tempcause;
+			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=DEFAULT_CAUSE_VALUE){
+				tempcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext;
+				tempcause.cause_num=1;
+				tempcdrstat.B_RANAP_Cause.push_back(tempcause);
+			}
 
-			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext==46){
-				tempcdrstat.B_causeTD46=1;
-				tempcdrstat.B_causeTD176=0;
-				tempcdrstat.B_causeTD192=0;
-				tempcdrstat.B_causeTD209=0;
-				tempcdrstat.B_causeTD239=0;
-				tempcdrstat.B_causeTDRadioNetwork=1;
-				tempcdrstat.B_causeTD=1;
-				tempcdrstat.B_causeTDMisc=0;
-				tempcdrstat.B_causeTDNAS=0;
-				tempcdrstat.B_causeTDNonStandard=0;
-				tempcdrstat.B_causeTDProtocol=0;
-				tempcdrstat.B_causeTDTransport=0;
+			CAUSE_TYPE tempDXcause;
+			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause!=DEFAULT_CAUSE_VALUE){
+				tempDXcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause;
+				tempDXcause.cause_num=1;
+				tempcdrstat.DX_Cause.push_back(tempDXcause);
 			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=46&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=1&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext<=64){
-				tempcdrstat.B_causeTDRadioNetwork=1;
-				tempcdrstat.B_causeTD=1;
-				tempcdrstat.B_causeTD46=0;
-				tempcdrstat.B_causeTD176=0;
-				tempcdrstat.B_causeTD192=0;
-				tempcdrstat.B_causeTD209=0;
-				tempcdrstat.B_causeTD239=0;
-				tempcdrstat.B_causeTDMisc=0;
-				tempcdrstat.B_causeTDNAS=0;
-				tempcdrstat.B_causeTDNonStandard=0;
-				tempcdrstat.B_causeTDProtocol=0;
-				tempcdrstat.B_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=257&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=512){
-				tempcdrstat.B_causeTDRadioNetwork=1;
-				tempcdrstat.B_causeTD=1;
-				tempcdrstat.B_causeTD46=0;
-				tempcdrstat.B_causeTD176=0;
-				tempcdrstat.B_causeTD192=0;
-				tempcdrstat.B_causeTD209=0;
-				tempcdrstat.B_causeTD239=0;
-				tempcdrstat.B_causeTDMisc=0;
-				tempcdrstat.B_causeTDNAS=0;
-				tempcdrstat.B_causeTDNonStandard=0;
-				tempcdrstat.B_causeTDProtocol=0;
-				tempcdrstat.B_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=65&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=80){
-				tempcdrstat.B_causeTDTransport=1;
-				tempcdrstat.B_causeTDRadioNetwork=0;
-				tempcdrstat.B_causeTD=1;
-				tempcdrstat.B_causeTD46=0;
-				tempcdrstat.B_causeTD176=0;
-				tempcdrstat.B_causeTD192=0;
-				tempcdrstat.B_causeTD209=0;
-				tempcdrstat.B_causeTD239=0;
-				tempcdrstat.B_causeTDMisc=0;
-				tempcdrstat.B_causeTDNAS=0;
-				tempcdrstat.B_causeTDNonStandard=0;
-				tempcdrstat.B_causeTDProtocol=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=81&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=96){
-				tempcdrstat.B_causeTDNAS=1;
-				tempcdrstat.B_causeTD=1;
-				tempcdrstat.B_causeTDRadioNetwork=0;
-				tempcdrstat.B_causeTD46=0;
-				tempcdrstat.B_causeTD176=0;
-				tempcdrstat.B_causeTD192=0;
-				tempcdrstat.B_causeTD209=0;
-				tempcdrstat.B_causeTD239=0;
-				tempcdrstat.B_causeTDMisc=0;
-				tempcdrstat.B_causeTDNonStandard=0;
-				tempcdrstat.B_causeTDProtocol=0;
-				tempcdrstat.B_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=97&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=112){
-				tempcdrstat.B_causeTDProtocol=1;
-				tempcdrstat.B_causeTD=1;
-				tempcdrstat.B_causeTDRadioNetwork=0;
-				tempcdrstat.B_causeTD46=0;
-				tempcdrstat.B_causeTD176=0;
-				tempcdrstat.B_causeTD192=0;
-				tempcdrstat.B_causeTD209=0;
-				tempcdrstat.B_causeTD239=0;
-				tempcdrstat.B_causeTDMisc=0;
-				tempcdrstat.B_causeTDNAS=0;
-				tempcdrstat.B_causeTDNonStandard=0;
-				tempcdrstat.B_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=113&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=128){
-				tempcdrstat.B_causeTDMisc=1;
-				tempcdrstat.B_causeTD=1;
-				tempcdrstat.B_causeTDRadioNetwork=0;
-				tempcdrstat.B_causeTD46=0;
-				tempcdrstat.B_causeTD176=0;
-				tempcdrstat.B_causeTD192=0;
-				tempcdrstat.B_causeTD209=0;
-				tempcdrstat.B_causeTD239=0;
-				tempcdrstat.B_causeTDNAS=0;
-				tempcdrstat.B_causeTDNonStandard=0;
-				tempcdrstat.B_causeTDProtocol=0;
-				tempcdrstat.B_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==176){
-				tempcdrstat.B_causeTDNonStandard=1;
-				tempcdrstat.B_causeTD=1;
-				tempcdrstat.B_causeTDRadioNetwork=0;
-				tempcdrstat.B_causeTD46=0;
-				tempcdrstat.B_causeTD176=1;
-				tempcdrstat.B_causeTD192=0;
-				tempcdrstat.B_causeTD209=0;
-				tempcdrstat.B_causeTD239=0;
-				tempcdrstat.B_causeTDMisc=0;
-				tempcdrstat.B_causeTDNAS=0;
-				tempcdrstat.B_causeTDProtocol=0;
-				tempcdrstat.B_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==192){
-				tempcdrstat.B_causeTDNonStandard=1;
-				tempcdrstat.B_causeTD=1;
-				tempcdrstat.B_causeTDRadioNetwork=0;
-				tempcdrstat.B_causeTD46=0;
-				tempcdrstat.B_causeTD176=0;
-				tempcdrstat.B_causeTD192=1;
-				tempcdrstat.B_causeTD209=0;
-				tempcdrstat.B_causeTD239=0;
-				tempcdrstat.B_causeTDMisc=0;
-				tempcdrstat.B_causeTDNAS=0;
-				tempcdrstat.B_causeTDProtocol=0;
-				tempcdrstat.B_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==209){
-				tempcdrstat.B_causeTDNonStandard=1;
-				tempcdrstat.B_causeTD=1;
-				tempcdrstat.B_causeTDRadioNetwork=0;
-				tempcdrstat.B_causeTD46=0;
-				tempcdrstat.B_causeTD176=0;
-				tempcdrstat.B_causeTD192=0;
-				tempcdrstat.B_causeTD209=1;
-				tempcdrstat.B_causeTD239=0;
-				tempcdrstat.B_causeTDMisc=0;
-				tempcdrstat.B_causeTDNAS=0;
-				tempcdrstat.B_causeTDProtocol=0;
-				tempcdrstat.B_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==239){
-				tempcdrstat.B_causeTDNonStandard=1;
-				tempcdrstat.B_causeTD=1;
-				tempcdrstat.B_causeTDRadioNetwork=0;
-				tempcdrstat.B_causeTD46=0;
-				tempcdrstat.B_causeTD176=0;
-				tempcdrstat.B_causeTD192=0;
-				tempcdrstat.B_causeTD209=0;
-				tempcdrstat.B_causeTD239=1;
-				tempcdrstat.B_causeTDMisc=0;
-				tempcdrstat.B_causeTDNAS=0;
-				tempcdrstat.B_causeTDProtocol=0;
-				tempcdrstat.B_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=176&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=192&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=209&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=239&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=129&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=256){
-				tempcdrstat.B_causeTDNonStandard=1;
-				tempcdrstat.B_causeTD=1;
-				tempcdrstat.B_causeTDRadioNetwork=0;
-				tempcdrstat.B_causeTD46=0;
-				tempcdrstat.B_causeTD176=0;
-				tempcdrstat.B_causeTD192=0;
-				tempcdrstat.B_causeTD209=0;
-				tempcdrstat.B_causeTD239=0;
-				tempcdrstat.B_causeTDMisc=0;
-				tempcdrstat.B_causeTDNAS=0;
-				tempcdrstat.B_causeTDProtocol=0;
-				tempcdrstat.B_causeTDTransport=0;
-			}
-			else{
-				tempcdrstat.B_causeTDNonStandard=0;
-				tempcdrstat.B_causeTD=0;
-				tempcdrstat.B_causeTDRadioNetwork=0;
-				tempcdrstat.B_causeTD46=0;
-				tempcdrstat.B_causeTD176=0;
-				tempcdrstat.B_causeTD192=0;
-				tempcdrstat.B_causeTD209=0;
-				tempcdrstat.B_causeTD239=0;
-				tempcdrstat.B_causeTDMisc=0;
-				tempcdrstat.B_causeTDNAS=0;
-				tempcdrstat.B_causeTDProtocol=0;
-				tempcdrstat.B_causeTDTransport=0;
-			}
+			//if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext==46){
+			//	tempcdrstat.B_causeTD46=1;
+			//	tempcdrstat.B_causeTD176=0;
+			//	tempcdrstat.B_causeTD192=0;
+			//	tempcdrstat.B_causeTD209=0;
+			//	tempcdrstat.B_causeTD239=0;
+			//	tempcdrstat.B_causeTDRadioNetwork=1;
+			//	tempcdrstat.B_causeTD=1;
+			//	tempcdrstat.B_causeTDMisc=0;
+			//	tempcdrstat.B_causeTDNAS=0;
+			//	tempcdrstat.B_causeTDNonStandard=0;
+			//	tempcdrstat.B_causeTDProtocol=0;
+			//	tempcdrstat.B_causeTDTransport=0;
+			//}
+			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=46&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=1&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext<=64){
+			//	tempcdrstat.B_causeTDRadioNetwork=1;
+			//	tempcdrstat.B_causeTD=1;
+			//	tempcdrstat.B_causeTD46=0;
+			//	tempcdrstat.B_causeTD176=0;
+			//	tempcdrstat.B_causeTD192=0;
+			//	tempcdrstat.B_causeTD209=0;
+			//	tempcdrstat.B_causeTD239=0;
+			//	tempcdrstat.B_causeTDMisc=0;
+			//	tempcdrstat.B_causeTDNAS=0;
+			//	tempcdrstat.B_causeTDNonStandard=0;
+			//	tempcdrstat.B_causeTDProtocol=0;
+			//	tempcdrstat.B_causeTDTransport=0;
+			//}
+			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=257&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=512){
+			//	tempcdrstat.B_causeTDRadioNetwork=1;
+			//	tempcdrstat.B_causeTD=1;
+			//	tempcdrstat.B_causeTD46=0;
+			//	tempcdrstat.B_causeTD176=0;
+			//	tempcdrstat.B_causeTD192=0;
+			//	tempcdrstat.B_causeTD209=0;
+			//	tempcdrstat.B_causeTD239=0;
+			//	tempcdrstat.B_causeTDMisc=0;
+			//	tempcdrstat.B_causeTDNAS=0;
+			//	tempcdrstat.B_causeTDNonStandard=0;
+			//	tempcdrstat.B_causeTDProtocol=0;
+			//	tempcdrstat.B_causeTDTransport=0;
+			//}
+			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=65&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=80){
+			//	tempcdrstat.B_causeTDTransport=1;
+			//	tempcdrstat.B_causeTDRadioNetwork=0;
+			//	tempcdrstat.B_causeTD=1;
+			//	tempcdrstat.B_causeTD46=0;
+			//	tempcdrstat.B_causeTD176=0;
+			//	tempcdrstat.B_causeTD192=0;
+			//	tempcdrstat.B_causeTD209=0;
+			//	tempcdrstat.B_causeTD239=0;
+			//	tempcdrstat.B_causeTDMisc=0;
+			//	tempcdrstat.B_causeTDNAS=0;
+			//	tempcdrstat.B_causeTDNonStandard=0;
+			//	tempcdrstat.B_causeTDProtocol=0;
+			//}
+			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=81&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=96){
+			//	tempcdrstat.B_causeTDNAS=1;
+			//	tempcdrstat.B_causeTD=1;
+			//	tempcdrstat.B_causeTDRadioNetwork=0;
+			//	tempcdrstat.B_causeTD46=0;
+			//	tempcdrstat.B_causeTD176=0;
+			//	tempcdrstat.B_causeTD192=0;
+			//	tempcdrstat.B_causeTD209=0;
+			//	tempcdrstat.B_causeTD239=0;
+			//	tempcdrstat.B_causeTDMisc=0;
+			//	tempcdrstat.B_causeTDNonStandard=0;
+			//	tempcdrstat.B_causeTDProtocol=0;
+			//	tempcdrstat.B_causeTDTransport=0;
+			//}
+			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=97&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=112){
+			//	tempcdrstat.B_causeTDProtocol=1;
+			//	tempcdrstat.B_causeTD=1;
+			//	tempcdrstat.B_causeTDRadioNetwork=0;
+			//	tempcdrstat.B_causeTD46=0;
+			//	tempcdrstat.B_causeTD176=0;
+			//	tempcdrstat.B_causeTD192=0;
+			//	tempcdrstat.B_causeTD209=0;
+			//	tempcdrstat.B_causeTD239=0;
+			//	tempcdrstat.B_causeTDMisc=0;
+			//	tempcdrstat.B_causeTDNAS=0;
+			//	tempcdrstat.B_causeTDNonStandard=0;
+			//	tempcdrstat.B_causeTDTransport=0;
+			//}
+			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=113&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=128){
+			//	tempcdrstat.B_causeTDMisc=1;
+			//	tempcdrstat.B_causeTD=1;
+			//	tempcdrstat.B_causeTDRadioNetwork=0;
+			//	tempcdrstat.B_causeTD46=0;
+			//	tempcdrstat.B_causeTD176=0;
+			//	tempcdrstat.B_causeTD192=0;
+			//	tempcdrstat.B_causeTD209=0;
+			//	tempcdrstat.B_causeTD239=0;
+			//	tempcdrstat.B_causeTDNAS=0;
+			//	tempcdrstat.B_causeTDNonStandard=0;
+			//	tempcdrstat.B_causeTDProtocol=0;
+			//	tempcdrstat.B_causeTDTransport=0;
+			//}
+			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==176){
+			//	tempcdrstat.B_causeTDNonStandard=1;
+			//	tempcdrstat.B_causeTD=1;
+			//	tempcdrstat.B_causeTDRadioNetwork=0;
+			//	tempcdrstat.B_causeTD46=0;
+			//	tempcdrstat.B_causeTD176=1;
+			//	tempcdrstat.B_causeTD192=0;
+			//	tempcdrstat.B_causeTD209=0;
+			//	tempcdrstat.B_causeTD239=0;
+			//	tempcdrstat.B_causeTDMisc=0;
+			//	tempcdrstat.B_causeTDNAS=0;
+			//	tempcdrstat.B_causeTDProtocol=0;
+			//	tempcdrstat.B_causeTDTransport=0;
+			//}
+			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==192){
+			//	tempcdrstat.B_causeTDNonStandard=1;
+			//	tempcdrstat.B_causeTD=1;
+			//	tempcdrstat.B_causeTDRadioNetwork=0;
+			//	tempcdrstat.B_causeTD46=0;
+			//	tempcdrstat.B_causeTD176=0;
+			//	tempcdrstat.B_causeTD192=1;
+			//	tempcdrstat.B_causeTD209=0;
+			//	tempcdrstat.B_causeTD239=0;
+			//	tempcdrstat.B_causeTDMisc=0;
+			//	tempcdrstat.B_causeTDNAS=0;
+			//	tempcdrstat.B_causeTDProtocol=0;
+			//	tempcdrstat.B_causeTDTransport=0;
+			//}
+			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==209){
+			//	tempcdrstat.B_causeTDNonStandard=1;
+			//	tempcdrstat.B_causeTD=1;
+			//	tempcdrstat.B_causeTDRadioNetwork=0;
+			//	tempcdrstat.B_causeTD46=0;
+			//	tempcdrstat.B_causeTD176=0;
+			//	tempcdrstat.B_causeTD192=0;
+			//	tempcdrstat.B_causeTD209=1;
+			//	tempcdrstat.B_causeTD239=0;
+			//	tempcdrstat.B_causeTDMisc=0;
+			//	tempcdrstat.B_causeTDNAS=0;
+			//	tempcdrstat.B_causeTDProtocol=0;
+			//	tempcdrstat.B_causeTDTransport=0;
+			//}
+			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==239){
+			//	tempcdrstat.B_causeTDNonStandard=1;
+			//	tempcdrstat.B_causeTD=1;
+			//	tempcdrstat.B_causeTDRadioNetwork=0;
+			//	tempcdrstat.B_causeTD46=0;
+			//	tempcdrstat.B_causeTD176=0;
+			//	tempcdrstat.B_causeTD192=0;
+			//	tempcdrstat.B_causeTD209=0;
+			//	tempcdrstat.B_causeTD239=1;
+			//	tempcdrstat.B_causeTDMisc=0;
+			//	tempcdrstat.B_causeTDNAS=0;
+			//	tempcdrstat.B_causeTDProtocol=0;
+			//	tempcdrstat.B_causeTDTransport=0;
+			//}
+			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=176&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=192&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=209&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=239&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=129&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=256){
+			//	tempcdrstat.B_causeTDNonStandard=1;
+			//	tempcdrstat.B_causeTD=1;
+			//	tempcdrstat.B_causeTDRadioNetwork=0;
+			//	tempcdrstat.B_causeTD46=0;
+			//	tempcdrstat.B_causeTD176=0;
+			//	tempcdrstat.B_causeTD192=0;
+			//	tempcdrstat.B_causeTD209=0;
+			//	tempcdrstat.B_causeTD239=0;
+			//	tempcdrstat.B_causeTDMisc=0;
+			//	tempcdrstat.B_causeTDNAS=0;
+			//	tempcdrstat.B_causeTDProtocol=0;
+			//	tempcdrstat.B_causeTDTransport=0;
+			//}
+			//else{
+			//	tempcdrstat.B_causeTDNonStandard=0;
+			//	tempcdrstat.B_causeTD=0;
+			//	tempcdrstat.B_causeTDRadioNetwork=0;
+			//	tempcdrstat.B_causeTD46=0;
+			//	tempcdrstat.B_causeTD176=0;
+			//	tempcdrstat.B_causeTD192=0;
+			//	tempcdrstat.B_causeTD209=0;
+			//	tempcdrstat.B_causeTD239=0;
+			//	tempcdrstat.B_causeTDMisc=0;
+			//	tempcdrstat.B_causeTDNAS=0;
+			//	tempcdrstat.B_causeTDProtocol=0;
+			//	tempcdrstat.B_causeTDTransport=0;
+			//}
 			int temp_hash=(int)pow((double)10,HASH_NUM_CELLID)*atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str())+cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_sac%((int)pow((double)10,HASH_NUM_CELLID));
 			imeicdrfile[fn][temp_hash].push_back(tempcdrstat);
 		}
@@ -1114,43 +1113,14 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.A_shortcall_1=0;
 			tempcdrstat.A_shortcall_2=0;
 			tempcdrstat.A_shortcall_3=0;
-			tempcdrstat.A_cause0=0;
-			tempcdrstat.A_cause1=0;
-			tempcdrstat.A_cause20=0;
-			tempcdrstat.A_cause60=0;
-			tempcdrstat.A_causeGSM=0;
-			tempcdrstat.A_causeTDNonStandard=0;
-			tempcdrstat.A_causeTD=0;
-			tempcdrstat.A_causeTDRadioNetwork=0;
-			tempcdrstat.A_causeTD46=0;
-			tempcdrstat.A_causeTD176=0;
-			tempcdrstat.A_causeTD192=0;
-			tempcdrstat.A_causeTD209=0;
-			tempcdrstat.A_causeTD239=0;
-			tempcdrstat.A_causeTDMisc=0;
-			tempcdrstat.A_causeTDNAS=0;
-			tempcdrstat.A_causeTDProtocol=0;
-			tempcdrstat.A_causeTDTransport=0;
+			tempcdrstat.A_BSSMAP_Cause.clear();
+			tempcdrstat.B_BSSMAP_Cause.clear();
+			tempcdrstat.A_RANAP_Cause.clear();
+			tempcdrstat.B_RANAP_Cause.clear();
+			tempcdrstat.DX_Cause.clear();
 			tempcdrstat.B_call_attempt=1;
 			tempcdrstat.B_call_attempt_GSM=1;
-			tempcdrstat.B_call_attempt_TD=0;
-			tempcdrstat.B_cause0=0;
-			tempcdrstat.B_cause1=0;
-			tempcdrstat.B_cause20=0;
-			tempcdrstat.B_cause60=0;
-			tempcdrstat.B_causeGSM=0;
-			tempcdrstat.B_causeTD=0;
-			tempcdrstat.B_causeTD46=0;
-			tempcdrstat.B_causeTD176=0;
-			tempcdrstat.B_causeTD192=0;
-			tempcdrstat.B_causeTD209=0;
-			tempcdrstat.B_causeTD239=0;
-			tempcdrstat.B_causeTDMisc=0;
-			tempcdrstat.B_causeTDNAS=0;
-			tempcdrstat.B_causeTDNonStandard=0;
-			tempcdrstat.B_causeTDProtocol=0;
-			tempcdrstat.B_causeTDRadioNetwork=0;
-			tempcdrstat.B_causeTDTransport=0;			
+			tempcdrstat.B_call_attempt_TD=0;		
 
 			if(difftime(cdr[rp[cdrcount].fn][rp[cdrcount].rn].charging_end_time,cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time)<SHORTCALL_THRESHOLD_1){
 				tempcdrstat.B_shortcall_1=1;
@@ -1190,43 +1160,15 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.A_shortcall_1=0;
 			tempcdrstat.A_shortcall_2=0;
 			tempcdrstat.A_shortcall_3=0;
-			tempcdrstat.A_cause0=0;
-			tempcdrstat.A_cause1=0;
-			tempcdrstat.A_cause20=0;
-			tempcdrstat.A_cause60=0;
-			tempcdrstat.A_causeGSM=0;
-			tempcdrstat.A_causeTDNonStandard=0;
-			tempcdrstat.A_causeTD=0;
-			tempcdrstat.A_causeTDRadioNetwork=0;
-			tempcdrstat.A_causeTD46=0;
-			tempcdrstat.A_causeTD176=0;
-			tempcdrstat.A_causeTD192=0;
-			tempcdrstat.A_causeTD209=0;
-			tempcdrstat.A_causeTD239=0;
-			tempcdrstat.A_causeTDMisc=0;
-			tempcdrstat.A_causeTDNAS=0;
-			tempcdrstat.A_causeTDProtocol=0;
-			tempcdrstat.A_causeTDTransport=0;
+			tempcdrstat.A_BSSMAP_Cause.clear();
+			tempcdrstat.B_BSSMAP_Cause.clear();
+			tempcdrstat.A_RANAP_Cause.clear();
+			tempcdrstat.B_RANAP_Cause.clear();
+			tempcdrstat.DX_Cause.clear();
 			tempcdrstat.B_call_attempt=1;
 			tempcdrstat.B_call_attempt_GSM=0;
 			tempcdrstat.B_call_attempt_TD=1;
-			tempcdrstat.B_cause0=0;
-			tempcdrstat.B_cause1=0;
-			tempcdrstat.B_cause20=0;
-			tempcdrstat.B_cause60=0;
-			tempcdrstat.B_causeGSM=0;
-			tempcdrstat.B_causeTD=0;
-			tempcdrstat.B_causeTD46=0;
-			tempcdrstat.B_causeTD176=0;
-			tempcdrstat.B_causeTD192=0;
-			tempcdrstat.B_causeTD209=0;
-			tempcdrstat.B_causeTD239=0;
-			tempcdrstat.B_causeTDMisc=0;
-			tempcdrstat.B_causeTDNAS=0;
-			tempcdrstat.B_causeTDNonStandard=0;
-			tempcdrstat.B_causeTDProtocol=0;
-			tempcdrstat.B_causeTDRadioNetwork=0;
-			tempcdrstat.B_causeTDTransport=0;
+			
 
 			if(difftime(cdr[rp[cdrcount].fn][rp[cdrcount].rn].charging_end_time,cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time)<SHORTCALL_THRESHOLD_1){
 				tempcdrstat.B_shortcall_1=1;
@@ -1751,7 +1693,7 @@ bool WriteIMEIFile_Combine(std::string temp_result_path_name){
 			<<"B_count20"<<","<<"B_count60"<<","\
 			<<"B_shortcall_1"<<","<<"B_shortcall_2"<<","<<"B_shortcall_3"<<","\
 			<<"B_call_attempt"<<endl;
-		for(int fn=0;fn<imeistat.size();fn++){
+		/*for(int fn=0;fn<imeistat.size();fn++){
 			for(int i=0;i<imeistat[fn].size();i++){
 				if(imeistat[fn][i].IMEI!=""){
 					fo<<imeistat[fn][i].TAC<<","<<imeistat[fn][i].IMEI<<","<<imeistat[fn][i].cellid<<","<<imeistat[fn][i].A_cause0<<","<<imeistat[fn][i].A_cause1<<","\
@@ -1764,7 +1706,7 @@ bool WriteIMEIFile_Combine(std::string temp_result_path_name){
 					<<imeistat[fn][i].B_call_attempt<<endl;
 				}
 			}	
-		}
+		}*/
 	}
 		
 	fo.close();
@@ -1782,7 +1724,7 @@ ofstream fo(temp_result_path_name.c_str(),'w');
 			<<"B_count20"<<","<<"B_count60"<<","\
 			<<"B_shortcall_1"<<","<<"B_shortcall_2"<<","<<"B_shortcall_3"<<","\
 			<<"B_call_attempt"<<endl;
-		for(int fn=0;fn<imeistat.size();fn++){
+		/*for(int fn=0;fn<imeistat.size();fn++){
 			for(int i=0;i<imeistat[fn].size();i++){
 				if(imeistat_cell[fn][i].IMEI!=""){
 					fo<<imeistat_cell[fn][i].TAC<<","<<imeistat_cell[fn][i].IMEI<<","<<imeistat_cell[fn][i].A_cause0<<","<<imeistat_cell[fn][i].A_cause1<<","\
@@ -1795,7 +1737,7 @@ ofstream fo(temp_result_path_name.c_str(),'w');
 					<<imeistat_cell[fn][i].B_call_attempt<<endl;
 				}
 			}	
-		}
+		}*/
 	}
 		
 	fo.close();
@@ -1822,14 +1764,14 @@ bool CombineIMEI(){
 					for(int im=0;im<imeistat[temp_hash].size();im++){
 						if(imeistat[temp_hash][im].IMEI==imeicdrfile[fn][hn][cr].IMEI&&imeistat[temp_hash][im].cellid==imeicdrfile[fn][hn][cr].cellid){
 							isExistIMEI=true;
-							imeistat[temp_hash][im].A_cause0+=imeicdrfile[fn][hn][cr].A_cause0;
+							/*imeistat[temp_hash][im].A_cause0+=imeicdrfile[fn][hn][cr].A_cause0;
 							imeistat[temp_hash][im].A_cause1+=imeicdrfile[fn][hn][cr].A_cause1;
 							imeistat[temp_hash][im].A_cause20+=imeicdrfile[fn][hn][cr].A_cause20;
 							imeistat[temp_hash][im].A_cause60+=imeicdrfile[fn][hn][cr].A_cause60;
 							imeistat[temp_hash][im].B_cause0+=imeicdrfile[fn][hn][cr].B_cause0;
 							imeistat[temp_hash][im].B_cause1+=imeicdrfile[fn][hn][cr].B_cause1;
 							imeistat[temp_hash][im].B_cause20+=imeicdrfile[fn][hn][cr].B_cause20;
-							imeistat[temp_hash][im].B_cause60+=imeicdrfile[fn][hn][cr].B_cause60;
+							imeistat[temp_hash][im].B_cause60+=imeicdrfile[fn][hn][cr].B_cause60;*/
 							imeistat[temp_hash][im].B_shortcall_1+=imeicdrfile[fn][hn][cr].B_shortcall_1;
 							imeistat[temp_hash][im].A_shortcall_1+=imeicdrfile[fn][hn][cr].A_shortcall_1;
 							imeistat[temp_hash][im].B_shortcall_2+=imeicdrfile[fn][hn][cr].B_shortcall_2;
@@ -1849,14 +1791,14 @@ bool CombineIMEI(){
 						tempimei.IMEI=imeicdrfile[fn][hn][cr].IMEI;
 						tempimei.TAC=imeicdrfile[fn][hn][cr].TAC;
 						tempimei.cellid=imeicdrfile[fn][hn][cr].cellid;
-						tempimei.A_cause0=imeicdrfile[fn][hn][cr].A_cause0;
+						/*tempimei.A_cause0=imeicdrfile[fn][hn][cr].A_cause0;
 						tempimei.A_cause1=imeicdrfile[fn][hn][cr].A_cause1;
 						tempimei.A_cause20=imeicdrfile[fn][hn][cr].A_cause20;
 						tempimei.A_cause60=imeicdrfile[fn][hn][cr].A_cause60;
 						tempimei.B_cause0=imeicdrfile[fn][hn][cr].B_cause0;
 						tempimei.B_cause1=imeicdrfile[fn][hn][cr].B_cause1;
 						tempimei.B_cause20=imeicdrfile[fn][hn][cr].B_cause20;
-						tempimei.B_cause60=imeicdrfile[fn][hn][cr].B_cause60;
+						tempimei.B_cause60=imeicdrfile[fn][hn][cr].B_cause60;*/
 						tempimei.A_shortcall_1=imeicdrfile[fn][hn][cr].A_shortcall_1;
 						tempimei.B_shortcall_1=imeicdrfile[fn][hn][cr].B_shortcall_1;
 						tempimei.A_shortcall_2=imeicdrfile[fn][hn][cr].A_shortcall_2;
@@ -1896,14 +1838,14 @@ bool CombineIMEI_Cell(){
 					for(int im=0;im<imeistat_cell[temp_hash].size();im++){
 						if(imeistat_cell[temp_hash][im].IMEI==imeistat[hn][cr].IMEI){
 							isExistIMEI=true;
-							imeistat_cell[temp_hash][im].A_cause0+=imeistat[hn][cr].A_cause0;
+							/*imeistat_cell[temp_hash][im].A_cause0+=imeistat[hn][cr].A_cause0;
 							imeistat_cell[temp_hash][im].A_cause1+=imeistat[hn][cr].A_cause1;
 							imeistat_cell[temp_hash][im].A_cause20+=imeistat[hn][cr].A_cause20;
 							imeistat_cell[temp_hash][im].A_cause60+=imeistat[hn][cr].A_cause60;
 							imeistat_cell[temp_hash][im].B_cause0+=imeistat[hn][cr].B_cause0;
 							imeistat_cell[temp_hash][im].B_cause1+=imeistat[hn][cr].B_cause1;
 							imeistat_cell[temp_hash][im].B_cause20+=imeistat[hn][cr].B_cause20;
-							imeistat_cell[temp_hash][im].B_cause60+=imeistat[hn][cr].B_cause60;
+							imeistat_cell[temp_hash][im].B_cause60+=imeistat[hn][cr].B_cause60;*/
 							imeistat_cell[temp_hash][im].B_shortcall_1+=imeistat[hn][cr].B_shortcall_1;
 							imeistat_cell[temp_hash][im].A_shortcall_1+=imeistat[hn][cr].A_shortcall_1;
 							imeistat_cell[temp_hash][im].B_shortcall_2+=imeistat[hn][cr].B_shortcall_2;
@@ -1923,14 +1865,14 @@ bool CombineIMEI_Cell(){
 						tempimei.IMEI=imeistat[hn][cr].IMEI;
 						tempimei.TAC=imeistat[hn][cr].TAC;
 						tempimei.cellid=-1;
-						tempimei.A_cause0=imeistat[hn][cr].A_cause0;
+						/*tempimei.A_cause0=imeistat[hn][cr].A_cause0;
 						tempimei.A_cause1=imeistat[hn][cr].A_cause1;
 						tempimei.A_cause20=imeistat[hn][cr].A_cause20;
 						tempimei.A_cause60=imeistat[hn][cr].A_cause60;
 						tempimei.B_cause0=imeistat[hn][cr].B_cause0;
 						tempimei.B_cause1=imeistat[hn][cr].B_cause1;
 						tempimei.B_cause20=imeistat[hn][cr].B_cause20;
-						tempimei.B_cause60=imeistat[hn][cr].B_cause60;
+						tempimei.B_cause60=imeistat[hn][cr].B_cause60;*/
 						tempimei.A_shortcall_1=imeistat[hn][cr].A_shortcall_1;
 						tempimei.B_shortcall_1=imeistat[hn][cr].B_shortcall_1;
 						tempimei.A_shortcall_2=imeistat[hn][cr].A_shortcall_2;

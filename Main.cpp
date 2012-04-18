@@ -36,13 +36,14 @@ vector<TAC_NAME> taclist;//TAC对应的品牌，型号和类型
 vector<CELL_TYPE> celltypelist;//CELL对应的类型
 
 vector<vector<CDR>> cdr;//文件读取CDR分文件存储
-vector<recordp> rp;//
-vector<vector<vector<IMEI_CDR_Statistic>>> imeicdrfile;//按文件统计imei的cdr
-vector<vector<vector<IMEI_CDR_Statistic>>> taccdrfile;//按文件统计tac的cdr
-vector<vector<IMEI_CDR_Statistic>> imeistat;//按imei统计的合并
-vector<vector<IMEI_CDR_Statistic>> tacstat;//按tac统计的合并
+vector<recordp> rp;//rp指针，为了使线程的处理cdr数目相同
+vector<vector<vector<IMEI_CDR_Statistic>>> imeicdrfile;//按线程平均分段统计imei的cdr
+vector<vector<vector<IMEI_CDR_Statistic>>> taccdrfile;//将计算好的imeicdrfile中在各自的线程里进行tac合并
+vector<vector<IMEI_CDR_Statistic>> imeistat;//将计算好的imeicdrfile中不同的线程fn合并生成imeistat
+vector<vector<IMEI_CDR_Statistic>> tacstat;//将计算好的taccdrfile中不同的线程fn合并生成tacstat
 vector<vector<IMEI_CDR_Statistic>> imeistat_cell;//将imei统计按照cellid合并
-vector<vector<IMEI_CDR_Statistic>> tacstat_cell;//将tac统计按照cellid合并
+vector<vector<IMEI_CDR_Statistic>> tacstat_cell;//将tacstat_timesection中不同的cell合并生成tacstat_cell
+vector<vector<IMEI_CDR_Statistic>> tacstat_timesection;//将计算好的tacstat中不同的TimeSection合并生成tacstat_timesection
 //将字符串转化为time_t变量
 time_t FormatTime(const char * szTime)
 {
@@ -355,6 +356,8 @@ bool WorkLoadDistribution(vector<string> fl,string workingdir){
 
 		}
 	}
+
+
 	
 	return true;
 

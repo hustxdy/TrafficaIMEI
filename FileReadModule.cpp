@@ -5,8 +5,10 @@
 bool isValidCDR(CDR cdr){
 		
 	for(int i=0;i<CDR_SCREEN_B_NUMBER_INITIAL_LIST.size();i++){
-		if(cdr.B_number.substr(0,CDR_SCREEN_B_NUMBER_INITIAL_LIST[i].size())==CDR_SCREEN_B_NUMBER_INITIAL_LIST[i]&&cdr.A_number==""){
-			return false;
+		if(cdr.B_number.size()>CDR_SCREEN_B_NUMBER_INITIAL_LIST[i].size()){//因substr不做长度检查，防止出错
+			if(cdr.B_number.substr(0,CDR_SCREEN_B_NUMBER_INITIAL_LIST[i].size())==CDR_SCREEN_B_NUMBER_INITIAL_LIST[i]){
+				return false;
+			}
 		}
 	}
 	/*if(difftime(cdr.signalling_complete_time,cdr.call_start_time)<NOCDR_THRESHOLD){
@@ -399,8 +401,8 @@ bool ReadCDRFile(int fn,string cdrfile){
 		while(getline(fi,sl)){
 			CDR tempcdr;//临时
 			tempcdr.report_time=0;//CDR上报时间
-			tempcdr.A_BSSMAP_cause=-1;//主叫释放原因（BSSMAP）
-			tempcdr.A_BSSMAP_cause_ext=-1;//TD的主叫释放原因(RANAP)
+			tempcdr.A_BSSMAP_cause=DEFAULT_CAUSE_VALUE;//主叫释放原因（BSSMAP）
+			tempcdr.A_BSSMAP_cause_ext=DEFAULT_CAUSE_VALUE;//TD的主叫释放原因(RANAP)
 			tempcdr.A_cell=0;//主叫挂机时所在小区号
 			tempcdr.A_sac=0;//主叫挂机时所在的TD小区号
 			tempcdr.A_number="";//主叫号码
@@ -409,8 +411,8 @@ bool ReadCDRFile(int fn,string cdrfile){
 			tempcdr.A_IMEI="";
 			tempcdr.A_IMSI="";
 			tempcdr.B_answered_time=0;
-			tempcdr.B_BSSMAP_cause=-1;
-			tempcdr.B_BSSMAP_cause_ext=-1;
+			tempcdr.B_BSSMAP_cause=DEFAULT_CAUSE_VALUE;
+			tempcdr.B_BSSMAP_cause_ext=DEFAULT_CAUSE_VALUE;
 			tempcdr.B_cell=0;
 			tempcdr.B_sac=0;
 			tempcdr.B_first_cell=0;
@@ -420,7 +422,7 @@ bool ReadCDRFile(int fn,string cdrfile){
 			tempcdr.B_number="";
 			tempcdr.call_start_time=0;
 			tempcdr.charging_end_time=0;
-			tempcdr.DX_cause=0;
+			tempcdr.DX_cause=DEFAULT_CAUSE_VALUE;
 			tempcdr.paging_time=0;
 			tempcdr.signalling_complete_time=0;
 			tempcdr.INTER_MSC_HO=-1;

@@ -11,6 +11,7 @@ typedef unsigned __int64    UINT64;
 #define PROGRESS_THRES 200000//多少条记录刷新一次进度条
 #define TAC_LENGTH 8//TAC的长度
 #define CONFIG_FILE_DEFAULT "config.txt"
+#define DEFAULT_CAUSE_VALUE -1
 
 //结构定义
 //CDR记录
@@ -77,11 +78,11 @@ struct IMEI_CDR_Statistic{
 	string celltype;//小区类型
 	int timeSection;//时段号
 	string timeSectionStartTime;//某一时段的起始时间
-	CAUSE_TYPE A_BSSMAP_Cause;//主叫在GSM结束原因的分类统计
-	CAUSE_TYPE A_RANAP_Cause;//主叫在TD结束时原因的分类统计
-	CAUSE_TYPE B_BSSMAP_Cause;//被叫在GSM结束时原因的分类统计
-	CAUSE_TYPE B_RANAP_Cause;//被叫在TD结束时原因的分类统计
-	CAUSE_TYPE DX_Cause;//DX_Cause的分类统计
+	vector<CAUSE_TYPE> A_BSSMAP_Cause;//主叫在GSM结束原因的分类统计
+	vector<CAUSE_TYPE> A_RANAP_Cause;//主叫在TD结束时原因的分类统计
+	vector<CAUSE_TYPE> B_BSSMAP_Cause;//被叫在GSM结束时原因的分类统计
+	vector<CAUSE_TYPE> B_RANAP_Cause;//被叫在TD结束时原因的分类统计
+	vector<CAUSE_TYPE> DX_Cause;//DX_Cause的分类统计
 	//int A_cause0;//作为主叫时BSSMAP_cause值为0
 	//int A_cause1;//作为主叫时BSSMAP_cause值为1
 	//int A_cause20;//作为主叫时BSSMAP_cause值为20
@@ -140,7 +141,9 @@ bool WorkLoadDistribution(vector<string> fl,string workdir);//分配工作量
 bool ReadConfigFile(std::string configfile);//读取配置文件
 bool ReadCDRFile(int fn,string cdrfile);//读取文件列表中的CDR文件
 bool ReadTACFile(string tacfile);//读取TAC对应的品牌，型号和类型文件
-bool ReadCellTypeFile(string celltypefile);//读取cell类型的文件
+//读取cell类型的文件
+bool ReadCellTypeFile(string celltypefile);
+//在运行ReadCDRFile函数中，判决CDR是否有效，用于屏蔽和减少部分CDR数量
 bool isValidCDR(CDR cdr);
 //==================IMEI相关=========================
 bool ComputeIMEIStatistic(int fn,int startnum,int endnum);//生成imeicdrfile
@@ -151,13 +154,28 @@ bool WriteIMEIFile_CombineCell(std::string temp_result_path_name);
 bool CombineIMEI_Cell();//用imeistat按照cellid合并
 bool CombineIMEI();//用imeicdrfile生成imeistat
 //==================TAC相关=======================
-bool ComputeTACStatistic(int fn);//生成taccdrfile
-bool CombineTAC();//用taccdrfile生成tacstat
-bool MatchTACList();//将tacstat与taclist联合
-bool MatchCellTypeList();//将tacstat与celltypelist联合
-bool CombineTAC_Cell();//用tacstat按照cellid合并
-bool WriteTACFile_Combine(std::string temp_result_path_name);
-bool WriteTACFile_CombineCell(std::string temp_result_path_name);
+//从计算好的imeicdrfile中根据TAC合并生成taccdrfile
+bool ComputeTACStatistic(int fn);
+//将计算好的taccdrfile中不同的线程fn合并生成tacstat
+bool CombineTAC_Thread();
+//将tacstat和taclist进行join操作
+bool MatchTACList();
+////将tacstat和celltypelist进行join操作
+bool MatchCellTypeList();
+////将不同批次产生的tacstat文件合并成一个tacstat
+bool CombineMultiTACStat(vector<string> tacstatfilelist);
+//读取tacstat存储的文件
+bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tacstat_temp);
+//输出tacstat
+bool WriteTACFile(std::string temp_result_path_name);
+//将计算好的tacstat中不同的TimeSection合并生成tacstat_timesection
+bool ComputeTAC_TimeSection();
+//将tacstat_timesection中不同的cell合并生成tacstat_cell
+bool CombineTAC_TimeSectionCell();
+//输出tacstat_timesection
+bool WriteTACFile_TimeSection();
+//输出tacstat_cell
+bool WriteTACFile_TimeSectionCell(std::string temp_result_path_name);
 //全局变量
 extern int THREADNUM;//线程数
 extern bool bIMEIOutput;//是否输出IMEI级的统计文件

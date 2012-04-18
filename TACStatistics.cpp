@@ -278,11 +278,6 @@ bool CombineTAC_Thread(){
 	}	
 	return true;
 }
-//将计算好的tacstat中不同的TimeSection合并生成tacstat
-bool ComputeTAC_TimeSection(){
-	
-}
-
 //将tacstat和taclist进行join操作
 bool MatchTACList(){
 	time_t start,end;
@@ -328,8 +323,82 @@ bool MatchCellTypeList(){
 	
 return true;
 }
-//将tacstat中不同的cell合并生成tacstat_cell
-bool CombineTAC_Cell(){
+//________________将不同的批次合并__________________________	
+//将不同批次产生的tacstat文件合并成一个tacstat
+bool CombineMultiTACStat(vector<string> tacstatfilelist){
+	for(int i=0;i<tacstatfilelist.size();i++){
+		vector<vector<IMEI_CDR_Statistic>> temptacstat;
+		temptacstat.clear();
+		
+		if(!ReadTACSTATFile(tacstatfilelist[i],temptacstat)){
+			cout<<"Read File "<<tacstatfilelist[i]<<" Error."<<endl;
+		}
+
+
+	}
+}
+//读取tacstatfile
+bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tacstat_temp){
+
+}
+//输出tacstat
+bool WriteTACFile(std::string temp_result_path_name){
+	ofstream fo(temp_result_path_name.c_str(),'w');
+	if(fo.is_open()==true){
+		fo<<"TAC"<<","<<"品牌"<<","<<"型号"<<","<<"类别"<<","<<"CellID"<<","<<"小区类别"<<","<<"网络类别"<<","\
+			<<"A_count0"<<","<<"A_count1"<<","\
+			<<"A_count20"<<","<<"A_count60"<<","\
+			<<"A_countGSM"<<","<<"A_countTD"<<","\
+			<<"A_causeTD46"<<","<<"A_causeTD176"<<","<<"A_causeTD192"<<","<<"A_causeTD209"<<","<<"A_causeTD239"<<","\
+			<<"A_causeTDMisc"<<","<<"A_causeTDNAS"<<","\
+			<<"A_causeTDNonStandard"<<","<<"A_causeTDProtocol"<<","\
+			<<"A_causeTDRadioNetwork"<<","<<"A_causeTDTransport"<<","\
+			<<"A_shortcall_1"<<","<<"A_shortcall_2"<<","<<"A_shortcall_3"<<","\
+			<<"A_call_attempt"<<","<<"A_call_attemp_GSM"<<","<<"A_call_attemp_TD"<<","\
+			<<"B_count0"<<","<<"B_count1"<<","\
+			<<"B_count20"<<","<<"B_count60"<<","\
+			<<"B_countGSM"<<","<<"B_countTD"<<","\
+			<<"B_causeTD46"<<","<<"B_causeTD176"<<","<<"B_causeTD192"<<","<<"B_causeTD209"<<","<<"B_causeTD239"<<","\
+			<<"B_causeTDMisc"<<","<<"B_causeTDNAS"<<","\
+			<<"B_causeTDNonStandard"<<","<<"B_causeTDProtocol"<<","\
+			<<"B_causeTDRadioNetwork"<<","<<"B_causeTDTransport"<<","\
+			<<"B_shortcall_1"<<","<<"B_shortcall_2"<<","<<"B_shortcall_3"<<","\
+			<<"B_call_attempt"<<","<<"B_call_attemp_GSM"<<","<<"B_call_attemp_TD"<<endl;
+		for(int hn=0;hn<tacstat.size();hn++){
+			for(int i=0;i<tacstat[hn].size();i++){
+				fo<<tacstat[hn][i].TAC<<","<<tacstat[hn][i].brand<<","<<tacstat[hn][i].name<<","<<tacstat[hn][i].type<<","\
+					<<tacstat[hn][i].cellid<<","<<tacstat[hn][i].celltype<<","<<tacstat[hn][i].network<<","\
+					<<tacstat[hn][i].A_cause0<<","<<tacstat[hn][i].A_cause1<<","\
+					<<tacstat[hn][i].A_cause20<<","<<tacstat[hn][i].A_cause60<<","\
+					<<tacstat[hn][i].A_causeGSM<<","<<tacstat[hn][i].A_causeTD<<","\
+					<<tacstat[hn][i].A_causeTD46<<","<<tacstat[hn][i].A_causeTD176<<","<<tacstat[hn][i].A_causeTD192<<","<<tacstat[hn][i].A_causeTD209<<","<<tacstat[hn][i].A_causeTD239<<","\
+					<<tacstat[hn][i].A_causeTDMisc<<","<<tacstat[hn][i].A_causeTDNAS<<","\
+					<<tacstat[hn][i].A_causeTDNonStandard<<","<<tacstat[hn][i].A_causeTDProtocol<<","\
+					<<tacstat[hn][i].A_causeTDRadioNetwork<<","<<tacstat[hn][i].A_causeTDTransport<<","\
+					<<tacstat[hn][i].A_shortcall_1<<","<<tacstat[hn][i].A_shortcall_2<<","<<tacstat[hn][i].A_shortcall_3<<","\
+					<<tacstat[hn][i].A_call_attempt<<","<<tacstat[hn][i].A_call_attempt_GSM<<","<<tacstat[hn][i].A_call_attempt_TD<<","\
+					<<tacstat[hn][i].B_cause0<<","<<tacstat[hn][i].B_cause1<<","\
+					<<tacstat[hn][i].B_cause20<<","<<tacstat[hn][i].B_cause60<<","\
+					<<tacstat[hn][i].B_causeGSM<<","<<tacstat[hn][i].B_causeTD<<","\
+					<<tacstat[hn][i].B_causeTD46<<","<<tacstat[hn][i].B_causeTD176<<","<<tacstat[hn][i].B_causeTD192<<","<<tacstat[hn][i].B_causeTD209<<","<<tacstat[hn][i].B_causeTD239<<","\
+					<<tacstat[hn][i].B_causeTDMisc<<","<<tacstat[hn][i].B_causeTDNAS<<","\
+					<<tacstat[hn][i].B_causeTDNonStandard<<","<<tacstat[hn][i].B_causeTDProtocol<<","\
+					<<tacstat[hn][i].B_causeTDRadioNetwork<<","<<tacstat[hn][i].B_causeTDTransport<<","\
+					<<tacstat[hn][i].B_shortcall_1<<","<<tacstat[hn][i].B_shortcall_2<<","<<tacstat[hn][i].B_shortcall_3<<","\
+					<<tacstat[hn][i].B_call_attempt<<","<<tacstat[hn][i].B_call_attempt_GSM<<","<<tacstat[hn][i].B_call_attempt_TD<<endl;
+			}
+		}
+	}
+	fo.close();
+	return true;
+}
+//-----------------不同级别的合并-----------------------
+//将计算好的tacstat中不同的TimeSection合并生成tacstat_timesection
+bool ComputeTAC_TimeSection(){
+	
+}
+//将tacstat_timesection中不同的cell合并生成tacstat_cell
+bool CombineTAC_TimeSectionCell(){
 	tacstat_cell.clear();
 	//hash tac用后四位
 	tacstat_cell.clear();
@@ -470,76 +539,13 @@ bool CombineTAC_Cell(){
 	
 	return true;
 }
-//将不同批次产生的tacstat文件合并成一个tacstat
-bool CombineMultiTACStat(vector<string> tacstatfilelist){
-	for(int i=0;i<tacstatfilelist.size();i++){
-		vector<vector<IMEI_CDR_Statistic>> temptacstat;
-		temptacstat.clear();
-		
-		if(!ReadTACSTATFile(tacstatfilelist[i],temptacstat)){
-			cout<<"Read File "<<tacstatfilelist[i]<<" Error."<<endl;
-		}
+//------------------输出合并结果-------------
+//输出tacstat_timesection
+bool WriteTACFile_TimeSection(){
 
-
-	}
-}
-//读取tacstatfile
-bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tacstat_temp){
-
-}
-//输出tacstat
-bool WriteTACFile_Combine(std::string temp_result_path_name){
-	ofstream fo(temp_result_path_name.c_str(),'w');
-	if(fo.is_open()==true){
-		fo<<"TAC"<<","<<"品牌"<<","<<"型号"<<","<<"类别"<<","<<"CellID"<<","<<"小区类别"<<","<<"网络类别"<<","\
-			<<"A_count0"<<","<<"A_count1"<<","\
-			<<"A_count20"<<","<<"A_count60"<<","\
-			<<"A_countGSM"<<","<<"A_countTD"<<","\
-			<<"A_causeTD46"<<","<<"A_causeTD176"<<","<<"A_causeTD192"<<","<<"A_causeTD209"<<","<<"A_causeTD239"<<","\
-			<<"A_causeTDMisc"<<","<<"A_causeTDNAS"<<","\
-			<<"A_causeTDNonStandard"<<","<<"A_causeTDProtocol"<<","\
-			<<"A_causeTDRadioNetwork"<<","<<"A_causeTDTransport"<<","\
-			<<"A_shortcall_1"<<","<<"A_shortcall_2"<<","<<"A_shortcall_3"<<","\
-			<<"A_call_attempt"<<","<<"A_call_attemp_GSM"<<","<<"A_call_attemp_TD"<<","\
-			<<"B_count0"<<","<<"B_count1"<<","\
-			<<"B_count20"<<","<<"B_count60"<<","\
-			<<"B_countGSM"<<","<<"B_countTD"<<","\
-			<<"B_causeTD46"<<","<<"B_causeTD176"<<","<<"B_causeTD192"<<","<<"B_causeTD209"<<","<<"B_causeTD239"<<","\
-			<<"B_causeTDMisc"<<","<<"B_causeTDNAS"<<","\
-			<<"B_causeTDNonStandard"<<","<<"B_causeTDProtocol"<<","\
-			<<"B_causeTDRadioNetwork"<<","<<"B_causeTDTransport"<<","\
-			<<"B_shortcall_1"<<","<<"B_shortcall_2"<<","<<"B_shortcall_3"<<","\
-			<<"B_call_attempt"<<","<<"A_call_attemp_GSM"<<","<<"A_call_attemp_TD"<<endl;
-		for(int hn=0;hn<tacstat.size();hn++){
-			for(int i=0;i<tacstat[hn].size();i++){
-				fo<<tacstat[hn][i].TAC<<","<<tacstat[hn][i].brand<<","<<tacstat[hn][i].name<<","<<tacstat[hn][i].type<<","\
-					<<tacstat[hn][i].cellid<<","<<tacstat[hn][i].celltype<<","<<tacstat[hn][i].network<<","\
-					<<tacstat[hn][i].A_cause0<<","<<tacstat[hn][i].A_cause1<<","\
-					<<tacstat[hn][i].A_cause20<<","<<tacstat[hn][i].A_cause60<<","\
-					<<tacstat[hn][i].A_causeGSM<<","<<tacstat[hn][i].A_causeTD<<","\
-					<<tacstat[hn][i].A_causeTD46<<","<<tacstat[hn][i].A_causeTD176<<","<<tacstat[hn][i].A_causeTD192<<","<<tacstat[hn][i].A_causeTD209<<","<<tacstat[hn][i].A_causeTD239<<","\
-					<<tacstat[hn][i].A_causeTDMisc<<","<<tacstat[hn][i].A_causeTDNAS<<","\
-					<<tacstat[hn][i].A_causeTDNonStandard<<","<<tacstat[hn][i].A_causeTDProtocol<<","\
-					<<tacstat[hn][i].A_causeTDRadioNetwork<<","<<tacstat[hn][i].A_causeTDTransport<<","\
-					<<tacstat[hn][i].A_shortcall_1<<","<<tacstat[hn][i].A_shortcall_2<<","<<tacstat[hn][i].A_shortcall_3<<","\
-					<<tacstat[hn][i].A_call_attempt<<","<<tacstat[hn][i].A_call_attempt_GSM<<","<<tacstat[hn][i].A_call_attempt_TD<<","\
-					<<tacstat[hn][i].B_cause0<<","<<tacstat[hn][i].B_cause1<<","\
-					<<tacstat[hn][i].B_cause20<<","<<tacstat[hn][i].B_cause60<<","\
-					<<tacstat[hn][i].B_causeGSM<<","<<tacstat[hn][i].B_causeTD<<","\
-					<<tacstat[hn][i].B_causeTD46<<","<<tacstat[hn][i].B_causeTD176<<","<<tacstat[hn][i].B_causeTD192<<","<<tacstat[hn][i].B_causeTD209<<","<<tacstat[hn][i].B_causeTD239<<","\
-					<<tacstat[hn][i].B_causeTDMisc<<","<<tacstat[hn][i].B_causeTDNAS<<","\
-					<<tacstat[hn][i].B_causeTDNonStandard<<","<<tacstat[hn][i].B_causeTDProtocol<<","\
-					<<tacstat[hn][i].B_causeTDRadioNetwork<<","<<tacstat[hn][i].B_causeTDTransport<<","\
-					<<tacstat[hn][i].B_shortcall_1<<","<<tacstat[hn][i].B_shortcall_2<<","<<tacstat[hn][i].B_shortcall_3<<","\
-					<<tacstat[hn][i].B_call_attempt<<","<<tacstat[hn][i].B_call_attempt_GSM<<","<<tacstat[hn][i].B_call_attempt_TD<<endl;
-			}
-		}
-	}
-	fo.close();
-	return true;
 }
 //输出tacstat_cell
-bool WriteTACFile_CombineCell(std::string temp_result_path_name){
+bool WriteTACFile_TimeSectionCell(std::string temp_result_path_name){
 	ofstream fo(temp_result_path_name.c_str(),'w');
 	if(fo.is_open()==true){
 		fo<<"TAC"<<","<<"品牌"<<","<<"型号"<<","<<"类别"<<","\
