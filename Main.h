@@ -60,7 +60,7 @@ struct CELL_TYPE{
 	int cellid;
 	string type;//小区类型
 };
-struct BSSMAP_CAUSE{
+struct CAUSE_TYPE{
 	//string network;//何种网络
 	int cause_id;//cause的id号
 	int cause_num;//此类cause出现的次数
@@ -77,23 +77,28 @@ struct IMEI_CDR_Statistic{
 	string celltype;//小区类型
 	int timeSection;//时段号
 	string timeSectionStartTime;//某一时段的起始时间
-	int A_cause0;//作为主叫时BSSMAP_cause值为0
-	int A_cause1;//作为主叫时BSSMAP_cause值为1
-	int A_cause20;//作为主叫时BSSMAP_cause值为20
-	int A_cause60;//作为主叫时BSSMAP_cause值为60
-	int A_causeGSM;//作为主叫时BSSMAP_cause值为0,1,20,60其中某一个的次数
-	int A_causeTD;//作为主叫时RANAP_cause值不为0的次数
-	int A_causeTDRadioNetwork;//作为主叫时RANAP_cause值为1-64,257-512其中某一个的次数
-	int A_causeTDTransport;//作为主叫时RANAP_cause值为65-80其中某一个的次数
-	int A_causeTDNAS;//作为主叫时RANAP_cause值为81-96其中某一个的次数
-	int A_causeTDProtocol;//作为主叫时RANAP_cause值为97-112其中某一个的次数
-	int A_causeTDMisc;//作为主叫时RANAP_cause值为113-128其中某一个的次数
-	int A_causeTDNonStandard;//作为主叫时RANAP_cause值为129-256其中某一个的次数
-	int A_causeTD46;//作为主叫时RANAP_cause值为46的次数
-	int A_causeTD176;//作为主叫时RANAP_cause值为176的次数
-	int A_causeTD192;//作为主叫时RANAP_cause值为192的次数
-	int A_causeTD209;//作为主叫时RANAP_cause值为209的次数
-	int A_causeTD239;//作为主叫时RANAP_cause值为239的次数
+	CAUSE_TYPE A_BSSMAP_Cause;//主叫在GSM结束原因的分类统计
+	CAUSE_TYPE A_RANAP_Cause;//主叫在TD结束时原因的分类统计
+	CAUSE_TYPE B_BSSMAP_Cause;//被叫在GSM结束时原因的分类统计
+	CAUSE_TYPE B_RANAP_Cause;//被叫在TD结束时原因的分类统计
+	CAUSE_TYPE DX_Cause;//DX_Cause的分类统计
+	//int A_cause0;//作为主叫时BSSMAP_cause值为0
+	//int A_cause1;//作为主叫时BSSMAP_cause值为1
+	//int A_cause20;//作为主叫时BSSMAP_cause值为20
+	//int A_cause60;//作为主叫时BSSMAP_cause值为60
+	//int A_causeGSM;//作为主叫时BSSMAP_cause值为0,1,20,60其中某一个的次数
+	//int A_causeTD;//作为主叫时RANAP_cause值不为0的次数
+	//int A_causeTDRadioNetwork;//作为主叫时RANAP_cause值为1-64,257-512其中某一个的次数
+	//int A_causeTDTransport;//作为主叫时RANAP_cause值为65-80其中某一个的次数
+	//int A_causeTDNAS;//作为主叫时RANAP_cause值为81-96其中某一个的次数
+	//int A_causeTDProtocol;//作为主叫时RANAP_cause值为97-112其中某一个的次数
+	//int A_causeTDMisc;//作为主叫时RANAP_cause值为113-128其中某一个的次数
+	//int A_causeTDNonStandard;//作为主叫时RANAP_cause值为129-256其中某一个的次数
+	//int A_causeTD46;//作为主叫时RANAP_cause值为46的次数
+	//int A_causeTD176;//作为主叫时RANAP_cause值为176的次数
+	//int A_causeTD192;//作为主叫时RANAP_cause值为192的次数
+	//int A_causeTD209;//作为主叫时RANAP_cause值为209的次数
+	//int A_causeTD239;//作为主叫时RANAP_cause值为239的次数
 	int A_shortcall_1;//作为主叫时通话时间<SHORTCALL_THRESHOLD_1
 	int A_shortcall_2;//作为主叫时通话时间<SHORTCALL_THRESHOLD_2
 	int A_shortcall_3;//作为主叫时通话时间<SHORTCALL_THRESHOLD_3
@@ -101,23 +106,23 @@ struct IMEI_CDR_Statistic{
 	int A_call_attempt_TD;//TD的call次数
 	int A_call_attempt_GSM;//GSM的call次数
 	//int A_call_not_connected;//作为主叫未接通的次数
-	int B_cause0;//作为被叫时BSSMAP_cause值为0
-	int B_cause1;//作为被叫时BSSMAP_cause值为1
-	int B_cause20;//作为被叫时BSSMAP_cause值为20
-	int B_cause60;//作为被叫时BSSMAP_cause值为60
-	int B_causeGSM;//作为被叫时BSSMAP_cause值为0,1,20,60其中某一个的次数
-	int B_causeTD;//作为被叫时RANAP_cause值不为0的次数
-	int B_causeTDRadioNetwork;//作为被叫时RANAP_cause值为1-64,257-512其中某一个的次数
-	int B_causeTDTransport;//作为被叫时RANAP_cause值为65-80其中某一个的次数
-	int B_causeTDNAS;//作为被叫时RANAP_cause值为81-96其中某一个的次数
-	int B_causeTDProtocol;//作为被叫时RANAP_cause值为97-112其中某一个的次数
-	int B_causeTDMisc;//作为被叫时RANAP_cause值为113-128其中某一个的次数
-	int B_causeTDNonStandard;//作为被叫时RANAP_cause值为129-256其中某一个的次数
-	int B_causeTD46;//作为被叫时RANAP_cause值为46的次数
-	int B_causeTD176;//作为被叫时RANAP_cause值为176的次数
-	int B_causeTD192;//作为被叫时RANAP_cause值为192的次数
-	int B_causeTD209;//作为被叫时RANAP_cause值为209的次数
-	int B_causeTD239;//作为被叫时RANAP_cause值为239的次数
+	//int B_cause0;//作为被叫时BSSMAP_cause值为0
+	//int B_cause1;//作为被叫时BSSMAP_cause值为1
+	//int B_cause20;//作为被叫时BSSMAP_cause值为20
+	//int B_cause60;//作为被叫时BSSMAP_cause值为60
+	//int B_causeGSM;//作为被叫时BSSMAP_cause值为0,1,20,60其中某一个的次数
+	//int B_causeTD;//作为被叫时RANAP_cause值不为0的次数
+	//int B_causeTDRadioNetwork;//作为被叫时RANAP_cause值为1-64,257-512其中某一个的次数
+	//int B_causeTDTransport;//作为被叫时RANAP_cause值为65-80其中某一个的次数
+	//int B_causeTDNAS;//作为被叫时RANAP_cause值为81-96其中某一个的次数
+	//int B_causeTDProtocol;//作为被叫时RANAP_cause值为97-112其中某一个的次数
+	//int B_causeTDMisc;//作为被叫时RANAP_cause值为113-128其中某一个的次数
+	//int B_causeTDNonStandard;//作为被叫时RANAP_cause值为129-256其中某一个的次数
+	//int B_causeTD46;//作为被叫时RANAP_cause值为46的次数
+	//int B_causeTD176;//作为被叫时RANAP_cause值为176的次数
+	//int B_causeTD192;//作为被叫时RANAP_cause值为192的次数
+	//int B_causeTD209;//作为被叫时RANAP_cause值为209的次数
+	//int B_causeTD239;//作为被叫时RANAP_cause值为239的次数
 	int B_shortcall_1;//作为被叫时通话时间<SHORTCALL_THRESHOLD_1
 	int B_shortcall_2;//作为被叫时通话时间<SHORTCALL_THRESHOLD_2
 	int B_shortcall_3;//作为被叫时通话时间<SHORTCALL_THRESHOLD_3
