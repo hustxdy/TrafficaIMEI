@@ -83,6 +83,14 @@ struct IMEI_CDR_Statistic{
 	vector<CAUSE_TYPE> B_BSSMAP_Cause;//被叫在GSM结束时原因的分类统计
 	vector<CAUSE_TYPE> B_RANAP_Cause;//被叫在TD结束时原因的分类统计
 	vector<CAUSE_TYPE> DX_Cause;//DX_Cause的分类统计
+	vector<string> A_IMEI_GSM;
+	vector<string> A_IMSI_GSM;
+	vector<string> A_IMEI_TD;
+	vector<string> A_IMSI_TD;
+	vector<string> B_IMEI_GSM;
+	vector<string> B_IMSI_GSM;
+	vector<string> B_IMEI_TD;
+	vector<string> B_IMSI_TD;
 	//int A_cause0;//作为主叫时BSSMAP_cause值为0
 	//int A_cause1;//作为主叫时BSSMAP_cause值为1
 	//int A_cause20;//作为主叫时BSSMAP_cause值为20

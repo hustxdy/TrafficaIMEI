@@ -58,7 +58,8 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 							tempcause.cause_num=1;
 							imeicdrfile[fn][temp_hash][cr].DX_Cause.push_back(tempcause);
 						}
-
+						//Í³¼ÆÖ÷½ÐIMSI
+						bool
 						/*if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause==0){
 							imeicdrfile[fn][temp_hash][cr].A_cause0++;
 							imeicdrfile[fn][temp_hash][cr].A_causeGSM++;

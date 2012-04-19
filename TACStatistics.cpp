@@ -20,9 +20,9 @@ bool ComputeTACStatistic(int fn){
 			int temp_hash=(int)pow((double)10,HASH_NUM_CELLID)*atoi(imeicdrfile[fn][hn][cr].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str())+imeicdrfile[fn][hn][cr].cellid%((int)pow((double)10,HASH_NUM_CELLID));
 
 			for(int i=0;i<taccdrfile[fn][temp_hash].size();i++){
-				if(taccdrfile[fn][temp_hash][i].TAC==imeicdrfile[fn][hn][cr].TAC&&taccdrfile[fn][temp_hash][i].cellid==imeicdrfile[fn][hn][cr].cellid&&taccdrfile[fn][temp_hash][i].network==imeicdrfile[fn][hn][cr].network){
+				if(taccdrfile[fn][temp_hash][i].timeSection==imeicdrfile[fn][hn][cr].timeSection&&taccdrfile[fn][temp_hash][i].TAC==imeicdrfile[fn][hn][cr].TAC&&taccdrfile[fn][temp_hash][i].cellid==imeicdrfile[fn][hn][cr].cellid&&taccdrfile[fn][temp_hash][i].network==imeicdrfile[fn][hn][cr].network){
 					isExistTAC=true;
-					taccdrfile[fn][temp_hash][i].A_cause0+=imeicdrfile[fn][hn][cr].A_cause0;
+					/*taccdrfile[fn][temp_hash][i].A_cause0+=imeicdrfile[fn][hn][cr].A_cause0;
 					taccdrfile[fn][temp_hash][i].A_cause1+=imeicdrfile[fn][hn][cr].A_cause1;
 					taccdrfile[fn][temp_hash][i].A_cause20+=imeicdrfile[fn][hn][cr].A_cause20;
 					taccdrfile[fn][temp_hash][i].A_cause60+=imeicdrfile[fn][hn][cr].A_cause60;
@@ -32,6 +32,93 @@ bool ComputeTACStatistic(int fn){
 					taccdrfile[fn][temp_hash][i].B_cause60+=imeicdrfile[fn][hn][cr].B_cause60;
 					taccdrfile[fn][temp_hash][i].A_causeGSM+=imeicdrfile[fn][hn][cr].A_causeGSM;
 					taccdrfile[fn][temp_hash][i].B_causeGSM+=imeicdrfile[fn][hn][cr].B_causeGSM;
+					*/
+					
+					for(int j=0;j<imeicdrfile[fn][hn][cr].A_BSSMAP_Cause.size();j++){
+						bool isExistCause=false;
+						for(int i=0;i<taccdrfile[fn][temp_hash][i].A_BSSMAP_Cause.size();i++){
+							if(taccdrfile[fn][temp_hash][i].A_BSSMAP_Cause[i].cause_id==imeicdrfile[fn][hn][cr].A_BSSMAP_Cause[j].cause_id){
+								isExistCause=true;
+								taccdrfile[fn][temp_hash][i].A_BSSMAP_Cause[i].cause_num+=imeicdrfile[fn][hn][cr].A_BSSMAP_Cause[j].cause_num;
+								break;
+							}
+						}
+						
+						if(isExistCause==false){
+							CAUSE_TYPE tempcause;
+							tempcause.cause_id=imeicdrfile[fn][hn][cr].A_BSSMAP_Cause[j].cause_id;
+							tempcause.cause_num=imeicdrfile[fn][hn][cr].A_BSSMAP_Cause[j].cause_num;
+							taccdrfile[fn][temp_hash][i].A_BSSMAP_Cause.push_back(tempcause);
+						}
+					}
+					for(int j=0;j<imeicdrfile[fn][hn][cr].B_BSSMAP_Cause.size();j++){
+						bool isExistCause=false;
+						for(int i=0;i<taccdrfile[fn][temp_hash][i].B_BSSMAP_Cause.size();i++){
+							if(taccdrfile[fn][temp_hash][i].B_BSSMAP_Cause[i].cause_id==imeicdrfile[fn][hn][cr].B_BSSMAP_Cause[j].cause_id){
+								isExistCause=true;
+								taccdrfile[fn][temp_hash][i].B_BSSMAP_Cause[i].cause_num+=imeicdrfile[fn][hn][cr].B_BSSMAP_Cause[j].cause_num;
+								break;
+							}
+						}
+						
+						if(isExistCause==false){
+							CAUSE_TYPE tempcause;
+							tempcause.cause_id=imeicdrfile[fn][hn][cr].B_BSSMAP_Cause[j].cause_id;
+							tempcause.cause_num=imeicdrfile[fn][hn][cr].B_BSSMAP_Cause[j].cause_num;
+							taccdrfile[fn][temp_hash][i].B_BSSMAP_Cause.push_back(tempcause);
+						}
+					}
+					for(int j=0;j<imeicdrfile[fn][hn][cr].A_RANAP_Cause.size();j++){
+						bool isExistCause=false;
+						for(int i=0;i<taccdrfile[fn][temp_hash][i].A_RANAP_Cause.size();i++){
+							if(taccdrfile[fn][temp_hash][i].A_RANAP_Cause[i].cause_id==imeicdrfile[fn][hn][cr].A_RANAP_Cause[j].cause_id){
+								isExistCause=true;
+								taccdrfile[fn][temp_hash][i].A_RANAP_Cause[i].cause_num+=imeicdrfile[fn][hn][cr].A_RANAP_Cause[j].cause_num;
+								break;
+							}
+						}
+						
+						if(isExistCause==false){
+							CAUSE_TYPE tempcause;
+							tempcause.cause_id=imeicdrfile[fn][hn][cr].A_RANAP_Cause[j].cause_id;
+							tempcause.cause_num=imeicdrfile[fn][hn][cr].A_RANAP_Cause[j].cause_num;
+							taccdrfile[fn][temp_hash][i].A_RANAP_Cause.push_back(tempcause);
+						}
+					}
+					for(int j=0;j<imeicdrfile[fn][hn][cr].B_RANAP_Cause.size();j++){
+						bool isExistCause=false;
+						for(int i=0;i<taccdrfile[fn][temp_hash][i].B_RANAP_Cause.size();i++){
+							if(taccdrfile[fn][temp_hash][i].B_RANAP_Cause[i].cause_id==imeicdrfile[fn][hn][cr].B_RANAP_Cause[j].cause_id){
+								isExistCause=true;
+								taccdrfile[fn][temp_hash][i].B_RANAP_Cause[i].cause_num+=imeicdrfile[fn][hn][cr].B_RANAP_Cause[j].cause_num;
+								break;
+							}
+						}
+						
+						if(isExistCause==false){
+							CAUSE_TYPE tempcause;
+							tempcause.cause_id=imeicdrfile[fn][hn][cr].B_RANAP_Cause[j].cause_id;
+							tempcause.cause_num=imeicdrfile[fn][hn][cr].B_RANAP_Cause[j].cause_num;
+							taccdrfile[fn][temp_hash][i].B_RANAP_Cause.push_back(tempcause);
+						}
+					}
+					for(int j=0;j<imeicdrfile[fn][hn][cr].DX_Cause.size();j++){
+						bool isExistCause=false;
+						for(int i=0;i<taccdrfile[fn][temp_hash][i].DX_Cause.size();i++){
+							if(taccdrfile[fn][temp_hash][i].DX_Cause[i].cause_id==imeicdrfile[fn][hn][cr].DX_Cause[j].cause_id){
+								isExistCause=true;
+								taccdrfile[fn][temp_hash][i].DX_Cause[i].cause_num+=imeicdrfile[fn][hn][cr].DX_Cause[j].cause_num;
+								break;
+							}
+						}
+						
+						if(isExistCause==false){
+							CAUSE_TYPE tempcause;
+							tempcause.cause_id=imeicdrfile[fn][hn][cr].DX_Cause[j].cause_id;
+							tempcause.cause_num=imeicdrfile[fn][hn][cr].DX_Cause[j].cause_num;
+							taccdrfile[fn][temp_hash][i].DX_Cause.push_back(tempcause);
+						}
+					}
 					taccdrfile[fn][temp_hash][i].B_shortcall_1+=imeicdrfile[fn][hn][cr].B_shortcall_1;
 					taccdrfile[fn][temp_hash][i].A_shortcall_1+=imeicdrfile[fn][hn][cr].A_shortcall_1;
 					taccdrfile[fn][temp_hash][i].B_shortcall_2+=imeicdrfile[fn][hn][cr].B_shortcall_2;
@@ -44,7 +131,7 @@ bool ComputeTACStatistic(int fn){
 					taccdrfile[fn][temp_hash][i].A_call_attempt_GSM+=imeicdrfile[fn][hn][cr].A_call_attempt_GSM;
 					taccdrfile[fn][temp_hash][i].A_call_attempt_TD+=imeicdrfile[fn][hn][cr].A_call_attempt_TD;
 					taccdrfile[fn][temp_hash][i].B_call_attempt_TD+=imeicdrfile[fn][hn][cr].B_call_attempt_TD;
-					taccdrfile[fn][temp_hash][i].A_causeTD+=imeicdrfile[fn][hn][cr].A_causeTD;
+					/*taccdrfile[fn][temp_hash][i].A_causeTD+=imeicdrfile[fn][hn][cr].A_causeTD;
 					taccdrfile[fn][temp_hash][i].A_causeTD46+=imeicdrfile[fn][hn][cr].A_causeTD46;
 					taccdrfile[fn][temp_hash][i].A_causeTD176+=imeicdrfile[fn][hn][cr].A_causeTD176;
 					taccdrfile[fn][temp_hash][i].A_causeTD192+=imeicdrfile[fn][hn][cr].A_causeTD192;
@@ -68,6 +155,7 @@ bool ComputeTACStatistic(int fn){
 					taccdrfile[fn][temp_hash][i].B_causeTDProtocol+=imeicdrfile[fn][hn][cr].B_causeTDProtocol;
 					taccdrfile[fn][temp_hash][i].B_causeTDRadioNetwork+=imeicdrfile[fn][hn][cr].B_causeTDRadioNetwork;
 					taccdrfile[fn][temp_hash][i].B_causeTDTransport+=imeicdrfile[fn][hn][cr].B_causeTDTransport;
+					*/
 					//taccdrfile[fn][temp_hash][i].A_call_not_connected+=imeicdrfile[fn][hn][cr].A_call_not_connected;
 					//taccdrfile[fn][temp_hash][i].B_call_not_connected+=imeicdrfile[fn][hn][cr].B_call_not_connected;
 					break;
@@ -80,7 +168,8 @@ bool ComputeTACStatistic(int fn){
 				tempimei.TAC=imeicdrfile[fn][hn][cr].TAC;
 				tempimei.cellid=imeicdrfile[fn][hn][cr].cellid;
 				tempimei.network=imeicdrfile[fn][hn][cr].network;
-				tempimei.A_cause0=imeicdrfile[fn][hn][cr].A_cause0;
+				tempimei.timeSection=imeicdrfile[fn][hn][cr].timeSection;
+				/*tempimei.A_cause0=imeicdrfile[fn][hn][cr].A_cause0;
 				tempimei.A_cause1=imeicdrfile[fn][hn][cr].A_cause1;
 				tempimei.A_cause20=imeicdrfile[fn][hn][cr].A_cause20;
 				tempimei.A_cause60=imeicdrfile[fn][hn][cr].A_cause60;
@@ -89,7 +178,7 @@ bool ComputeTACStatistic(int fn){
 				tempimei.B_cause20=imeicdrfile[fn][hn][cr].B_cause20;
 				tempimei.B_cause60=imeicdrfile[fn][hn][cr].B_cause60;
 				tempimei.A_causeGSM=imeicdrfile[fn][hn][cr].A_causeGSM;
-				tempimei.B_causeGSM=imeicdrfile[fn][hn][cr].B_causeGSM;
+				tempimei.B_causeGSM=imeicdrfile[fn][hn][cr].B_causeGSM;*/
 				tempimei.A_shortcall_1=imeicdrfile[fn][hn][cr].A_shortcall_1;
 				tempimei.B_shortcall_1=imeicdrfile[fn][hn][cr].B_shortcall_1;
 				tempimei.A_shortcall_2=imeicdrfile[fn][hn][cr].A_shortcall_2;
@@ -102,7 +191,7 @@ bool ComputeTACStatistic(int fn){
 				tempimei.A_call_attempt_GSM=imeicdrfile[fn][hn][cr].A_call_attempt_GSM;
 				tempimei.A_call_attempt_TD=imeicdrfile[fn][hn][cr].A_call_attempt_TD;
 				tempimei.B_call_attempt_TD=imeicdrfile[fn][hn][cr].B_call_attempt_TD;
-				tempimei.A_causeTD=imeicdrfile[fn][hn][cr].A_causeTD;
+				/*tempimei.A_causeTD=imeicdrfile[fn][hn][cr].A_causeTD;
 				tempimei.A_causeTD46=imeicdrfile[fn][hn][cr].A_causeTD46;
 				tempimei.A_causeTD176=imeicdrfile[fn][hn][cr].A_causeTD176;
 				tempimei.A_causeTD192=imeicdrfile[fn][hn][cr].A_causeTD192;
@@ -125,10 +214,10 @@ bool ComputeTACStatistic(int fn){
 				tempimei.B_causeTDNonStandard=imeicdrfile[fn][hn][cr].B_causeTDNonStandard;
 				tempimei.B_causeTDProtocol=imeicdrfile[fn][hn][cr].B_causeTDProtocol;
 				tempimei.B_causeTDRadioNetwork=imeicdrfile[fn][hn][cr].B_causeTDRadioNetwork;
-				tempimei.B_causeTDTransport=imeicdrfile[fn][hn][cr].B_causeTDTransport;
+				tempimei.B_causeTDTransport=imeicdrfile[fn][hn][cr].B_causeTDTransport;*/
 				//tempimei.A_call_not_connected=imeicdrfile[fn][hn][cr].A_call_not_connected;
 				//tempimei.B_call_not_connected=imeicdrfile[fn][hn][cr].B_call_not_connected;
-			
+				
 				taccdrfile[fn][temp_hash].push_back(tempimei);
 			}
 		}
