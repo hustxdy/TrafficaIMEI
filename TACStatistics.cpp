@@ -36,10 +36,10 @@ bool ComputeTACStatistic(int fn){
 					
 					for(int j=0;j<imeicdrfile[fn][hn][cr].A_BSSMAP_Cause.size();j++){
 						bool isExistCause=false;
-						for(int i=0;i<taccdrfile[fn][temp_hash][i].A_BSSMAP_Cause.size();i++){
-							if(taccdrfile[fn][temp_hash][i].A_BSSMAP_Cause[i].cause_id==imeicdrfile[fn][hn][cr].A_BSSMAP_Cause[j].cause_id){
+						for(int k=0;k<taccdrfile[fn][temp_hash][i].A_BSSMAP_Cause.size();k++){
+							if(taccdrfile[fn][temp_hash][i].A_BSSMAP_Cause[k].cause_id==imeicdrfile[fn][hn][cr].A_BSSMAP_Cause[j].cause_id){
 								isExistCause=true;
-								taccdrfile[fn][temp_hash][i].A_BSSMAP_Cause[i].cause_num+=imeicdrfile[fn][hn][cr].A_BSSMAP_Cause[j].cause_num;
+								taccdrfile[fn][temp_hash][i].A_BSSMAP_Cause[k].cause_num+=imeicdrfile[fn][hn][cr].A_BSSMAP_Cause[j].cause_num;
 								break;
 							}
 						}
@@ -53,10 +53,10 @@ bool ComputeTACStatistic(int fn){
 					}
 					for(int j=0;j<imeicdrfile[fn][hn][cr].B_BSSMAP_Cause.size();j++){
 						bool isExistCause=false;
-						for(int i=0;i<taccdrfile[fn][temp_hash][i].B_BSSMAP_Cause.size();i++){
-							if(taccdrfile[fn][temp_hash][i].B_BSSMAP_Cause[i].cause_id==imeicdrfile[fn][hn][cr].B_BSSMAP_Cause[j].cause_id){
+						for(int k=0;k<taccdrfile[fn][temp_hash][i].B_BSSMAP_Cause.size();k++){
+							if(taccdrfile[fn][temp_hash][i].B_BSSMAP_Cause[k].cause_id==imeicdrfile[fn][hn][cr].B_BSSMAP_Cause[j].cause_id){
 								isExistCause=true;
-								taccdrfile[fn][temp_hash][i].B_BSSMAP_Cause[i].cause_num+=imeicdrfile[fn][hn][cr].B_BSSMAP_Cause[j].cause_num;
+								taccdrfile[fn][temp_hash][i].B_BSSMAP_Cause[k].cause_num+=imeicdrfile[fn][hn][cr].B_BSSMAP_Cause[j].cause_num;
 								break;
 							}
 						}
@@ -70,10 +70,10 @@ bool ComputeTACStatistic(int fn){
 					}
 					for(int j=0;j<imeicdrfile[fn][hn][cr].A_RANAP_Cause.size();j++){
 						bool isExistCause=false;
-						for(int i=0;i<taccdrfile[fn][temp_hash][i].A_RANAP_Cause.size();i++){
-							if(taccdrfile[fn][temp_hash][i].A_RANAP_Cause[i].cause_id==imeicdrfile[fn][hn][cr].A_RANAP_Cause[j].cause_id){
+						for(int k=0;k<taccdrfile[fn][temp_hash][i].A_RANAP_Cause.size();k++){
+							if(taccdrfile[fn][temp_hash][i].A_RANAP_Cause[k].cause_id==imeicdrfile[fn][hn][cr].A_RANAP_Cause[j].cause_id){
 								isExistCause=true;
-								taccdrfile[fn][temp_hash][i].A_RANAP_Cause[i].cause_num+=imeicdrfile[fn][hn][cr].A_RANAP_Cause[j].cause_num;
+								taccdrfile[fn][temp_hash][i].A_RANAP_Cause[k].cause_num+=imeicdrfile[fn][hn][cr].A_RANAP_Cause[j].cause_num;
 								break;
 							}
 						}
@@ -87,10 +87,10 @@ bool ComputeTACStatistic(int fn){
 					}
 					for(int j=0;j<imeicdrfile[fn][hn][cr].B_RANAP_Cause.size();j++){
 						bool isExistCause=false;
-						for(int i=0;i<taccdrfile[fn][temp_hash][i].B_RANAP_Cause.size();i++){
-							if(taccdrfile[fn][temp_hash][i].B_RANAP_Cause[i].cause_id==imeicdrfile[fn][hn][cr].B_RANAP_Cause[j].cause_id){
+						for(int k=0;k<taccdrfile[fn][temp_hash][i].B_RANAP_Cause.size();k++){
+							if(taccdrfile[fn][temp_hash][i].B_RANAP_Cause[k].cause_id==imeicdrfile[fn][hn][cr].B_RANAP_Cause[j].cause_id){
 								isExistCause=true;
-								taccdrfile[fn][temp_hash][i].B_RANAP_Cause[i].cause_num+=imeicdrfile[fn][hn][cr].B_RANAP_Cause[j].cause_num;
+								taccdrfile[fn][temp_hash][i].B_RANAP_Cause[k].cause_num+=imeicdrfile[fn][hn][cr].B_RANAP_Cause[j].cause_num;
 								break;
 							}
 						}
@@ -102,21 +102,193 @@ bool ComputeTACStatistic(int fn){
 							taccdrfile[fn][temp_hash][i].B_RANAP_Cause.push_back(tempcause);
 						}
 					}
-					for(int j=0;j<imeicdrfile[fn][hn][cr].DX_Cause.size();j++){
+					for(int j=0;j<imeicdrfile[fn][hn][cr].A_DX_Cause_GSM.size();j++){
 						bool isExistCause=false;
-						for(int i=0;i<taccdrfile[fn][temp_hash][i].DX_Cause.size();i++){
-							if(taccdrfile[fn][temp_hash][i].DX_Cause[i].cause_id==imeicdrfile[fn][hn][cr].DX_Cause[j].cause_id){
+						for(int k=0;k<taccdrfile[fn][temp_hash][i].A_DX_Cause_GSM.size();k++){
+							if(taccdrfile[fn][temp_hash][i].A_DX_Cause_GSM[k].cause_id==imeicdrfile[fn][hn][cr].A_DX_Cause_GSM[j].cause_id){
 								isExistCause=true;
-								taccdrfile[fn][temp_hash][i].DX_Cause[i].cause_num+=imeicdrfile[fn][hn][cr].DX_Cause[j].cause_num;
+								taccdrfile[fn][temp_hash][i].A_DX_Cause_GSM[k].cause_num+=imeicdrfile[fn][hn][cr].A_DX_Cause_GSM[j].cause_num;
 								break;
 							}
 						}
 						
 						if(isExistCause==false){
 							CAUSE_TYPE tempcause;
-							tempcause.cause_id=imeicdrfile[fn][hn][cr].DX_Cause[j].cause_id;
-							tempcause.cause_num=imeicdrfile[fn][hn][cr].DX_Cause[j].cause_num;
-							taccdrfile[fn][temp_hash][i].DX_Cause.push_back(tempcause);
+							tempcause.cause_id=imeicdrfile[fn][hn][cr].A_DX_Cause_GSM[j].cause_id;
+							tempcause.cause_num=imeicdrfile[fn][hn][cr].A_DX_Cause_GSM[j].cause_num;
+							taccdrfile[fn][temp_hash][i].A_DX_Cause_GSM.push_back(tempcause);
+						}
+					}
+					for(int j=0;j<imeicdrfile[fn][hn][cr].A_DX_Cause_TD.size();j++){
+						bool isExistCause=false;
+						for(int k=0;k<taccdrfile[fn][temp_hash][i].A_DX_Cause_TD.size();k++){
+							if(taccdrfile[fn][temp_hash][i].A_DX_Cause_TD[k].cause_id==imeicdrfile[fn][hn][cr].A_DX_Cause_TD[j].cause_id){
+								isExistCause=true;
+								taccdrfile[fn][temp_hash][i].A_DX_Cause_TD[k].cause_num+=imeicdrfile[fn][hn][cr].A_DX_Cause_TD[j].cause_num;
+								break;
+							}
+						}
+						
+						if(isExistCause==false){
+							CAUSE_TYPE tempcause;
+							tempcause.cause_id=imeicdrfile[fn][hn][cr].A_DX_Cause_TD[j].cause_id;
+							tempcause.cause_num=imeicdrfile[fn][hn][cr].A_DX_Cause_TD[j].cause_num;
+							taccdrfile[fn][temp_hash][i].A_DX_Cause_TD.push_back(tempcause);
+						}
+					}
+					for(int j=0;j<imeicdrfile[fn][hn][cr].B_DX_Cause_GSM.size();j++){
+						bool isExistCause=false;
+						for(int k=0;k<taccdrfile[fn][temp_hash][i].B_DX_Cause_GSM.size();k++){
+							if(taccdrfile[fn][temp_hash][i].B_DX_Cause_GSM[k].cause_id==imeicdrfile[fn][hn][cr].B_DX_Cause_GSM[j].cause_id){
+								isExistCause=true;
+								taccdrfile[fn][temp_hash][i].B_DX_Cause_GSM[k].cause_num+=imeicdrfile[fn][hn][cr].B_DX_Cause_GSM[j].cause_num;
+								break;
+							}
+						}
+						
+						if(isExistCause==false){
+							CAUSE_TYPE tempcause;
+							tempcause.cause_id=imeicdrfile[fn][hn][cr].B_DX_Cause_GSM[j].cause_id;
+							tempcause.cause_num=imeicdrfile[fn][hn][cr].B_DX_Cause_GSM[j].cause_num;
+							taccdrfile[fn][temp_hash][i].B_DX_Cause_GSM.push_back(tempcause);
+						}
+					}
+					for(int j=0;j<imeicdrfile[fn][hn][cr].B_DX_Cause_TD.size();j++){
+						bool isExistCause=false;
+						for(int k=0;k<taccdrfile[fn][temp_hash][i].B_DX_Cause_TD.size();k++){
+							if(taccdrfile[fn][temp_hash][i].B_DX_Cause_TD[k].cause_id==imeicdrfile[fn][hn][cr].B_DX_Cause_TD[j].cause_id){
+								isExistCause=true;
+								taccdrfile[fn][temp_hash][i].B_DX_Cause_TD[k].cause_num+=imeicdrfile[fn][hn][cr].B_DX_Cause_TD[j].cause_num;
+								break;
+							}
+						}
+						
+						if(isExistCause==false){
+							CAUSE_TYPE tempcause;
+							tempcause.cause_id=imeicdrfile[fn][hn][cr].B_DX_Cause_TD[j].cause_id;
+							tempcause.cause_num=imeicdrfile[fn][hn][cr].B_DX_Cause_TD[j].cause_num;
+							taccdrfile[fn][temp_hash][i].B_DX_Cause_TD.push_back(tempcause);
+						}
+					}
+					
+					for(int j=0;j<imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM.size();j++){
+						for(int k=0;k<imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j].size();k++){
+							//对每一个IMEI和IMSI组合，查询是否已有记录
+							bool isExistIMEI=false;
+							bool isExistIMEIandIMSI=false;
+							int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							for(int m=0;m<taccdrfile[fn][temp_hash][i].A_IMEI_IMSI_GSM[temp_hash_imei].size();m++){
+								if(imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI==taccdrfile[fn][temp_hash][i].A_IMEI_IMSI_GSM[temp_hash_imei][m].IMEI){
+									isExistIMEI=true;
+									if(imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMSI==taccdrfile[fn][temp_hash][i].A_IMEI_IMSI_GSM[temp_hash_imei][m].IMSI){
+										isExistIMEIandIMSI==true;
+										break;
+									}
+								}
+							}
+
+							if(isExistIMEIandIMSI==false){
+								//如果IMEI和IMSI组成的对不重复，那么新增一个
+								IMEI_IMSI tempim;
+								tempim.IMEI=imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI;
+								tempim.IMSI=imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMSI;
+								taccdrfile[fn][temp_hash][i].A_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempim);
+							}
+
+							if(isExistIMEI==false){
+								//如果IMEI不重复
+								taccdrfile[fn][temp_hash][i].A_IMEI_GSM++;
+							}
+						}
+					}
+					for(int j=0;j<imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD.size();j++){
+						for(int k=0;k<imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j].size();k++){
+							//对每一个IMEI和IMSI组合，查询是否已有记录
+							bool isExistIMEI=false;
+							bool isExistIMEIandIMSI=false;
+							int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							for(int m=0;m<taccdrfile[fn][temp_hash][i].A_IMEI_IMSI_TD[temp_hash_imei].size();m++){
+								if(imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMEI==taccdrfile[fn][temp_hash][i].A_IMEI_IMSI_TD[temp_hash_imei][m].IMEI){
+									isExistIMEI=true;
+									if(imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMSI==taccdrfile[fn][temp_hash][i].A_IMEI_IMSI_TD[temp_hash_imei][m].IMSI){
+										isExistIMEIandIMSI==true;
+										break;
+									}
+								}
+							}
+
+							if(isExistIMEIandIMSI==false){
+								//如果IMEI和IMSI组成的对不重复，那么新增一个
+								IMEI_IMSI tempim;
+								tempim.IMEI=imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMEI;
+								tempim.IMSI=imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMSI;
+								taccdrfile[fn][temp_hash][i].A_IMEI_IMSI_TD[temp_hash_imei].push_back(tempim);
+							}
+
+							if(isExistIMEI==false){
+								//如果IMEI不重复
+								taccdrfile[fn][temp_hash][i].A_IMEI_TD++;
+							}
+						}
+					}
+					for(int j=0;j<imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM.size();j++){
+						for(int k=0;k<imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j].size();k++){
+							//对每一个IMEI和IMSI组合，查询是否已有记录
+							bool isExistIMEI=false;
+							bool isExistIMEIandIMSI=false;
+							int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							for(int m=0;m<taccdrfile[fn][temp_hash][i].B_IMEI_IMSI_GSM[temp_hash_imei].size();m++){
+								if(imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI==taccdrfile[fn][temp_hash][i].B_IMEI_IMSI_GSM[temp_hash_imei][m].IMEI){
+									isExistIMEI=true;
+									if(imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMSI==taccdrfile[fn][temp_hash][i].B_IMEI_IMSI_GSM[temp_hash_imei][m].IMSI){
+										isExistIMEIandIMSI==true;
+										break;
+									}
+								}
+							}
+
+							if(isExistIMEIandIMSI==false){
+								//如果IMEI和IMSI组成的对不重复，那么新增一个
+								IMEI_IMSI tempim;
+								tempim.IMEI=imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI;
+								tempim.IMSI=imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMSI;
+								taccdrfile[fn][temp_hash][i].B_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempim);
+							}
+
+							if(isExistIMEI==false){
+								//如果IMEI不重复
+								taccdrfile[fn][temp_hash][i].B_IMEI_GSM++;
+							}
+						}
+					}
+					for(int j=0;j<imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD.size();j++){
+						for(int k=0;k<imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j].size();k++){
+							//对每一个IMEI和IMSI组合，查询是否已有记录
+							bool isExistIMEI=false;
+							bool isExistIMEIandIMSI=false;
+							int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							for(int m=0;m<taccdrfile[fn][temp_hash][i].B_IMEI_IMSI_TD[temp_hash_imei].size();m++){
+								if(imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMEI==taccdrfile[fn][temp_hash][i].B_IMEI_IMSI_TD[temp_hash_imei][m].IMEI){
+									isExistIMEI=true;
+									if(imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMSI==taccdrfile[fn][temp_hash][i].B_IMEI_IMSI_TD[temp_hash_imei][m].IMSI){
+										isExistIMEIandIMSI==true;
+										break;
+									}
+								}
+							}
+
+							if(isExistIMEIandIMSI==false){
+								//如果IMEI和IMSI组成的对不重复，那么新增一个
+								IMEI_IMSI tempim;
+								tempim.IMEI=imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMEI;
+								tempim.IMSI=imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMSI;
+								taccdrfile[fn][temp_hash][i].B_IMEI_IMSI_TD[temp_hash_imei].push_back(tempim);
+							}
+
+							if(isExistIMEI==false){
+								//如果IMEI不重复
+								taccdrfile[fn][temp_hash][i].B_IMEI_TD++;
+							}
 						}
 					}
 					taccdrfile[fn][temp_hash][i].B_shortcall_1+=imeicdrfile[fn][hn][cr].B_shortcall_1;
@@ -191,6 +363,135 @@ bool ComputeTACStatistic(int fn){
 				tempimei.A_call_attempt_GSM=imeicdrfile[fn][hn][cr].A_call_attempt_GSM;
 				tempimei.A_call_attempt_TD=imeicdrfile[fn][hn][cr].A_call_attempt_TD;
 				tempimei.B_call_attempt_TD=imeicdrfile[fn][hn][cr].B_call_attempt_TD;
+				tempimei.A_BSSMAP_Cause.clear();
+				tempimei.A_RANAP_Cause.clear();
+				tempimei.B_BSSMAP_Cause.clear();
+				tempimei.B_RANAP_Cause.clear();
+				tempimei.A_DX_Cause_GSM.clear();
+				tempimei.A_DX_Cause_TD.clear();
+				tempimei.B_DX_Cause_GSM.clear();
+				tempimei.B_DX_Cause_TD.clear();
+				tempimei.A_IMEI_IMSI_GSM.clear();
+				tempimei.A_IMEI_IMSI_TD.clear();
+				tempimei.B_IMEI_IMSI_GSM.clear();
+				tempimei.B_IMEI_IMSI_TD.clear();
+				tempimei.A_IMEI_GSM=0;
+				tempimei.A_IMEI_TD=0;
+				tempimei.B_IMEI_GSM=0;
+				tempimei.B_IMEI_TD=0;
+				
+				for(int j=0;j<imeicdrfile[fn][hn][cr].A_BSSMAP_Cause.size();j++){
+					CAUSE_TYPE tempcause;
+					tempcause.cause_id=imeicdrfile[fn][hn][cr].A_BSSMAP_Cause[j].cause_id;
+					tempcause.cause_num=imeicdrfile[fn][hn][cr].A_BSSMAP_Cause[j].cause_num;
+					tempimei.A_BSSMAP_Cause.push_back(tempcause);
+				}
+				for(int j=0;j<imeicdrfile[fn][hn][cr].B_BSSMAP_Cause.size();j++){
+					CAUSE_TYPE tempcause;
+					tempcause.cause_id=imeicdrfile[fn][hn][cr].B_BSSMAP_Cause[j].cause_id;
+					tempcause.cause_num=imeicdrfile[fn][hn][cr].B_BSSMAP_Cause[j].cause_num;
+					tempimei.B_BSSMAP_Cause.push_back(tempcause);
+					
+				}
+				for(int j=0;j<imeicdrfile[fn][hn][cr].A_RANAP_Cause.size();j++){
+					CAUSE_TYPE tempcause;
+					tempcause.cause_id=imeicdrfile[fn][hn][cr].A_RANAP_Cause[j].cause_id;
+					tempcause.cause_num=imeicdrfile[fn][hn][cr].A_RANAP_Cause[j].cause_num;
+					tempimei.A_RANAP_Cause.push_back(tempcause);
+				}
+				for(int j=0;j<imeicdrfile[fn][hn][cr].B_RANAP_Cause.size();j++){
+					CAUSE_TYPE tempcause;
+					tempcause.cause_id=imeicdrfile[fn][hn][cr].B_RANAP_Cause[j].cause_id;
+					tempcause.cause_num=imeicdrfile[fn][hn][cr].B_RANAP_Cause[j].cause_num;
+					tempimei.B_RANAP_Cause.push_back(tempcause);
+				}
+				for(int j=0;j<imeicdrfile[fn][hn][cr].A_DX_Cause_GSM.size();j++){
+					CAUSE_TYPE tempcause;
+					tempcause.cause_id=imeicdrfile[fn][hn][cr].A_DX_Cause_GSM[j].cause_id;
+					tempcause.cause_num=imeicdrfile[fn][hn][cr].A_DX_Cause_GSM[j].cause_num;
+					tempimei.A_DX_Cause_GSM.push_back(tempcause);
+				}
+				for(int j=0;j<imeicdrfile[fn][hn][cr].A_DX_Cause_TD.size();j++){
+					CAUSE_TYPE tempcause;
+					tempcause.cause_id=imeicdrfile[fn][hn][cr].A_DX_Cause_TD[j].cause_id;
+					tempcause.cause_num=imeicdrfile[fn][hn][cr].A_DX_Cause_TD[j].cause_num;
+					tempimei.A_DX_Cause_TD.push_back(tempcause);
+				}
+				for(int j=0;j<imeicdrfile[fn][hn][cr].B_DX_Cause_GSM.size();j++){
+					CAUSE_TYPE tempcause;
+					tempcause.cause_id=imeicdrfile[fn][hn][cr].B_DX_Cause_GSM[j].cause_id;
+					tempcause.cause_num=imeicdrfile[fn][hn][cr].B_DX_Cause_GSM[j].cause_num;
+					tempimei.B_DX_Cause_GSM.push_back(tempcause);
+				}
+				for(int j=0;j<imeicdrfile[fn][hn][cr].B_DX_Cause_TD.size();j++){
+					CAUSE_TYPE tempcause;
+					tempcause.cause_id=imeicdrfile[fn][hn][cr].B_DX_Cause_TD[j].cause_id;
+					tempcause.cause_num=imeicdrfile[fn][hn][cr].B_DX_Cause_TD[j].cause_num;
+					tempimei.B_DX_Cause_TD.push_back(tempcause);
+				}
+				
+				
+				for(int j=0;j<imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM.size();j++){
+					if(j==0){
+						//只初始化一次
+						tempimei.A_IMEI_IMSI_GSM.resize((int)pow((double)10,HASH_NUM_IMEI));
+					}
+					for(int k=0;k<imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j].size();k++){
+						int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+					
+						IMEI_IMSI tempim;
+						tempim.IMEI=imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI;
+						tempim.IMSI=imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMSI;
+						tempimei.A_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempim);
+						tempimei.A_IMEI_GSM++;
+					}
+				}
+				for(int j=0;j<imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD.size();j++){
+					if(j==0){
+						//只初始化一次
+						tempimei.A_IMEI_IMSI_TD.resize((int)pow((double)10,HASH_NUM_IMEI));
+					}
+					for(int k=0;k<imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j].size();k++){
+						int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+					
+						IMEI_IMSI tempim;
+						tempim.IMEI=imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMEI;
+						tempim.IMSI=imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMSI;
+						tempimei.A_IMEI_IMSI_TD[temp_hash_imei].push_back(tempim);
+						tempimei.A_IMEI_TD++;
+					}
+				}
+				for(int j=0;j<imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM.size();j++){
+					if(j==0){
+						//只初始化一次
+						tempimei.B_IMEI_IMSI_GSM.resize((int)pow((double)10,HASH_NUM_IMEI));
+					}
+					for(int k=0;k<imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j].size();k++){
+						int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+					
+						IMEI_IMSI tempim;
+						tempim.IMEI=imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI;
+						tempim.IMSI=imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMSI;
+						tempimei.B_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempim);
+						tempimei.B_IMEI_GSM++;
+					}
+				}
+				for(int j=0;j<imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD.size();j++){
+					if(j==0){
+						//只初始化一次
+						tempimei.B_IMEI_IMSI_TD.resize((int)pow((double)10,HASH_NUM_IMEI));
+					}
+					for(int k=0;k<imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j].size();k++){
+						int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+					
+						IMEI_IMSI tempim;
+						tempim.IMEI=imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMEI;
+						tempim.IMSI=imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMSI;
+						tempimei.B_IMEI_IMSI_TD[temp_hash_imei].push_back(tempim);
+						tempimei.B_IMEI_TD++;
+					}
+				}
+
 				/*tempimei.A_causeTD=imeicdrfile[fn][hn][cr].A_causeTD;
 				tempimei.A_causeTD46=imeicdrfile[fn][hn][cr].A_causeTD46;
 				tempimei.A_causeTD176=imeicdrfile[fn][hn][cr].A_causeTD176;
