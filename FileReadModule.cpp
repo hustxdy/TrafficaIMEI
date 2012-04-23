@@ -529,6 +529,7 @@ bool ReadCDRFile(int fn,string cdrfile){
 							tempcdr.call_start_time=FormatTime(trim(readitem[pos]).c_str());
 							if(TIME_SECTION_UNIT!=0){
 								tempcdr.timeSection=(int)ceil(difftime(tempcdr.call_start_time,STATISTIC_START_TIME)/1000/TIME_SECTION_UNIT);
+								tempcdr.timeSectionStartTime=STATISTIC_START_TIME+tempcdr.timeSection*1000*TIME_SECTION_UNIT;
 							}
 							else{
 								tempcdr.timeSection=0;

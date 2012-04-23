@@ -755,6 +755,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.cellid=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_cell;
 			tempcdrstat.network="GSM";
 			tempcdrstat.timeSection=cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection;
+			tempcdrstat.timeSectionStartTime=cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSectionStartTime;
 			tempcdrstat.A_call_attempt=0;
 			tempcdrstat.A_call_attempt_GSM=0;
 			tempcdrstat.A_call_attempt_TD=0;			
@@ -810,6 +811,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.cellid=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_sac;
 			tempcdrstat.network="TD";
 			tempcdrstat.timeSection=cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection;
+			tempcdrstat.timeSectionStartTime=cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSectionStartTime;
 			tempcdrstat.A_call_attempt=0;
 			tempcdrstat.A_call_attempt_GSM=0;
 			tempcdrstat.A_call_attempt_TD=0;
@@ -1046,6 +1048,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.cellid=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_first_cell;
 			tempcdrstat.network="GSM";
 			tempcdrstat.timeSection=cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection;
+			tempcdrstat.timeSectionStartTime=cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSectionStartTime;
 			tempcdrstat.A_call_attempt=1;
 			tempcdrstat.A_call_attempt_GSM=1;
 			tempcdrstat.A_call_attempt_TD=0;
@@ -1118,6 +1121,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.cellid=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_first_sac;
 			tempcdrstat.network="TD";
 			tempcdrstat.timeSection=cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection;
+			tempcdrstat.timeSectionStartTime=cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSectionStartTime;
 			tempcdrstat.A_call_attempt=1;
 			tempcdrstat.A_call_attempt_GSM=0;
 			tempcdrstat.A_call_attempt_TD=1;
@@ -1190,6 +1194,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.cellid=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_cell;
 			tempcdrstat.network="GSM";
 			tempcdrstat.timeSection=cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection;
+			tempcdrstat.timeSectionStartTime=cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSectionStartTime;
 			tempcdrstat.A_call_attempt=0;
 			tempcdrstat.A_call_attempt_GSM=0;
 			tempcdrstat.A_call_attempt_TD=0;
@@ -1280,6 +1285,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.cellid=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_sac;
 			tempcdrstat.network="TD";
 			tempcdrstat.timeSection=cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection;
+			tempcdrstat.timeSectionStartTime=cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSectionStartTime;
 			tempcdrstat.A_call_attempt=0;
 			tempcdrstat.A_call_attempt_GSM=0;
 			tempcdrstat.A_call_attempt_TD=0;
@@ -1516,6 +1522,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.cellid=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_first_cell;
 			tempcdrstat.network="GSM";
 			tempcdrstat.timeSection=cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection;
+			tempcdrstat.timeSectionStartTime=cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSectionStartTime;
 			tempcdrstat.A_call_attempt=0;
 			tempcdrstat.A_call_attempt_GSM=0;
 			tempcdrstat.A_call_attempt_TD=0;
@@ -1588,6 +1595,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.cellid=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_first_sac;
 			tempcdrstat.network="TD";
 			tempcdrstat.timeSection=cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection;
+			tempcdrstat.timeSectionStartTime=cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSectionStartTime;
 			tempcdrstat.A_call_attempt=0;
 			tempcdrstat.A_call_attempt_GSM=0;
 			tempcdrstat.A_call_attempt_TD=0;

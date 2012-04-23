@@ -41,6 +41,7 @@ struct CDR{
 	int paging_time;//寻呼的次数
 	time_t call_start_time;//主叫发setup消息的时间
 	int timeSection;//时间段编号
+	time_t timeSectionStartTime;//此时间段的起始时间
 	time_t signalling_complete_time;//主叫收到altering的时间
 	int B_BSSMAP_cause;//被叫释放原因(BSSMAP)
 	int B_BSSMAP_cause_ext;//TD被叫释放原因(RANAP)
