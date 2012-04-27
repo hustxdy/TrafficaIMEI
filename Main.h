@@ -155,6 +155,7 @@ time_t FormatTime(const char * szTime);//从字符串转换为时间
 
 bool WorkModeSelection(string mode);//工作模式选择
 bool WorkLoadDistribution(vector<string> fl,string workdir);//分配工作量
+bool CombineProcess();//最后的对tacstat按照timesection和cell进行合并的进程
 //==================文件读取=====
 bool ReadConfigFile(std::string configfile);//读取配置文件
 bool ReadCDRFile(int fn,string cdrfile);//读取文件列表中的CDR文件
@@ -187,8 +188,8 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 //输出tacstat
 bool WriteTACFile(std::string temp_result_path_name);
 //将计算好的tacstat中不同的TimeSection合并生成tacstat_timesection
-bool ComputeTAC_TimeSection();
-//将tacstat_timesection中不同的cell合并生成tacstat_cell
+bool CombineTAC_TimeSection();
+//将tacstat_timesection中不同的cell合并生成tacstat_timesectioncell
 bool CombineTAC_TimeSectionCell();
 //输出tacstat_timesection
 bool WriteTACFile_TimeSection();

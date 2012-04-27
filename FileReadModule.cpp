@@ -201,6 +201,18 @@ bool ReadConfigFile(std::string configfile){
 			filelist.push_back(trim(str.substr(j,str.length()-j)));
 			continue;
 		}
+		if(str.find("ITEM=") != string::npos){
+			int j=0;
+			while(str[j]!='='){
+				j++;
+			}
+			j++;
+			while(str[j]==' '){
+				j++;
+			}
+			itemlist.push_back(trim(str.substr(j,str.length()-j)));
+			continue;
+		}
 		if(str.find("SHORTCALL_THRESHOLD_1=") != string::npos){
 			int j=0;
 			while(str[j]!='='){
@@ -390,7 +402,7 @@ bool ReadCDRFile(int fn,string cdrfile){
 	time_t start,end;
 	ifstream fi(cdrfile.c_str());
 	if(!fi){
-		cout<<"Reading File "<<filelist[fn]<<" Error!!! "<<endl;
+		cout<<"Reading File "<<cdrfile<<" Error!!! "<<endl;
 		//return false;
 	}
 	else{
@@ -528,7 +540,7 @@ bool ReadCDRFile(int fn,string cdrfile){
 						else if(item=="CALL_START_TIME"&&readitem[pos]!="empty"){
 							tempcdr.call_start_time=FormatTime(trim(readitem[pos]).c_str());
 							if(TIME_SECTION_UNIT!=0){
-								tempcdr.timeSection=(int)ceil(difftime(tempcdr.call_start_time,STATISTIC_START_TIME)/1000/TIME_SECTION_UNIT);
+								tempcdr.timeSection=(int)ceil(difftime(tempcdr.call_start_time,STATISTIC_START_TIME)/1000/TIME_SECTION_UNIT)+1;
 								tempcdr.timeSectionStartTime=STATISTIC_START_TIME+tempcdr.timeSection*1000*TIME_SECTION_UNIT;
 							}
 							else{

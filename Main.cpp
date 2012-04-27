@@ -42,7 +42,7 @@ vector<vector<vector<IMEI_CDR_Statistic>>> taccdrfile;//½«¼ÆËãºÃµÄimeicdrfileÖĞÔ
 vector<vector<IMEI_CDR_Statistic>> imeistat;//½«¼ÆËãºÃµÄimeicdrfileÖĞ²»Í¬µÄÏß³ÌfnºÏ²¢Éú³Éimeistat
 vector<vector<IMEI_CDR_Statistic>> tacstat;//½«¼ÆËãºÃµÄtaccdrfileÖĞ²»Í¬µÄÏß³ÌfnºÏ²¢Éú³Étacstat
 vector<vector<IMEI_CDR_Statistic>> imeistat_cell;//½«imeiÍ³¼Æ°´ÕÕcellidºÏ²¢
-vector<vector<IMEI_CDR_Statistic>> tacstat_cell;//½«tacstat_timesectionÖĞ²»Í¬µÄcellºÏ²¢Éú³Étacstat_cell
+vector<vector<IMEI_CDR_Statistic>> tacstat_timesectioncell;//½«tacstat_timesectionÖĞ²»Í¬µÄcellºÏ²¢Éú³Étacstat_timesectioncell
 vector<vector<IMEI_CDR_Statistic>> tacstat_timesection;//½«¼ÆËãºÃµÄtacstatÖĞ²»Í¬µÄTimeSectionºÏ²¢Éú³Étacstat_timesection
 //½«×Ö·û´®×ª»¯Îªtime_t±äÁ¿
 time_t FormatTime(const char * szTime)
@@ -84,7 +84,9 @@ bool WorkModeSelection(string mode){
 		if(!WorkLoadDistribution(filelist,CDRDirectory)){
 			cout<<"IMEI and TAC statistic computing is not complete due to error"<<endl;
 		}
-	
+		CombineMultiTACStat(tacstatfilelist);
+
+		CombineProcess();
 		/*
 		//¿ªÊ¼°´IMEIÍ³¼Æ
 		//ÔÚÒÑÓĞµÄIMEIÁĞ±í²éÕÒÊÇ·ñÓĞÏàÍ¬µÄ
@@ -204,6 +206,22 @@ bool WorkModeSelection(string mode){
 		cout<<"TAC Statistic compute complete in total "<<difftime(end,start)/1000<<"s "<<endl;
 		return true;
 	}
+	else if(mode=="CombineTACStatistic"){
+		tacstatfilelist.clear();
+		tacstatfilelist.push_back("D:\\xudayong\\traffica20120326\\CombineTACCellstat.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\traffica20120326\\CombineTACCellstat_0.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\traffica20120326\\CombineTACCellstat_1.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\traffica20120326\\CombineTACCellstat_2.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\traffica20120326\\CombineTACCellstat_3.csv");
+
+		CombineMultiTACStat(tacstatfilelist);
+
+		CombineProcess();
+
+		end=clock();
+		cout<<"TAC Statistic File Combining complete in total "<<difftime(end,start)/1000<<"s "<<endl;
+		return true;
+	}
 	return true;
 }
 //¸ºÔØÔÚ¸÷¸öÏß³ÌÖĞ·ÖÅä
@@ -212,7 +230,7 @@ bool WorkLoadDistribution(vector<string> fl,string workingdir){
 	taccdrfile.resize(THREADNUM);
 	//Ã¿ÂÖµÄtacstat´æ´¢µÄÎÄ¼şÃû
 	tacstatfilelist.clear();
-	//ËãÃ¿ÂÖ¶ÁFileBatchNum¸öÎÄ¼ş½øÀ´£¬¹²Ğè¶àÉÙÂÖ
+	//ËãÃ¿ÂÖ¶ÁFileBatchNum¸öÎÄ¼ş½øÀ´£¬¹²Ğè¶àÉÙÂÖ---ceilº¯ÊıËÆºõ±ä³ÉÁËËÄÉáÎåÈëµÄ
 	int batchnum=(int)(ceil((double)(fl.size()/(FileBatchNum))))+1;
 	cout<<"Divide into "<<batchnum<<" Batch"<<endl;
 	//¿ªÊ¼
@@ -294,25 +312,21 @@ bool WorkLoadDistribution(vector<string> fl,string workingdir){
 		}
 
 		//Éú³Étacstat±¾ÂÖµÄÊä³öÎÄ¼şÃû
-		string result_combinetacfile_name=OutputDirectory+"\\CombineTACCellstat";
-		string result_combinetacfile_name1=OutputDirectory+"\\CombineTACCellstat.csv";
-		string result_combinecelltacfile_name=OutputDirectory+"\\CombineTACstat";
-		string result_combinecelltacfile_name1=OutputDirectory+"\\CombineTACstat.csv";
+		string result_combinetacfile_name=OutputDirectory+"\\ToCombineTACstat";
+		string result_combinetacfile_name1=OutputDirectory+"\\ToCombineTACstat.csv";
 		int i=0;
 		char num[64];
-		while(_access(result_combinetacfile_name1.c_str(),0)==0||_access(result_combinecelltacfile_name1.c_str(),0)==0){//Èç¹û½á¹ûÎÄµµ´æÔÚ£¬Ôò×îºóµÄ±êºÅ¼Ó1£¬ÕâÊÇÎªÁË±£´æÒÔÇ°µÄ¼ÆËã½á¹û
+		while(_access(result_combinetacfile_name1.c_str(),0)==0){//Èç¹û½á¹ûÎÄµµ´æÔÚ£¬Ôò×îºóµÄ±êºÅ¼Ó1£¬ÕâÊÇÎªÁË±£´æÒÔÇ°µÄ¼ÆËã½á¹û
 			sprintf_s(num,"%d",i);
 			string result_combinetacfile_name_new=result_combinetacfile_name+(string)"_"+(string)num+".csv";
-			string result_combinecelltacfile_name_new=result_combinecelltacfile_name+(string)"_"+(string)num+".csv";
-			if(_access(result_combinetacfile_name_new.c_str(),0)!=0&&_access(result_combinecelltacfile_name.c_str(),0)!=0){
+			if(_access(result_combinetacfile_name_new.c_str(),0)!=0){
 				result_combinetacfile_name1=result_combinetacfile_name_new;
-				result_combinecelltacfile_name1=result_combinecelltacfile_name_new;
 				break;
 			}
 			i++;
 		}
 		//Ã¿ÂÖºó½øĞĞTACµÄºÏ²¢£¬ÒÔÊÍ·Åtaccdrfile
-		if(!CombineTAC()){
+		if(!CombineTAC_Thread()){
 			cout<<"Batch $"<<bn<<" TAC combining is not complete due to error"<<endl;
 		}
 		else{
@@ -332,35 +346,82 @@ bool WorkLoadDistribution(vector<string> fl,string workingdir){
 			//¿ªÊ¼Ğ´ÎÄ¼ş
 			cout<<"Batch $"<<bn<<" Start writing file "<<result_combinetacfile_name1<<endl;
 			tacstatfilelist.push_back(result_combinetacfile_name1);
-			WriteTACFile_Combine(result_combinetacfile_name1);
+			WriteTACFile(result_combinetacfile_name1);
 		}
-		//Ã¿ÂÖºó½øĞĞtacºÍcellµÄºÏ²¢£¬ÒÔÊÍ·Åtacstat
-		if(!CombineTAC_Cell()){
-			cout<<"TAC with Cell combining is not complete due to error"<<endl;
+		
+	}
+
+	return true;
+
+}
+
+bool CombineProcess(){
+		//¾­¹ınÂÖºó½øĞĞ¸÷ÂÖtacstatµÄºÏ²¢ºóµÄtacstat°´ÕÕtimesectionºÍcell½øĞĞ£¬ºÏ²¢ºóÊÍ·Åtacstat
+
+		if(CombineTAC_TimeSection()!=true){
+			cout<<"TAC with Same TimeSection combining is not complete due to error"<<endl;
 		}
 		else{
-			cout<<"TAC with Cell combining complete!!!"<<endl;
+			cout<<"TAC with Same TimeSection combining complete!!!"<<endl;
 			
 			//Çå¿Õtacstat
 			tacstat.clear();
 			vector<vector<IMEI_CDR_Statistic>>().swap(tacstat);
 			cout<<"TAC_STAT vector is cleared"<<endl;
 
-			cout<<"Start writing file "<<result_combinecelltacfile_name1<<endl;
-			WriteTACFile_CombineCell(result_combinecelltacfile_name1);
+			string result_filename=OutputDirectory+"\\TACstat_Cell";
+			string result_filename1=OutputDirectory+"\\TACstat_Cell.csv";
+			int i=0;
+			char num[64];
+			while(_access(result_filename1.c_str(),0)==0){//Èç¹û½á¹ûÎÄµµ´æÔÚ£¬Ôò×îºóµÄ±êºÅ¼Ó1£¬ÕâÊÇÎªÁË±£´æÒÔÇ°µÄ¼ÆËã½á¹û
+				sprintf_s(num,"%d",i);
+				string result_filename_new=result_filename+(string)"_"+(string)num+".csv";
+				if(_access(result_filename_new.c_str(),0)!=0){
+					result_filename1=result_filename_new;
+					break;
+				}
+				i++;
+			}
 
-			//Çå¿Õtacstat_cell
-			tacstat_cell.clear();
-			vector<vector<IMEI_CDR_Statistic>>().swap(tacstat_cell);
-			cout<<"TAC_STAT_CELL vector is cleared"<<endl;
+			cout<<"Start writing file "<<result_filename1<<endl;
+			WriteTACFile_TimeSection(result_filename1);
+		}
+		
+
+		if(CombineTAC_TimeSectionCell()!=true){
+			cout<<"TAC with Cell combining is not complete due to error"<<endl;
+		}
+		else{
+			cout<<"TAC with Cell combining complete!!!"<<endl;
+
+			//Çå¿Õtacstat_timesectioncell
+			tacstat_timesection.clear();
+			vector<vector<IMEI_CDR_Statistic>>().swap(tacstat_timesection);
+			cout<<"TAC_STAT_TIMESECTION vector is cleared"<<endl;
+
+
+			string result_filename=OutputDirectory+"\\TACstat";
+			string result_filename1=OutputDirectory+"\\TACstat.csv";
+			int i=0;
+			char num[64];
+			while(_access(result_filename1.c_str(),0)==0){//Èç¹û½á¹ûÎÄµµ´æÔÚ£¬Ôò×îºóµÄ±êºÅ¼Ó1£¬ÕâÊÇÎªÁË±£´æÒÔÇ°µÄ¼ÆËã½á¹û
+				sprintf_s(num,"%d",i);
+				string result_filename_new=result_filename+(string)"_"+(string)num+".csv";
+				if(_access(result_filename_new.c_str(),0)!=0){
+					result_filename1=result_filename_new;
+					break;
+				}
+				i++;
+			}
+			cout<<"Start writing file "<<result_filename1<<endl;
+			WriteTACFile_TimeSectionCell(result_filename1);
+
+			//Çå¿Õtacstat_timesectioncell
+			tacstat_timesectioncell.clear();
+			vector<vector<IMEI_CDR_Statistic>>().swap(tacstat_timesectioncell);
+			cout<<"TAC_STAT_TIMESECTION_CELL vector is cleared"<<endl;
 
 		}
-	}
-
-
-	
-	return true;
-
 }
 //Èë¿Úº¯Êı
 int _tmain(int argc, _TCHAR* argv[])
