@@ -4,9 +4,9 @@
 
 bool isValidCDR(CDR cdr){
 		
-	for(int i=0;i<CDR_SCREEN_B_NUMBER_INITIAL_LIST.size();i++){
-		if(cdr.B_number.size()>CDR_SCREEN_B_NUMBER_INITIAL_LIST[i].size()){//因substr不做长度检查，防止出错
-			if(cdr.B_number.substr(0,CDR_SCREEN_B_NUMBER_INITIAL_LIST[i].size())==CDR_SCREEN_B_NUMBER_INITIAL_LIST[i]){
+	for(int i=0;i<cfg.CDR_SCREEN_B_NUMBER_INITIAL_LIST.size();i++){
+		if(cdr.B_number.size()>cfg.CDR_SCREEN_B_NUMBER_INITIAL_LIST[i].size()){//因substr不做长度检查，防止出错
+			if(cdr.B_number.substr(0,cfg.CDR_SCREEN_B_NUMBER_INITIAL_LIST[i].size())==cfg.CDR_SCREEN_B_NUMBER_INITIAL_LIST[i]){
 				return false;
 			}
 		}
@@ -17,7 +17,7 @@ bool isValidCDR(CDR cdr){
 	if(cdr.INTER_MSC_HO==1){
 		return false;
 	}
-	if((difftime(cdr.call_start_time,STATISTIC_START_TIME)<0||difftime(cdr.call_start_time,STATISTIC_END_TIME)>0)){
+	if((difftime(cdr.call_start_time,cfg.STATISTIC_START_TIME)<0||difftime(cdr.call_start_time,cfg.STATISTIC_END_TIME)>0)){
 		return false;
 	}
 	return true;
@@ -31,8 +31,8 @@ bool ReadConfigFile(std::string configfile){
 	}
 
 	string str;
-	filelist.clear();
-	itemlist.clear();
+	cfg.filelist.clear();
+	cfg.itemlist.clear();
 	while(getline(fi,str)){
 		if(str.find("WorkMode=")!=string::npos){
 			int j=0;
@@ -43,7 +43,7 @@ bool ReadConfigFile(std::string configfile){
 			while(str[j]==' '){
 				j++;
 			}
-			workmode=trim(str.substr(j,str.length()-j));
+			cfg.workmode=trim(str.substr(j,str.length()-j));
 		}
 		if(str.find("CDRDirectory=")!=string::npos){
 			int j=0;
@@ -54,7 +54,7 @@ bool ReadConfigFile(std::string configfile){
 			while(str[j]==' '){
 				j++;
 			}
-			CDRDirectory=trim(str.substr(j,str.length()-j));
+			cfg.CDRDirectory=trim(str.substr(j,str.length()-j));
 		}
 		if(str.find("OutputDirectory=")!=string::npos){
 			int j=0;
@@ -65,7 +65,7 @@ bool ReadConfigFile(std::string configfile){
 			while(str[j]==' '){
 				j++;
 			}
-			OutputDirectory=trim(str.substr(j,str.length()-j));
+			cfg.OutputDirectory=trim(str.substr(j,str.length()-j));
 		}
 		if(str.find("TACFILE=")!=string::npos){
 			int j=0;
@@ -76,7 +76,7 @@ bool ReadConfigFile(std::string configfile){
 			while(str[j]==' '){
 				j++;
 			}
-			TACFILE=trim(str.substr(j,str.length()-j));
+			cfg.TACFILE=trim(str.substr(j,str.length()-j));
 		}
 		if(str.find("CELLFILE=")!=string::npos){
 			int j=0;
@@ -87,7 +87,7 @@ bool ReadConfigFile(std::string configfile){
 			while(str[j]==' '){
 				j++;
 			}
-			CELLFILE=trim(str.substr(j,str.length()-j));
+			cfg.CELLFILE=trim(str.substr(j,str.length()-j));
 		}
 		if(str.find("CDR_SCREEN_B_NUMBER_INITIAL_LIST=")!=string::npos){
 			int j=0;
@@ -99,7 +99,7 @@ bool ReadConfigFile(std::string configfile){
 				j++;
 			}
 			
-			CDR_SCREEN_B_NUMBER_INITIAL_LIST.clear();
+			cfg.CDR_SCREEN_B_NUMBER_INITIAL_LIST.clear();
 			
 			int it=0;//记录当前读取字段的开头
 			int jt=0;//记录当前读取字段的结束
@@ -110,7 +110,7 @@ bool ReadConfigFile(std::string configfile){
 					jt++;//找寻下一个coma
 				}
 				if((jt-it)>0){
-					CDR_SCREEN_B_NUMBER_INITIAL_LIST.push_back(temp_b_number_initial_list.substr(it,jt-it));
+					cfg.CDR_SCREEN_B_NUMBER_INITIAL_LIST.push_back(temp_b_number_initial_list.substr(it,jt-it));
 				}
 				else if(jt==it){
 					//
@@ -128,10 +128,26 @@ bool ReadConfigFile(std::string configfile){
 				j++;
 			}
 			if(trim(str.substr(j,str.length()-j))=="true"){
-				bIMEIOutput=true;
+				cfg.bIMEIOutput=true;
 			}
 			else{
-				bIMEIOutput=false;
+				cfg.bIMEIOutput=false;
+			}
+		}
+		if(str.find("ComputeDistinctIMEI=")!=string::npos){
+			int j=0;
+			while(str[j]!='='){
+				j++;
+			}
+			j++;
+			while(str[j]==' '){
+				j++;
+			}
+			if(trim(str.substr(j,str.length()-j))=="true"){
+				cfg.bComputeDistinctIMEI=true;
+			}
+			else{
+				cfg.bComputeDistinctIMEI=false;
 			}
 		}
 		if(str.find("FileReadBatch=")!=string::npos){
@@ -143,7 +159,7 @@ bool ReadConfigFile(std::string configfile){
 			while(str[j]==' '){
 				j++;
 			}
-			FileBatchNum=atoi(str.substr(j,str.length()-j).c_str());
+			cfg.FileBatchNum=atoi(str.substr(j,str.length()-j).c_str());
 		}
 		if(str.find("THREADNUM=")!=string::npos){
 			int j=0;
@@ -154,7 +170,7 @@ bool ReadConfigFile(std::string configfile){
 			while(str[j]==' '){
 				j++;
 			}
-			THREADNUM=atoi(str.substr(j,str.length()-j).c_str());
+			cfg.THREADNUM=atoi(str.substr(j,str.length()-j).c_str());
 		}
 		if(str.find("HASH_NUM_IMEI=")!=string::npos){
 			int j=0;
@@ -165,7 +181,7 @@ bool ReadConfigFile(std::string configfile){
 			while(str[j]==' '){
 				j++;
 			}
-			HASH_NUM_IMEI=atoi(str.substr(j,str.length()-j).c_str());
+			cfg.HASH_NUM_IMEI=atoi(str.substr(j,str.length()-j).c_str());
 		}
 		if(str.find("HASH_NUM_CELLID=")!=string::npos){
 			int j=0;
@@ -176,7 +192,7 @@ bool ReadConfigFile(std::string configfile){
 			while(str[j]==' '){
 				j++;
 			}
-			HASH_NUM_CELLID=atoi(str.substr(j,str.length()-j).c_str());
+			cfg.HASH_NUM_CELLID=atoi(str.substr(j,str.length()-j).c_str());
 		}
 		if(str.find("START_HASH_INDEX_IMEI=")!=string::npos){
 			int j=0;
@@ -187,7 +203,7 @@ bool ReadConfigFile(std::string configfile){
 			while(str[j]==' '){
 				j++;
 			}
-			START_HASH_INDEX_IMEI=atoi(str.substr(j,str.length()-j).c_str());
+			cfg.START_HASH_INDEX_IMEI=atoi(str.substr(j,str.length()-j).c_str());
 		}
 		if(str.find("CDRFile=") != string::npos){
 			int j=0;
@@ -198,7 +214,7 @@ bool ReadConfigFile(std::string configfile){
 			while(str[j]==' '){
 				j++;
 			}
-			filelist.push_back(trim(str.substr(j,str.length()-j)));
+			cfg.filelist.push_back(trim(str.substr(j,str.length()-j)));
 			continue;
 		}
 		if(str.find("ITEM=") != string::npos){
@@ -210,7 +226,7 @@ bool ReadConfigFile(std::string configfile){
 			while(str[j]==' '){
 				j++;
 			}
-			itemlist.push_back(trim(str.substr(j,str.length()-j)));
+			cfg.itemlist.push_back(trim(str.substr(j,str.length()-j)));
 			continue;
 		}
 		if(str.find("SHORTCALL_THRESHOLD_1=") != string::npos){
@@ -222,7 +238,7 @@ bool ReadConfigFile(std::string configfile){
 			while(str[j]==' '){
 				j++;
 			}
-			SHORTCALL_THRESHOLD_1=atoi(trim(str.substr(j,str.length()-j)).c_str());
+			cfg.SHORTCALL_THRESHOLD_1=atoi(trim(str.substr(j,str.length()-j)).c_str());
 			continue;
 		}
 		if(str.find("SHORTCALL_THRESHOLD_2=") != string::npos){
@@ -234,7 +250,7 @@ bool ReadConfigFile(std::string configfile){
 			while(str[j]==' '){
 				j++;
 			}
-			SHORTCALL_THRESHOLD_2=atoi(trim(str.substr(j,str.length()-j)).c_str());
+			cfg.SHORTCALL_THRESHOLD_2=atoi(trim(str.substr(j,str.length()-j)).c_str());
 			continue;
 		}
 		if(str.find("SHORTCALL_THRESHOLD_3=") != string::npos){
@@ -246,7 +262,7 @@ bool ReadConfigFile(std::string configfile){
 			while(str[j]==' '){
 				j++;
 			}
-			SHORTCALL_THRESHOLD_3=atoi(trim(str.substr(j,str.length()-j)).c_str());
+			cfg.SHORTCALL_THRESHOLD_3=atoi(trim(str.substr(j,str.length()-j)).c_str());
 			continue;
 		}
 		if(str.find("STATISTIC_START_TIME=") != string::npos){
@@ -258,7 +274,7 @@ bool ReadConfigFile(std::string configfile){
 			while(str[j]==' '){
 				j++;
 			}
-			STATISTIC_START_TIME=FormatTime(trim(str.substr(j,str.length()-j)).c_str());
+			cfg.STATISTIC_START_TIME=FormatTime(trim(str.substr(j,str.length()-j)).c_str());
 			continue;
 		}
 		if(str.find("STATISTIC_END_TIME=") != string::npos){
@@ -270,7 +286,7 @@ bool ReadConfigFile(std::string configfile){
 			while(str[j]==' '){
 				j++;
 			}
-			STATISTIC_END_TIME=FormatTime(trim(str.substr(j,str.length()-j)).c_str());
+			cfg.STATISTIC_END_TIME=FormatTime(trim(str.substr(j,str.length()-j)).c_str());
 			continue;
 		}
 		if(str.find("TIME_SECTION_UNIT=") != string::npos){
@@ -283,15 +299,15 @@ bool ReadConfigFile(std::string configfile){
 				j++;
 			}
 			if(trim(str.substr(j,str.length()-j))=="all"){
-				TIME_SECTION_UNIT=0;
+				cfg.TIME_SECTION_UNIT=0;
 			}
 			else if(trim(str.substr(j,str.length()-j)).size()>3){
 				if(trim(str.substr(j,str.length()-j)).substr(trim(str.substr(j,str.length()-j)).size()-3,3)=="min"){
-					TIME_SECTION_UNIT=60*atoi(trim(str.substr(j,str.length()-j)).substr(0,trim(str.substr(j,str.length()-j)).size()-3).c_str());
+					cfg.TIME_SECTION_UNIT=60*atoi(trim(str.substr(j,str.length()-j)).substr(0,trim(str.substr(j,str.length()-j)).size()-3).c_str());
 				}
 			}
 			else{
-				TIME_SECTION_UNIT=0;
+				cfg.TIME_SECTION_UNIT=0;
 			}
 			continue;
 		}
@@ -539,9 +555,9 @@ bool ReadCDRFile(int fn,string cdrfile){
 						}
 						else if(item=="CALL_START_TIME"&&readitem[pos]!="empty"){
 							tempcdr.call_start_time=FormatTime(trim(readitem[pos]).c_str());
-							if(TIME_SECTION_UNIT!=0){
-								tempcdr.timeSection=(int)ceil(difftime(tempcdr.call_start_time,STATISTIC_START_TIME)/1000/TIME_SECTION_UNIT)+1;
-								tempcdr.timeSectionStartTime=STATISTIC_START_TIME+tempcdr.timeSection*1000*TIME_SECTION_UNIT;
+							if(cfg.TIME_SECTION_UNIT!=0){
+								tempcdr.timeSection=(int)ceil(difftime(tempcdr.call_start_time,cfg.STATISTIC_START_TIME)/1000/cfg.TIME_SECTION_UNIT)+1;
+								tempcdr.timeSectionStartTime=cfg.STATISTIC_START_TIME+tempcdr.timeSection*1000*cfg.TIME_SECTION_UNIT;
 							}
 							else{
 								tempcdr.timeSection=0;

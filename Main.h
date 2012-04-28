@@ -8,10 +8,11 @@ using namespace std;
 //数据类型定义
 typedef unsigned __int64    UINT64;
 //常量定义
-#define PROGRESS_THRES 200000//多少条记录刷新一次进度条
+#define PROGRESS_THRES 50000//多少条记录刷新一次进度条
 #define TAC_LENGTH 8//TAC的长度
-#define CONFIG_FILE_DEFAULT "config.txt"
+#define CONFIG_FILE_DEFAULT "D:\\xudayong\\Program\\TrafficaIMEI\\x64\\Release\\config.txt"
 #define DEFAULT_CAUSE_VALUE -1
+#define DEFAULT_MAXIMUM_FIELD_NUM 100//最大字段数
 //#define DEFAULT_GSM_CAUSE_TO_COUNT "0,1,20,60"
 //#define DEFAULT_TD_CAUSE_TO_COUNT ""
 
@@ -84,7 +85,7 @@ struct IMEI_CDR_Statistic{
 	string network;//是TD还是GSM
 	string celltype;//小区类型
 	int timeSection;//时段号
-	string timeSectionStartTime;//某一时段的起始时间
+	time_t timeSectionStartTime;//某一时段的起始时间
 	vector<CAUSE_TYPE> A_BSSMAP_Cause;//主叫在GSM结束原因的分类统计
 	vector<CAUSE_TYPE> A_RANAP_Cause;//主叫在TD结束时原因的分类统计
 	vector<CAUSE_TYPE> B_BSSMAP_Cause;//被叫在GSM结束时原因的分类统计
@@ -149,7 +150,30 @@ struct IMEI_CDR_Statistic{
 	int B_call_attempt_TD;//TD的call次数
 	int B_call_attempt_GSM;//GSM的call次数
 };
-
+//程序参数
+struct config{
+	int THREADNUM;//线程数
+	bool bIMEIOutput;//是否输出IMEI级的统计文件
+	bool bComputeDistinctIMEI;//是否统计不重复的IMEI数
+	string workmode;//工作模式
+	int FileBatchNum;//每次处理的文件数，s主要是内存不足造成速度慢，所以分批次倒入CDR
+	int SHORTCALL_THRESHOLD_1;//短呼门限1段，即xx<SHORTCALL_THRESHOLD_1
+	int SHORTCALL_THRESHOLD_2;//短呼门限2段，即SHORTCALL_THRESHOLD_1<xx<SHORTCALL_THRESHOLD_2
+	int SHORTCALL_THRESHOLD_3;//短呼门限3段，即SHORTCALL_THRESHOLD_2<xx<SHORTCALL_THRESHOLD_3
+	int HASH_NUM_IMEI;//散列的hash key的前hash_num_imei位取得IMEI的从START_HASH_INDEX起共HASH_NUM位
+	int START_HASH_INDEX_IMEI;//散列的key取imei的第几位开始
+	int HASH_NUM_CELLID;//取CELLID的后几位作为HASH KEY的后几位
+	time_t STATISTIC_START_TIME;//CDR记录开始时间，以call_start_time为准
+	time_t STATISTIC_END_TIME;//CDR记录结束时间，以call_start_time为准
+	int TIME_SECTION_UNIT;//在统计时按时段的间隔，以秒为单位，如果为0，则无时段间隔。
+	vector<string> CDR_SCREEN_B_NUMBER_INITIAL_LIST;//如果被叫号码的前缀在这个LIST（逗号分隔)中，那么不计入CDR，主要是为了除掉彩玲
+	string CDRDirectory;//要处理的CDR文件所在的文件夹
+	string OutputDirectory;//最后输出的统计文件存放的目录
+	string CELLFILE;//cell类型的文件
+	string TACFILE;//tac类型的文件
+	vector<string> itemlist;//字段位置列表
+	vector<string> filelist;//要处理的CDR文件列表
+};
 //通用函数定义
 time_t FormatTime(const char * szTime);//从字符串转换为时间
 
@@ -166,12 +190,6 @@ bool ReadCellTypeFile(string celltypefile);
 bool isValidCDR(CDR cdr);
 //==================IMEI相关=========================
 bool ComputeIMEIStatistic(int fn,int startnum,int endnum);//生成imeicdrfile
-	//输出
-bool WriteIMEIFile_Combine(std::string temp_result_path_name);
-bool WriteIMEIFile_CombineCell(std::string temp_result_path_name);
-	//合并
-bool CombineIMEI_Cell();//用imeistat按照cellid合并
-bool CombineIMEI();//用imeicdrfile生成imeistat
 //==================TAC相关=======================
 //从计算好的imeicdrfile中根据TAC合并生成taccdrfile
 bool ComputeTACStatistic(int fn);
@@ -192,20 +210,15 @@ bool CombineTAC_TimeSection();
 //将tacstat_timesection中不同的cell合并生成tacstat_timesectioncell
 bool CombineTAC_TimeSectionCell();
 //输出tacstat_timesection
-bool WriteTACFile_TimeSection();
+bool WriteTACFile_TimeSection(std::string temp_result_path_name);
 //输出tacstat_cell
 bool WriteTACFile_TimeSectionCell(std::string temp_result_path_name);
+//用于读取第一列名
+bool ReadItemList(string sl,vector<string>& readitem);
 //全局变量
-extern int THREADNUM;//线程数
-extern bool bIMEIOutput;//是否输出IMEI级的统计文件
-extern string workmode;//工作模式
+
 extern vector<recordp> rp;//rp指针
-extern int SHORTCALL_THRESHOLD_1;//短呼门限1段，即xx<SHORTCALL_THRESHOLD_1
-extern int SHORTCALL_THRESHOLD_2;//短呼门限2段，即SHORTCALL_THRESHOLD_1<xx<SHORTCALL_THRESHOLD_2
-extern int SHORTCALL_THRESHOLD_3;//短呼门限3段，即SHORTCALL_THRESHOLD_2<xx<SHORTCALL_THRESHOLD_3
-extern int HASH_NUM_IMEI;//散列的hash key的前hash_num_imei位取得IMEI的从START_HASH_INDEX起共HASH_NUM位
-extern int START_HASH_INDEX_IMEI;//散列的key取imei的第几位开始
-extern int HASH_NUM_CELLID;//取CELLID的后几位作为HASH KEY的后几位
+extern config cfg;//程序参数集
 //基础的全局变量
 extern vector<vector<vector<IMEI_CDR_Statistic>>> imeicdrfile;//按文件统计imei的cdr
 extern vector<vector<CDR>> cdr;//文件读取CDR分文件存储
@@ -219,13 +232,13 @@ inline string&  lTrim(string   &ss)
     ss.erase(ss.begin(),p);   
     return  ss;   
 }   
-inline  string&  rTrim(string   &ss)   
+inline string&  rTrim(string   &ss)   
 {   
     string::reverse_iterator  p=find_if(ss.rbegin(),ss.rend(),not1(ptr_fun(isspace)));   
     ss.erase(p.base(),ss.end());   
     return   ss;   
 }   
-inline   string&   trim(string   &st)   
+inline string&   trim(string   &st)   
 {   
     lTrim(rTrim(st));   
     return   st;   

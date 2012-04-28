@@ -5,32 +5,9 @@
 using namespace std;
 
 //全局变量
-int THREADNUM=16;//线程数
-int HASH_NUM_IMEI=4;//散列的hash key的前hash_num_imei位取得IMEI的从START_HASH_INDEX起共HASH_NUM位
-int START_HASH_INDEX_IMEI=4;//散列的key取imei的第几位开始
-int HASH_NUM_CELLID=2;//取CELLID的后几位作为HASH KEY的后几位
+config cfg;//程序运行参数集
 
-int SHORTCALL_THRESHOLD_1;//短呼门限1段，即xx<SHORTCALL_THRESHOLD_1
-int SHORTCALL_THRESHOLD_2;//短呼门限2段，即SHORTCALL_THRESHOLD_1<xx<SHORTCALL_THRESHOLD_2
-int SHORTCALL_THRESHOLD_3;//短呼门限3段，即SHORTCALL_THRESHOLD_2<xx<SHORTCALL_THRESHOLD_3
-
-time_t STATISTIC_START_TIME;//CDR记录开始时间，以call_start_time为准
-time_t STATISTIC_END_TIME;//CDR记录结束时间，以call_start_time为准
-int TIME_SECTION_UNIT;//在统计时按时段的间隔，以秒为单位，如果为0，则无时段间隔。
-
-vector<string> CDR_SCREEN_B_NUMBER_INITIAL_LIST;//如果被叫号码的前缀在这个LIST（逗号分隔)中，那么不计入CDR，主要是为了除掉彩玲
-
-bool bIMEIOutput;//是否输出IMEI级的统计文件
-string workmode;//工作模式
-int FileBatchNum;//每次处理的文件数，s主要是内存不足造成速度慢，所以分批次倒入CDR
-
-vector<string> itemlist;//字段位置列表
-vector<string> filelist;//要处理的CDR文件列表
 vector<string> tacstatfilelist;//tac输出的文件名
-string CDRDirectory;//要处理的CDR文件所在的文件夹
-string OutputDirectory;//最后输出的统计文件存放的目录
-string CELLFILE;//cell类型的文件
-string TACFILE;//tac类型的文件
 
 vector<TAC_NAME> taclist;//TAC对应的品牌，型号和类型
 vector<CELL_TYPE> celltypelist;//CELL对应的类型
@@ -68,6 +45,34 @@ time_t FormatTime(const char * szTime)
         time1 = mktime(&tm1);
         return time1;
 }
+//用于读取第一列名
+bool ReadItemList(string sl,vector<string>& readitem){
+	int pos=0;//当前读的第几个字段
+
+	//vector<string> readitem;
+	readitem.clear();
+			
+	int i=0;//记录当前读取字段的开头
+	int j=0;//记录当前读取字段的结束
+	while(j<sl.size()){
+		i=j;//设置当前读取字段的新开头
+		while(j<sl.size()&&sl[j]!=','){
+			j++;//找寻下一个coma
+		}
+		if((j-i)>0){
+			char strpos[DEFAULT_MAXIMUM_FIELD_NUM]="";
+			_itoa_s(pos,strpos,DEFAULT_MAXIMUM_FIELD_NUM,10);
+			readitem.push_back(sl.substr(i,j-i)+"="+strpos);
+		}
+		else if(j==i){
+			//readitem.push_back("empty");
+		}
+		j++;//越过coma
+		pos++;//当前读的第几个字段+1
+	}
+	return true;
+
+}
 //工作模式选择
 bool WorkModeSelection(string mode){
 	time_t start,end;
@@ -81,7 +86,7 @@ bool WorkModeSelection(string mode){
 	}
 	else if(mode=="ComputeTACStatistic"){
 		
-		if(!WorkLoadDistribution(filelist,CDRDirectory)){
+		if(!WorkLoadDistribution(cfg.filelist,cfg.CDRDirectory)){
 			cout<<"IMEI and TAC statistic computing is not complete due to error"<<endl;
 		}
 		CombineMultiTACStat(tacstatfilelist);
@@ -227,12 +232,12 @@ bool WorkModeSelection(string mode){
 //负载在各个线程中分配
 bool WorkLoadDistribution(vector<string> fl,string workingdir){	
 	taccdrfile.clear();
-	taccdrfile.resize(THREADNUM);
+	taccdrfile.resize(cfg.THREADNUM);
 	//每轮的tacstat存储的文件名
 	tacstatfilelist.clear();
 	//算每轮读FileBatchNum个文件进来，共需多少轮---ceil函数似乎变成了四舍五入的
-	int batchnum=(int)(ceil((double)(fl.size()/(FileBatchNum))))+1;
-	cout<<"Divide into "<<batchnum<<" Batch"<<endl;
+	int batchnum=(int)(ceil((double)(fl.size())/(double)(cfg.FileBatchNum))))+1;
+	cout<<"Divide into "<<batchnum<<" Batch, Total "<<fl.size()<<" files."<<endl;
 	//开始
 	for(int bn=0;bn<batchnum;bn++){
 		cdr.clear();
@@ -240,21 +245,21 @@ bool WorkLoadDistribution(vector<string> fl,string workingdir){
 		//如果只要tac，那么清空imeicdrfile,或者第一轮运行时，初始化imeicdrfile
 		if(bIMEIOutput==false||bn==0){
 			imeicdrfile.clear();
-			imeicdrfile.resize(THREADNUM);
-			for(int threadn=0;threadn<THREADNUM;threadn++){
+			imeicdrfile.resize(cfg.THREADNUM);
+			for(int threadn=0;threadn<cfg.THREADNUM;threadn++){
 				imeicdrfile[threadn].clear();
-				imeicdrfile[threadn].resize((int)pow((double)10,HASH_NUM_IMEI+HASH_NUM_CELLID));
+				imeicdrfile[threadn].resize((int)pow((double)10,cfg.HASH_NUM_IMEI+cfg.HASH_NUM_CELLID));
 			}
 		}
 		//读取文件,并行
-		omp_set_num_threads(THREADNUM);
+		omp_set_num_threads(cfg.THREADNUM);
 		#pragma omp parallel for
-			for(int fn=bn*FileBatchNum;fn<min((bn+1)*FileBatchNum,(int)fl.size());fn++){
+			for(int fn=bn*cfg.FileBatchNum;fn<min((bn+1)*cfg.FileBatchNum,(int)fl.size());fn++){
 				ReadCDRFile(fn,workingdir+"\\"+fl[fn]);
 			}
 		//创建基于record的列表，以平均分配任务给每个线程
 		rp.clear();
-		for(int fn=bn*FileBatchNum;fn<min((bn+1)*FileBatchNum,(int)fl.size());fn++){
+		for(int fn=bn*FileBatchNum;fn<min((bn+1)*cfg.FileBatchNum,(int)fl.size());fn++){
 			for(int j=0;j<cdr[fn].size();j++){
 				recordp temp_rp;
 				temp_rp.fn=fn;
@@ -263,17 +268,17 @@ bool WorkLoadDistribution(vector<string> fl,string workingdir){
 			}
 		}
 		//计算每个线程的IMEI和TAC统计
-		omp_set_num_threads(THREADNUM);
+		omp_set_num_threads(cfg.THREADNUM);
 		#pragma omp parallel for
-			for(int threadn=0;threadn<THREADNUM;threadn++){
+			for(int threadn=0;threadn<cfg.THREADNUM;threadn++){
 				int threadi=omp_get_thread_num();
-				int startnum=threadi*(int)(ceil((double)(rp.size()/(THREADNUM))));
+				int startnum=threadi*(int)(ceil((double)(rp.size()/(cfg.THREADNUM))));
 				int endnum;
-				if(threadi==THREADNUM-1){
+				if(threadi==cfg.THREADNUM-1){
 					endnum=(int)rp.size()-1;
 				}
 				else{
-					endnum=(threadi+1)*(int)(ceil((double)(rp.size()/(THREADNUM))))-1;
+					endnum=(threadi+1)*(int)(ceil((double)(rp.size()/(cfg.THREADNUM))))-1;
 				}
 				cout<<"Batch $"<<bn<<" Thread #"<<threadi<<" Compute IMEI statistic of Records No."<<startnum<<" to "<<endnum<<",Total "<<rp.size()<<".\n";
 		
@@ -298,12 +303,12 @@ bool WorkLoadDistribution(vector<string> fl,string workingdir){
 		}
 		
 		//初始化tacstat的输出文件夹
-		if(_access(OutputDirectory.c_str(),0)==0)//为真表示文件夹存在,则不做任何处理，如果不存在则新建一个文件夹
+		if(_access(cfg.OutputDirectory.c_str(),0)==0)//为真表示文件夹存在,则不做任何处理，如果不存在则新建一个文件夹
 		{
 			//cout<<"directory exist\n";
 		}
 		else{
-			string delresultpath=(string)"rmdir "+OutputDirectory+(string)" /q/s";
+			string delresultpath=(string)"rmdir "+cfg.OutputDirectory+(string)" /q/s";
 			_mkdir(OutputDirectory.c_str());
 			if(_mkdir(OutputDirectory.c_str())==-1){
 				system(delresultpath.c_str());
@@ -312,8 +317,8 @@ bool WorkLoadDistribution(vector<string> fl,string workingdir){
 		}
 
 		//生成tacstat本轮的输出文件名
-		string result_combinetacfile_name=OutputDirectory+"\\ToCombineTACstat";
-		string result_combinetacfile_name1=OutputDirectory+"\\ToCombineTACstat.csv";
+		string result_combinetacfile_name=cfg.OutputDirectory+"\\ToCombineTACstat";
+		string result_combinetacfile_name1=cfg.OutputDirectory+"\\ToCombineTACstat.csv";
 		int i=0;
 		char num[64];
 		while(_access(result_combinetacfile_name1.c_str(),0)==0){//如果结果文档存在，则最后的标号加1，这是为了保存以前的计算结果
@@ -337,16 +342,15 @@ bool WorkLoadDistribution(vector<string> fl,string workingdir){
 			vector<vector<vector<IMEI_CDR_Statistic>>>().swap(taccdrfile);
 			cout<<"TAC_CDR_FILE vector is cleared"<<endl;
 
-			//已经生成了tacstat，开始match tac with brand, name and type
-			cout<<"Batch $"<<bn<<" Start Matching TAC with brand, name and type"<<endl;
-			MatchTACList();
-			//已经生成tacstat,开始match cell with celltype
-			cout<<"Batch $"<<bn<<" Start Matching Cell with celltype"<<endl;
-			MatchCellTypeList();
 			//开始写文件
 			cout<<"Batch $"<<bn<<" Start writing file "<<result_combinetacfile_name1<<endl;
 			tacstatfilelist.push_back(result_combinetacfile_name1);
 			WriteTACFile(result_combinetacfile_name1);
+
+			//清空tacstat
+			tacstat.clear();
+			vector<vector<IMEI_CDR_Statistic>>().swap(tacstat);
+			cout<<"TAC_STAT vector is cleared"<<endl;
 		}
 		
 	}
@@ -356,8 +360,15 @@ bool WorkLoadDistribution(vector<string> fl,string workingdir){
 }
 
 bool CombineProcess(){
-		//经过n轮后进行各轮tacstat的合并后的tacstat按照timesection和cell进行，合并后释放tacstat
+		
+		//已经生成了tacstat，开始match tac with brand, name and type
+		cout<<"Start Matching TAC with brand, name and type "<<endl;
+		MatchTACList();
+		//已经生成tacstat,开始match cell with celltype
+		cout<<"Start Matching Cell with celltype"<<endl;
+		MatchCellTypeList();
 
+		//经过n轮后进行各轮tacstat的合并后的tacstat按照timesection和cell进行，合并后释放tacstat
 		if(CombineTAC_TimeSection()!=true){
 			cout<<"TAC with Same TimeSection combining is not complete due to error"<<endl;
 		}
@@ -369,8 +380,8 @@ bool CombineProcess(){
 			vector<vector<IMEI_CDR_Statistic>>().swap(tacstat);
 			cout<<"TAC_STAT vector is cleared"<<endl;
 
-			string result_filename=OutputDirectory+"\\TACstat_Cell";
-			string result_filename1=OutputDirectory+"\\TACstat_Cell.csv";
+			string result_filename=cfg.OutputDirectory+"\\TACstat_Cell";
+			string result_filename1=cfg.OutputDirectory+"\\TACstat_Cell.csv";
 			int i=0;
 			char num[64];
 			while(_access(result_filename1.c_str(),0)==0){//如果结果文档存在，则最后的标号加1，这是为了保存以前的计算结果
@@ -400,8 +411,8 @@ bool CombineProcess(){
 			cout<<"TAC_STAT_TIMESECTION vector is cleared"<<endl;
 
 
-			string result_filename=OutputDirectory+"\\TACstat";
-			string result_filename1=OutputDirectory+"\\TACstat.csv";
+			string result_filename=cfg.OutputDirectory+"\\TACstat";
+			string result_filename1=cfg.OutputDirectory+"\\TACstat.csv";
 			int i=0;
 			char num[64];
 			while(_access(result_filename1.c_str(),0)==0){//如果结果文档存在，则最后的标号加1，这是为了保存以前的计算结果
@@ -422,6 +433,7 @@ bool CombineProcess(){
 			cout<<"TAC_STAT_TIMESECTION_CELL vector is cleared"<<endl;
 
 		}
+	return true;
 }
 //入口函数
 int _tmain(int argc, _TCHAR* argv[])
@@ -430,8 +442,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	//读取参数制定的文件名
 	string readpathname;
 	if(argc==1||argc==0){
-		string defaultfilepath="D:\\xudayong\\Program\\TrafficaIMEI\\x64\\Release\\";
-		readpathname=defaultfilepath+CONFIG_FILE_DEFAULT;;
+		readpathname=CONFIG_FILE_DEFAULT;;
 	}
 	else if(argc==2){
 		char tempstring[1000];
@@ -449,7 +460,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		return 0;
 	}
 	else{
-		if(filelist.size()>0){
+		if(cfg.filelist.size()>0){
 			cdr.clear();
 			cdr.resize(filelist.size());
 			cout<<"Number of CDR file to be processed is "<<filelist.size()<<endl;
@@ -460,18 +471,18 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 	}
 
-	if(!ReadTACFile(TACFILE)){
+	if(!ReadTACFile(cfg.TACFILE)){
 		cout<<"Reading TAC list file is not complete due to error"<<endl;
 		return 0;
 	}
 
-	if(!ReadCellTypeFile(CELLFILE)){
+	if(!ReadCellTypeFile(cfg.CELLFILE)){
 		cout<<"Reading Cell type file is not complete due to error"<<endl;
 		return 0;
 	}
 	
-	if(!WorkModeSelection(workmode)){
-		cout<<"work mode "<<workmode<<" is wrong"<<endl;
+	if(!WorkModeSelection(cfg.workmode)){
+		cout<<"work mode "<<cfg.workmode<<" is wrong"<<endl;
 		return 0;
 	}
 	
