@@ -474,14 +474,14 @@ bool ReadCDRFile(int fn,string cdrfile){
 				j++;//越过coma
 			}
 
-			for(int k=0;k<itemlist.size();k++){
+			for(int k=0;k<cfg.itemlist.size();k++){
 				int n=0;//记录=位置
-				while(n<itemlist[k].size()&&itemlist[k][n]!='='){
+				while(n<cfg.itemlist[k].size()&&cfg.itemlist[k][n]!='='){
 					n++;//找寻=
 				}
-				if(n!=itemlist[k].size()){
-					string item=itemlist[k].substr(0,n);
-					int pos=atoi(trim(itemlist[k].substr(n+1,itemlist[k].size()-n-1)).c_str());
+				if(n!=cfg.itemlist[k].size()){
+					string item=cfg.itemlist[k].substr(0,n);
+					int pos=atoi(trim(cfg.itemlist[k].substr(n+1,cfg.itemlist[k].size()-n-1)).c_str());
 
 					if(pos<readitem.size()){
 						if(item=="REPORT_TIME"&&readitem[pos]!="empty"){
@@ -578,7 +578,7 @@ bool ReadCDRFile(int fn,string cdrfile){
 		}
 	}
 	end=clock();
-	cout<<"Reading File "<<filelist[fn]<<" with "<<cdr[fn].size()<<" Records in "<<difftime(end,start)<<" ms\n";
+	cout<<"Reading File "<<cfg.filelist[fn]<<" with "<<cdr[fn].size()<<" Records in "<<difftime(end,start)<<" ms\n";
 	return true;
 }
 

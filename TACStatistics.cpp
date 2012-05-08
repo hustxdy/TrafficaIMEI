@@ -9,7 +9,7 @@ bool ComputeTACStatistic(int fn){
 	start=clock();
 	//hash tac用后四位
 	taccdrfile[fn].clear();
-	taccdrfile[fn].resize((int)pow((double)10,HASH_NUM_IMEI+HASH_NUM_CELLID));
+	taccdrfile[fn].resize((int)pow((double)10,cfg.HASH_NUM_IMEI+cfg.HASH_NUM_CELLID));
 
 	for(int hn=0;hn<imeicdrfile[fn].size();hn++){
 		
@@ -17,7 +17,7 @@ bool ComputeTACStatistic(int fn){
 			//查询是否已经有相应的TAC记录
 			
 			bool isExistTAC=false;
-			int temp_hash=(int)pow((double)10,HASH_NUM_CELLID)*atoi(imeicdrfile[fn][hn][cr].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str())+imeicdrfile[fn][hn][cr].cellid%((int)pow((double)10,HASH_NUM_CELLID));
+			int temp_hash=(int)pow((double)10,cfg.HASH_NUM_CELLID)*atoi(imeicdrfile[fn][hn][cr].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str())+imeicdrfile[fn][hn][cr].cellid%((int)pow((double)10,cfg.HASH_NUM_CELLID));
 
 			for(int i=0;i<taccdrfile[fn][temp_hash].size();i++){
 				if(taccdrfile[fn][temp_hash][i].timeSection==imeicdrfile[fn][hn][cr].timeSection&&taccdrfile[fn][temp_hash][i].TAC==imeicdrfile[fn][hn][cr].TAC&&taccdrfile[fn][temp_hash][i].cellid==imeicdrfile[fn][hn][cr].cellid&&taccdrfile[fn][temp_hash][i].network==imeicdrfile[fn][hn][cr].network){
@@ -176,7 +176,7 @@ bool ComputeTACStatistic(int fn){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<taccdrfile[fn][temp_hash][i].A_IMEI_IMSI_GSM[temp_hash_imei].size();m++){
 								if(imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI==taccdrfile[fn][temp_hash][i].A_IMEI_IMSI_GSM[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -206,7 +206,7 @@ bool ComputeTACStatistic(int fn){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<taccdrfile[fn][temp_hash][i].A_IMEI_IMSI_TD[temp_hash_imei].size();m++){
 								if(imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMEI==taccdrfile[fn][temp_hash][i].A_IMEI_IMSI_TD[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -236,7 +236,7 @@ bool ComputeTACStatistic(int fn){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<taccdrfile[fn][temp_hash][i].B_IMEI_IMSI_GSM[temp_hash_imei].size();m++){
 								if(imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI==taccdrfile[fn][temp_hash][i].B_IMEI_IMSI_GSM[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -266,7 +266,7 @@ bool ComputeTACStatistic(int fn){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<taccdrfile[fn][temp_hash][i].B_IMEI_IMSI_TD[temp_hash_imei].size();m++){
 								if(imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMEI==taccdrfile[fn][temp_hash][i].B_IMEI_IMSI_TD[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -435,10 +435,10 @@ bool ComputeTACStatistic(int fn){
 				for(int j=0;j<imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM.size();j++){
 					if(j==0){
 						//只初始化一次
-						tempimei.A_IMEI_IMSI_GSM.resize((int)pow((double)10,HASH_NUM_IMEI));
+						tempimei.A_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 					}
 					for(int k=0;k<imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j].size();k++){
-						int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+						int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 						IMEI_IMSI tempim;
 						tempim.IMEI=imeicdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI;
@@ -450,10 +450,10 @@ bool ComputeTACStatistic(int fn){
 				for(int j=0;j<imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD.size();j++){
 					if(j==0){
 						//只初始化一次
-						tempimei.A_IMEI_IMSI_TD.resize((int)pow((double)10,HASH_NUM_IMEI));
+						tempimei.A_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 					}
 					for(int k=0;k<imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j].size();k++){
-						int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+						int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 						IMEI_IMSI tempim;
 						tempim.IMEI=imeicdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMEI;
@@ -465,10 +465,10 @@ bool ComputeTACStatistic(int fn){
 				for(int j=0;j<imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM.size();j++){
 					if(j==0){
 						//只初始化一次
-						tempimei.B_IMEI_IMSI_GSM.resize((int)pow((double)10,HASH_NUM_IMEI));
+						tempimei.B_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 					}
 					for(int k=0;k<imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j].size();k++){
-						int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+						int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 						IMEI_IMSI tempim;
 						tempim.IMEI=imeicdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI;
@@ -480,10 +480,10 @@ bool ComputeTACStatistic(int fn){
 				for(int j=0;j<imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD.size();j++){
 					if(j==0){
 						//只初始化一次
-						tempimei.B_IMEI_IMSI_TD.resize((int)pow((double)10,HASH_NUM_IMEI));
+						tempimei.B_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 					}
 					for(int k=0;k<imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j].size();k++){
-						int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+						int temp_hash_imei=atoi(imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 						IMEI_IMSI tempim;
 						tempim.IMEI=imeicdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMEI;
@@ -532,11 +532,11 @@ bool ComputeTACStatistic(int fn){
 bool CombineTAC_Thread(){
 	//hash tac用后四位
 	tacstat.clear();
-	tacstat.resize((int)pow((double)10,HASH_NUM_IMEI+HASH_NUM_CELLID));
+	tacstat.resize((int)pow((double)10,cfg.HASH_NUM_IMEI+cfg.HASH_NUM_CELLID));
 	
 	time_t start,end;
 	
-	for(int fn=0;fn<THREADNUM;fn++){
+	for(int fn=0;fn<cfg.THREADNUM;fn++){
 		start=clock();
 		int hsize=0;
 		for(int hn=0;hn<taccdrfile[fn].size();hn++){
@@ -546,7 +546,7 @@ bool CombineTAC_Thread(){
 				//cout<<"HASKKEY"<<hn<<" has "<<taccdrfile[fn][hn].size()<<" records"<<endl;
 				//查询是否已经有相应的TAC记录。
 				bool isExistTAC=false;
-				int temp_hash=(int)pow((double)10,HASH_NUM_CELLID)*atoi(taccdrfile[fn][hn][cr].TAC.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str())+taccdrfile[fn][hn][cr].cellid%((int)pow((double)10,HASH_NUM_CELLID));
+				int temp_hash=(int)pow((double)10,cfg.HASH_NUM_CELLID)*atoi(taccdrfile[fn][hn][cr].TAC.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str())+taccdrfile[fn][hn][cr].cellid%((int)pow((double)10,cfg.HASH_NUM_CELLID));
 				//cout<<"temp_hash is "<<temp_hash<<" with IMEI="<<taccdrfile[fn][hn][cr].IMEI<<" and cellid="<<taccdrfile[fn][hn][cr].cellid<<endl;
 				
 				for(int im=0;im<tacstat[temp_hash].size();im++){
@@ -705,7 +705,7 @@ bool CombineTAC_Thread(){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(taccdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(taccdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<tacstat[temp_hash][im].A_IMEI_IMSI_GSM[temp_hash_imei].size();m++){
 								if(taccdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI==tacstat[temp_hash][im].A_IMEI_IMSI_GSM[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -735,7 +735,7 @@ bool CombineTAC_Thread(){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(taccdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(taccdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<tacstat[temp_hash][im].A_IMEI_IMSI_TD[temp_hash_imei].size();m++){
 								if(taccdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMEI==tacstat[temp_hash][im].A_IMEI_IMSI_TD[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -765,7 +765,7 @@ bool CombineTAC_Thread(){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(taccdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(taccdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<tacstat[temp_hash][im].B_IMEI_IMSI_GSM[temp_hash_imei].size();m++){
 								if(taccdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI==tacstat[temp_hash][im].B_IMEI_IMSI_GSM[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -795,7 +795,7 @@ bool CombineTAC_Thread(){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(taccdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(taccdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<tacstat[temp_hash][im].B_IMEI_IMSI_TD[temp_hash_imei].size();m++){
 								if(taccdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMEI==tacstat[temp_hash][im].B_IMEI_IMSI_TD[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -972,10 +972,10 @@ bool CombineTAC_Thread(){
 					for(int j=0;j<taccdrfile[fn][hn][cr].A_IMEI_IMSI_GSM.size();j++){
 						if(j==0){
 							//只初始化一次
-							tempimei.A_IMEI_IMSI_GSM.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempimei.A_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 						}
 						for(int k=0;k<taccdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j].size();k++){
-							int temp_hash_imei=atoi(taccdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(taccdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 							IMEI_IMSI tempim;
 							tempim.IMEI=taccdrfile[fn][hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI;
@@ -987,10 +987,10 @@ bool CombineTAC_Thread(){
 					for(int j=0;j<taccdrfile[fn][hn][cr].A_IMEI_IMSI_TD.size();j++){
 						if(j==0){
 							//只初始化一次
-							tempimei.A_IMEI_IMSI_TD.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempimei.A_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 						}
 						for(int k=0;k<taccdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j].size();k++){
-							int temp_hash_imei=atoi(taccdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(taccdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 							IMEI_IMSI tempim;
 							tempim.IMEI=taccdrfile[fn][hn][cr].A_IMEI_IMSI_TD[j][k].IMEI;
@@ -1002,10 +1002,10 @@ bool CombineTAC_Thread(){
 					for(int j=0;j<taccdrfile[fn][hn][cr].B_IMEI_IMSI_GSM.size();j++){
 						if(j==0){
 							//只初始化一次
-							tempimei.B_IMEI_IMSI_GSM.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempimei.B_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 						}
 						for(int k=0;k<taccdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j].size();k++){
-							int temp_hash_imei=atoi(taccdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(taccdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 							IMEI_IMSI tempim;
 							tempim.IMEI=taccdrfile[fn][hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI;
@@ -1017,10 +1017,10 @@ bool CombineTAC_Thread(){
 					for(int j=0;j<taccdrfile[fn][hn][cr].B_IMEI_IMSI_TD.size();j++){
 						if(j==0){
 							//只初始化一次
-							tempimei.B_IMEI_IMSI_TD.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempimei.B_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 						}
 						for(int k=0;k<taccdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j].size();k++){
-							int temp_hash_imei=atoi(taccdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(taccdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 							IMEI_IMSI tempim;
 							tempim.IMEI=taccdrfile[fn][hn][cr].B_IMEI_IMSI_TD[j][k].IMEI;
@@ -1045,29 +1045,30 @@ bool CombineTAC_Thread(){
 //将不同批次产生的tacstat文件合并成一个tacstat
 bool CombineMultiTACStat(vector<string> tacstatfilelist){
 	time_t start,end;
-	start=clock();
-
+	
+	cout<<"Start Combining "<<tacstatfilelist.size()<<"TAC STAT FILE"<<endl;
 	tacstat.clear();
-	tacstat.resize((int)pow((double)10,HASH_NUM_IMEI+HASH_NUM_CELLID));
+	tacstat.resize((int)pow((double)10,cfg.HASH_NUM_IMEI+cfg.HASH_NUM_CELLID));
 	
 	for(int i=0;i<tacstatfilelist.size();i++){
-		vector<vector<IMEI_CDR_Statistic>> temptacstat;
+		//vector<vector<IMEI_CDR_Statistic>> temptacstat;
 		temptacstat.clear();
 		
-		if(!ReadTACSTATFile(tacstatfilelist[i],temptacstat)){
+		if(!ReadTACSTATFile(tacstatfilelist[i])){
 			cout<<"Read File "<<tacstatfilelist[i]<<" Error."<<endl;
 		}
 		else{
+			start=clock();
 			int hsize=0;
 			//combine tacstat和temptacstat
-			omp_set_num_threads(THREADNUM);
+			omp_set_num_threads(cfg.THREADNUM);
 #pragma omp parallel for reduction(+:hsize)		
 		for(int hn=0;hn<temptacstat.size();hn++){
 			hsize+=(int)temptacstat[hn].size();
 			for(int cr=0;cr<temptacstat[hn].size();cr++){
 				//查询是否已经有相应的TAC记录。
 				bool isExistTAC=false;
-				int temp_hash=(int)pow((double)10,HASH_NUM_CELLID)*atoi(temptacstat[hn][cr].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str())+temptacstat[hn][cr].cellid%((int)pow((double)10,HASH_NUM_CELLID));
+				int temp_hash=(int)pow((double)10,cfg.HASH_NUM_CELLID)*atoi(temptacstat[hn][cr].TAC.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str())+temptacstat[hn][cr].cellid%((int)pow((double)10,cfg.HASH_NUM_CELLID));
 				for(int im=0;im<tacstat[temp_hash].size();im++){
 					if(tacstat[temp_hash][im].timeSection==temptacstat[hn][cr].timeSection&&tacstat[temp_hash][im].cellid==temptacstat[hn][cr].cellid&&tacstat[temp_hash][im].TAC==temptacstat[hn][cr].TAC){
 						isExistTAC=true;
@@ -1213,7 +1214,7 @@ bool CombineMultiTACStat(vector<string> tacstatfilelist){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(temptacstat[hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(temptacstat[hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<tacstat[temp_hash][im].A_IMEI_IMSI_GSM[temp_hash_imei].size();m++){
 								if(temptacstat[hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI==tacstat[temp_hash][im].A_IMEI_IMSI_GSM[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -1243,7 +1244,7 @@ bool CombineMultiTACStat(vector<string> tacstatfilelist){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(temptacstat[hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(temptacstat[hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<tacstat[temp_hash][im].A_IMEI_IMSI_TD[temp_hash_imei].size();m++){
 								if(temptacstat[hn][cr].A_IMEI_IMSI_TD[j][k].IMEI==tacstat[temp_hash][im].A_IMEI_IMSI_TD[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -1273,7 +1274,7 @@ bool CombineMultiTACStat(vector<string> tacstatfilelist){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(temptacstat[hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(temptacstat[hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<tacstat[temp_hash][im].B_IMEI_IMSI_GSM[temp_hash_imei].size();m++){
 								if(temptacstat[hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI==tacstat[temp_hash][im].B_IMEI_IMSI_GSM[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -1303,7 +1304,7 @@ bool CombineMultiTACStat(vector<string> tacstatfilelist){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(temptacstat[hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(temptacstat[hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<tacstat[temp_hash][im].B_IMEI_IMSI_TD[temp_hash_imei].size();m++){
 								if(temptacstat[hn][cr].B_IMEI_IMSI_TD[j][k].IMEI==tacstat[temp_hash][im].B_IMEI_IMSI_TD[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -1482,10 +1483,10 @@ bool CombineMultiTACStat(vector<string> tacstatfilelist){
 					for(int j=0;j<temptacstat[hn][cr].A_IMEI_IMSI_GSM.size();j++){
 						if(j==0){
 							//只初始化一次
-							tempimei.A_IMEI_IMSI_GSM.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempimei.A_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 						}
 						for(int k=0;k<temptacstat[hn][cr].A_IMEI_IMSI_GSM[j].size();k++){
-							int temp_hash_imei=atoi(temptacstat[hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(temptacstat[hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 							IMEI_IMSI tempim;
 							tempim.IMEI=temptacstat[hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI;
@@ -1497,10 +1498,10 @@ bool CombineMultiTACStat(vector<string> tacstatfilelist){
 					for(int j=0;j<temptacstat[hn][cr].A_IMEI_IMSI_TD.size();j++){
 						if(j==0){
 							//只初始化一次
-							tempimei.A_IMEI_IMSI_TD.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempimei.A_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 						}
 						for(int k=0;k<temptacstat[hn][cr].A_IMEI_IMSI_TD[j].size();k++){
-							int temp_hash_imei=atoi(temptacstat[hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(temptacstat[hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 							IMEI_IMSI tempim;
 							tempim.IMEI=temptacstat[hn][cr].A_IMEI_IMSI_TD[j][k].IMEI;
@@ -1512,10 +1513,10 @@ bool CombineMultiTACStat(vector<string> tacstatfilelist){
 					for(int j=0;j<temptacstat[hn][cr].B_IMEI_IMSI_GSM.size();j++){
 						if(j==0){
 							//只初始化一次
-							tempimei.B_IMEI_IMSI_GSM.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempimei.B_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 						}
 						for(int k=0;k<temptacstat[hn][cr].B_IMEI_IMSI_GSM[j].size();k++){
-							int temp_hash_imei=atoi(temptacstat[hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(temptacstat[hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 							IMEI_IMSI tempim;
 							tempim.IMEI=temptacstat[hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI;
@@ -1527,10 +1528,10 @@ bool CombineMultiTACStat(vector<string> tacstatfilelist){
 					for(int j=0;j<temptacstat[hn][cr].B_IMEI_IMSI_TD.size();j++){
 						if(j==0){
 							//只初始化一次
-							tempimei.B_IMEI_IMSI_TD.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempimei.B_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 						}
 						for(int k=0;k<temptacstat[hn][cr].B_IMEI_IMSI_TD[j].size();k++){
-							int temp_hash_imei=atoi(temptacstat[hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(temptacstat[hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 							IMEI_IMSI tempim;
 							tempim.IMEI=temptacstat[hn][cr].B_IMEI_IMSI_TD[j][k].IMEI;
@@ -1543,19 +1544,25 @@ bool CombineMultiTACStat(vector<string> tacstatfilelist){
 				}
 			}
 		}
+		//clear temptacstat
+		cout<<"Start Clear Temp TAC STAT vector"<<endl;
+		temptacstat.clear();
+		vector<vector<IMEI_CDR_Statistic>>().swap(temptacstat);
+		cout<<"Temp TAC STAT vector is cleared"<<endl;
 
-			end=clock();
-			cout<<"Combine TAC statistic with File "<<tacstatfilelist[i]<<" in "<<difftime(end,start)<<"ms"<<endl;
+		end=clock();
+		cout<<"Combine TAC statistic with File "<<tacstatfilelist[i]<<" in "<<difftime(end,start)<<"ms"<<endl;
 	
 		}
 	}
+	
 	return true;
 }
 //读取tacstatfile
-bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tacstat_temp){
+bool ReadTACSTATFile(string tacstatfile){
 	
-	tacstat_temp.clear();
-	tacstat_temp.resize((int)pow((double)10,HASH_NUM_IMEI+HASH_NUM_CELLID));
+	temptacstat.clear();
+	temptacstat.resize((int)pow((double)10,cfg.HASH_NUM_IMEI+cfg.HASH_NUM_CELLID));
 
 	time_t start,end;
 	ifstream fi(tacstatfile.c_str());
@@ -1568,7 +1575,7 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 
 		string sl;//每一行
 		getline(fi,sl);//取第一行xd
-		ReadItemList(sl,itemlist);//读取第一行，存到itemlist里
+		ReadItemList(sl,cfg.itemlist);//读取第一行，存到itemlist里
 		while(getline(fi,sl)){
 
 			IMEI_CDR_Statistic tempcdrstat;
@@ -1626,14 +1633,14 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 				j++;//越过coma
 			}
 
-			for(int k=0;k<itemlist.size();k++){
+			for(int k=0;k<cfg.itemlist.size();k++){
 				int n=0;//记录=位置
-				while(n<itemlist[k].size()&&itemlist[k][n]!='='){
+				while(n<cfg.itemlist[k].size()&&cfg.itemlist[k][n]!='='){
 					n++;//找寻=
 				}
-				if(n!=itemlist[k].size()){
-					string item=itemlist[k].substr(0,n);
-					int pos=atoi(trim(itemlist[k].substr(n+1,itemlist[k].size()-n-1)).c_str());
+				if(n!=cfg.itemlist[k].size()){
+					string item=cfg.itemlist[k].substr(0,n);
+					int pos=atoi(trim(cfg.itemlist[k].substr(n+1,cfg.itemlist[k].size()-n-1)).c_str());
 					if(pos<readitem.size()){
 						if(item=="TAC"&&readitem[pos]!="empty"){
 							tempcdrstat.TAC=trim(readitem[pos]);
@@ -1718,10 +1725,13 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 							int j=0;//记录当前读取字段的结束
 							while(j<readitem[pos].size()){
 								i=j;//设置当前读取字段的新开头
-								while(j<readitem[pos].size()&&sl[j]!=';'){
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
 									j++;//找寻下一个coma
 								}
 								if((j-i)>0){
+									/*cout<<readitem[pos].substr(i,j-i)<<endl;
+									cout<<i<<endl;
+									cout<<j<<endl;*/
 									colonlist.push_back(readitem[pos].substr(i,j-i));
 								}
 								else if(j==i){
@@ -1729,7 +1739,7 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 								}
 								j++;//越过分隔符
 							}
-
+							
 							for(int k=0;k<colonlist.size();k=k+2){
 								CAUSE_TYPE tempcause;
 								tempcause.cause_id=atoi(colonlist[k].c_str());
@@ -1745,7 +1755,7 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 							int j=0;//记录当前读取字段的结束
 							while(j<readitem[pos].size()){
 								i=j;//设置当前读取字段的新开头
-								while(j<readitem[pos].size()&&sl[j]!=';'){
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
 									j++;//找寻下一个coma
 								}
 								if((j-i)>0){
@@ -1772,7 +1782,7 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 							int j=0;//记录当前读取字段的结束
 							while(j<readitem[pos].size()){
 								i=j;//设置当前读取字段的新开头
-								while(j<readitem[pos].size()&&sl[j]!=';'){
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
 									j++;//找寻下一个coma
 								}
 								if((j-i)>0){
@@ -1799,7 +1809,7 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 							int j=0;//记录当前读取字段的结束
 							while(j<readitem[pos].size()){
 								i=j;//设置当前读取字段的新开头
-								while(j<readitem[pos].size()&&sl[j]!=';'){
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
 									j++;//找寻下一个coma
 								}
 								if((j-i)>0){
@@ -1826,7 +1836,7 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 							int j=0;//记录当前读取字段的结束
 							while(j<readitem[pos].size()){
 								i=j;//设置当前读取字段的新开头
-								while(j<readitem[pos].size()&&sl[j]!=';'){
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
 									j++;//找寻下一个coma
 								}
 								if((j-i)>0){
@@ -1853,7 +1863,7 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 							int j=0;//记录当前读取字段的结束
 							while(j<readitem[pos].size()){
 								i=j;//设置当前读取字段的新开头
-								while(j<readitem[pos].size()&&sl[j]!=';'){
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
 									j++;//找寻下一个coma
 								}
 								if((j-i)>0){
@@ -1880,7 +1890,7 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 							int j=0;//记录当前读取字段的结束
 							while(j<readitem[pos].size()){
 								i=j;//设置当前读取字段的新开头
-								while(j<readitem[pos].size()&&sl[j]!=';'){
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
 									j++;//找寻下一个coma
 								}
 								if((j-i)>0){
@@ -1907,7 +1917,7 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 							int j=0;//记录当前读取字段的结束
 							while(j<readitem[pos].size()){
 								i=j;//设置当前读取字段的新开头
-								while(j<readitem[pos].size()&&sl[j]!=';'){
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
 									j++;//找寻下一个coma
 								}
 								if((j-i)>0){
@@ -1934,7 +1944,7 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 							int j=0;//记录当前读取字段的结束
 							while(j<readitem[pos].size()){
 								i=j;//设置当前读取字段的新开头
-								while(j<readitem[pos].size()&&sl[j]!=';'){
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
 									j++;//找寻下一个coma
 								}
 								if((j-i)>0){
@@ -1946,12 +1956,12 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 								j++;//越过分隔符
 							}
 
-							tempcdrstat.A_IMEI_IMSI_GSM.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempcdrstat.A_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 							for(int k=0;k<colonlist.size();k=k+2){
 								IMEI_IMSI tempimei;
 								tempimei.IMEI=trim(colonlist[k]);
 								tempimei.IMSI=trim(colonlist[k+1]);
-								int temp_hash_imei=atoi(tempimei.IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+								int temp_hash_imei=atoi(tempimei.IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 								tempcdrstat.A_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempimei);
 							}
 						}
@@ -1963,7 +1973,7 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 							int j=0;//记录当前读取字段的结束
 							while(j<readitem[pos].size()){
 								i=j;//设置当前读取字段的新开头
-								while(j<readitem[pos].size()&&sl[j]!=';'){
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
 									j++;//找寻下一个coma
 								}
 								if((j-i)>0){
@@ -1974,12 +1984,12 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 								}
 								j++;//越过分隔符
 							}
-							tempcdrstat.A_IMEI_IMSI_TD.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempcdrstat.A_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 							for(int k=0;k<colonlist.size();k=k+2){
 								IMEI_IMSI tempimei;
 								tempimei.IMEI=trim(colonlist[k]);
 								tempimei.IMSI=trim(colonlist[k+1]);
-								int temp_hash_imei=atoi(tempimei.IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+								int temp_hash_imei=atoi(tempimei.IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 								tempcdrstat.A_IMEI_IMSI_TD[temp_hash_imei].push_back(tempimei);
 							}
 						}
@@ -1991,7 +2001,7 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 							int j=0;//记录当前读取字段的结束
 							while(j<readitem[pos].size()){
 								i=j;//设置当前读取字段的新开头
-								while(j<readitem[pos].size()&&sl[j]!=';'){
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
 									j++;//找寻下一个coma
 								}
 								if((j-i)>0){
@@ -2002,12 +2012,12 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 								}
 								j++;//越过分隔符
 							}
-							tempcdrstat.B_IMEI_IMSI_GSM.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempcdrstat.B_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 							for(int k=0;k<colonlist.size();k=k+2){
 								IMEI_IMSI tempimei;
 								tempimei.IMEI=trim(colonlist[k]);
 								tempimei.IMSI=trim(colonlist[k+1]);
-								int temp_hash_imei=atoi(tempimei.IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+								int temp_hash_imei=atoi(tempimei.IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 								tempcdrstat.B_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempimei);
 							}
 						}
@@ -2019,7 +2029,7 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 							int j=0;//记录当前读取字段的结束
 							while(j<readitem[pos].size()){
 								i=j;//设置当前读取字段的新开头
-								while(j<readitem[pos].size()&&sl[j]!=';'){
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
 									j++;//找寻下一个coma
 								}
 								if((j-i)>0){
@@ -2030,12 +2040,12 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 								}
 								j++;//越过分隔符
 							}
-							tempcdrstat.B_IMEI_IMSI_TD.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempcdrstat.B_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 							for(int k=0;k<colonlist.size();k=k+2){
 								IMEI_IMSI tempimei;
 								tempimei.IMEI=trim(colonlist[k]);
 								tempimei.IMSI=trim(colonlist[k+1]);
-								int temp_hash_imei=atoi(tempimei.IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+								int temp_hash_imei=atoi(tempimei.IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 								tempcdrstat.B_IMEI_IMSI_TD[temp_hash_imei].push_back(tempimei);
 							}
 						}
@@ -2043,9 +2053,9 @@ bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tac
 				}			
 			}
 			
-			int temp_hash=(int)pow((double)10,HASH_NUM_CELLID)*atoi(tempcdrstat.TAC.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str())+tempcdrstat.cellid%((int)pow((double)10,HASH_NUM_CELLID));
+			int temp_hash=(int)pow((double)10,cfg.HASH_NUM_CELLID)*atoi(tempcdrstat.TAC.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str())+tempcdrstat.cellid%((int)pow((double)10,cfg.HASH_NUM_CELLID));
 			
-			tacstat_temp[temp_hash].push_back(tempcdrstat);
+			temptacstat[temp_hash].push_back(tempcdrstat);
 		}
 	}
 	
@@ -2160,7 +2170,7 @@ bool MatchTACList(){
 	time_t start,end;
 	start=clock();
 	int hsize=0;
-	omp_set_num_threads(THREADNUM);
+	omp_set_num_threads(cfg.THREADNUM);
 #pragma omp parallel for reduction(+:hsize)
 	for(int i=0;i<tacstat.size();i++){
 		hsize+=(int)tacstat[i].size();
@@ -2183,7 +2193,7 @@ bool MatchCellTypeList(){
 	time_t start,end;
 	start=clock();
 	int hsize=0;
-	omp_set_num_threads(THREADNUM);
+	omp_set_num_threads(cfg.THREADNUM);
 #pragma omp parallel for reduction(+:hsize)
 	for(int i=0;i<tacstat.size();i++){
 		hsize+=(int)tacstat[i].size();
@@ -2206,19 +2216,19 @@ return true;
 bool CombineTAC_TimeSection(){
 	//hash tac用后四位
 	tacstat_timesection.clear();
-	tacstat_timesection.resize((int)pow((double)10,HASH_NUM_IMEI));
+	tacstat_timesection.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 	time_t start,end;
 	int hsize=0;
 	int csize=0;
 	start=clock();
-	omp_set_num_threads(THREADNUM);
+	omp_set_num_threads(cfg.THREADNUM);
 #pragma omp parallel for reduction(+:hsize,csize)		
 		for(int hn=0;hn<tacstat.size();hn++){
 			hsize+=(int)tacstat[hn].size();
 			for(int cr=0;cr<tacstat[hn].size();cr++){
 				//查询是否已经有相应的TAC记录。
 				bool isExistTAC=false;
-				int temp_hash=atoi(tacstat[hn][cr].TAC.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+				int temp_hash=atoi(tacstat[hn][cr].TAC.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 				for(int im=0;im<tacstat_timesection[temp_hash].size();im++){
 					if(tacstat_timesection[temp_hash][im].cellid==tacstat[hn][cr].cellid&&tacstat_timesection[temp_hash][im].TAC==tacstat[hn][cr].TAC){
 						isExistTAC=true;
@@ -2374,7 +2384,7 @@ bool CombineTAC_TimeSection(){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(tacstat[hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(tacstat[hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<tacstat_timesection[temp_hash][im].A_IMEI_IMSI_GSM[temp_hash_imei].size();m++){
 								if(tacstat[hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI==tacstat_timesection[temp_hash][im].A_IMEI_IMSI_GSM[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -2404,7 +2414,7 @@ bool CombineTAC_TimeSection(){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(tacstat[hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(tacstat[hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<tacstat_timesection[temp_hash][im].A_IMEI_IMSI_TD[temp_hash_imei].size();m++){
 								if(tacstat[hn][cr].A_IMEI_IMSI_TD[j][k].IMEI==tacstat_timesection[temp_hash][im].A_IMEI_IMSI_TD[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -2434,7 +2444,7 @@ bool CombineTAC_TimeSection(){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(tacstat[hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(tacstat[hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<tacstat_timesection[temp_hash][im].B_IMEI_IMSI_GSM[temp_hash_imei].size();m++){
 								if(tacstat[hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI==tacstat_timesection[temp_hash][im].B_IMEI_IMSI_GSM[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -2464,7 +2474,7 @@ bool CombineTAC_TimeSection(){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(tacstat[hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(tacstat[hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<tacstat_timesection[temp_hash][im].B_IMEI_IMSI_TD[temp_hash_imei].size();m++){
 								if(tacstat[hn][cr].B_IMEI_IMSI_TD[j][k].IMEI==tacstat_timesection[temp_hash][im].B_IMEI_IMSI_TD[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -2643,10 +2653,10 @@ bool CombineTAC_TimeSection(){
 					for(int j=0;j<tacstat[hn][cr].A_IMEI_IMSI_GSM.size();j++){
 						if(j==0){
 							//只初始化一次
-							tempimei.A_IMEI_IMSI_GSM.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempimei.A_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 						}
 						for(int k=0;k<tacstat[hn][cr].A_IMEI_IMSI_GSM[j].size();k++){
-							int temp_hash_imei=atoi(tacstat[hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(tacstat[hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 							IMEI_IMSI tempim;
 							tempim.IMEI=tacstat[hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI;
@@ -2658,10 +2668,10 @@ bool CombineTAC_TimeSection(){
 					for(int j=0;j<tacstat[hn][cr].A_IMEI_IMSI_TD.size();j++){
 						if(j==0){
 							//只初始化一次
-							tempimei.A_IMEI_IMSI_TD.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempimei.A_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 						}
 						for(int k=0;k<tacstat[hn][cr].A_IMEI_IMSI_TD[j].size();k++){
-							int temp_hash_imei=atoi(tacstat[hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(tacstat[hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 							IMEI_IMSI tempim;
 							tempim.IMEI=tacstat[hn][cr].A_IMEI_IMSI_TD[j][k].IMEI;
@@ -2673,10 +2683,10 @@ bool CombineTAC_TimeSection(){
 					for(int j=0;j<tacstat[hn][cr].B_IMEI_IMSI_GSM.size();j++){
 						if(j==0){
 							//只初始化一次
-							tempimei.B_IMEI_IMSI_GSM.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempimei.B_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 						}
 						for(int k=0;k<tacstat[hn][cr].B_IMEI_IMSI_GSM[j].size();k++){
-							int temp_hash_imei=atoi(tacstat[hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(tacstat[hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 							IMEI_IMSI tempim;
 							tempim.IMEI=tacstat[hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI;
@@ -2688,10 +2698,10 @@ bool CombineTAC_TimeSection(){
 					for(int j=0;j<tacstat[hn][cr].B_IMEI_IMSI_TD.size();j++){
 						if(j==0){
 							//只初始化一次
-							tempimei.B_IMEI_IMSI_TD.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempimei.B_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 						}
 						for(int k=0;k<tacstat[hn][cr].B_IMEI_IMSI_TD[j].size();k++){
-							int temp_hash_imei=atoi(tacstat[hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(tacstat[hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 							IMEI_IMSI tempim;
 							tempim.IMEI=tacstat[hn][cr].B_IMEI_IMSI_TD[j][k].IMEI;
@@ -2715,19 +2725,19 @@ bool CombineTAC_TimeSection(){
 bool CombineTAC_TimeSectionCell(){
 	//hash tac用后四位
 	tacstat_timesectioncell.clear();
-	tacstat_timesectioncell.resize((int)pow((double)10,HASH_NUM_IMEI));
+	tacstat_timesectioncell.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 	time_t start,end;
 	int hsize=0;
 	int csize=0;
 	start=clock();
-	omp_set_num_threads(THREADNUM);
+	omp_set_num_threads(cfg.THREADNUM);
 #pragma omp parallel for reduction(+:hsize,csize)		
 		for(int hn=0;hn<tacstat_timesection.size();hn++){
 			hsize+=(int)tacstat_timesection[hn].size();
 			for(int cr=0;cr<tacstat_timesection[hn].size();cr++){
 				//查询是否已经有相应的TAC记录。
 				bool isExistTAC=false;
-				int temp_hash=atoi(tacstat_timesection[hn][cr].TAC.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+				int temp_hash=atoi(tacstat_timesection[hn][cr].TAC.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 				for(int im=0;im<tacstat_timesectioncell[temp_hash].size();im++){
 					if(tacstat_timesectioncell[temp_hash][im].TAC==tacstat_timesection[hn][cr].TAC){
 						isExistTAC=true;
@@ -2883,7 +2893,7 @@ bool CombineTAC_TimeSectionCell(){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(tacstat_timesection[hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(tacstat_timesection[hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<tacstat_timesectioncell[temp_hash][im].A_IMEI_IMSI_GSM[temp_hash_imei].size();m++){
 								if(tacstat_timesection[hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI==tacstat_timesectioncell[temp_hash][im].A_IMEI_IMSI_GSM[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -2913,7 +2923,7 @@ bool CombineTAC_TimeSectionCell(){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(tacstat_timesection[hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(tacstat_timesection[hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<tacstat_timesectioncell[temp_hash][im].A_IMEI_IMSI_TD[temp_hash_imei].size();m++){
 								if(tacstat_timesection[hn][cr].A_IMEI_IMSI_TD[j][k].IMEI==tacstat_timesectioncell[temp_hash][im].A_IMEI_IMSI_TD[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -2943,7 +2953,7 @@ bool CombineTAC_TimeSectionCell(){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(tacstat_timesection[hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(tacstat_timesection[hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<tacstat_timesectioncell[temp_hash][im].B_IMEI_IMSI_GSM[temp_hash_imei].size();m++){
 								if(tacstat_timesection[hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI==tacstat_timesectioncell[temp_hash][im].B_IMEI_IMSI_GSM[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -2973,7 +2983,7 @@ bool CombineTAC_TimeSectionCell(){
 							//对每一个IMEI和IMSI组合，查询是否已有记录
 							bool isExistIMEI=false;
 							bool isExistIMEIandIMSI=false;
-							int temp_hash_imei=atoi(tacstat_timesection[hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(tacstat_timesection[hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 							for(int m=0;m<tacstat_timesectioncell[temp_hash][im].B_IMEI_IMSI_TD[temp_hash_imei].size();m++){
 								if(tacstat_timesection[hn][cr].B_IMEI_IMSI_TD[j][k].IMEI==tacstat_timesectioncell[temp_hash][im].B_IMEI_IMSI_TD[temp_hash_imei][m].IMEI){
 									isExistIMEI=true;
@@ -3152,10 +3162,10 @@ bool CombineTAC_TimeSectionCell(){
 					for(int j=0;j<tacstat_timesection[hn][cr].A_IMEI_IMSI_GSM.size();j++){
 						if(j==0){
 							//只初始化一次
-							tempimei.A_IMEI_IMSI_GSM.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempimei.A_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 						}
 						for(int k=0;k<tacstat_timesection[hn][cr].A_IMEI_IMSI_GSM[j].size();k++){
-							int temp_hash_imei=atoi(tacstat_timesection[hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(tacstat_timesection[hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 							IMEI_IMSI tempim;
 							tempim.IMEI=tacstat_timesection[hn][cr].A_IMEI_IMSI_GSM[j][k].IMEI;
@@ -3167,10 +3177,10 @@ bool CombineTAC_TimeSectionCell(){
 					for(int j=0;j<tacstat_timesection[hn][cr].A_IMEI_IMSI_TD.size();j++){
 						if(j==0){
 							//只初始化一次
-							tempimei.A_IMEI_IMSI_TD.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempimei.A_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 						}
 						for(int k=0;k<tacstat_timesection[hn][cr].A_IMEI_IMSI_TD[j].size();k++){
-							int temp_hash_imei=atoi(tacstat_timesection[hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(tacstat_timesection[hn][cr].A_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 							IMEI_IMSI tempim;
 							tempim.IMEI=tacstat_timesection[hn][cr].A_IMEI_IMSI_TD[j][k].IMEI;
@@ -3182,10 +3192,10 @@ bool CombineTAC_TimeSectionCell(){
 					for(int j=0;j<tacstat_timesection[hn][cr].B_IMEI_IMSI_GSM.size();j++){
 						if(j==0){
 							//只初始化一次
-							tempimei.B_IMEI_IMSI_GSM.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempimei.B_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 						}
 						for(int k=0;k<tacstat_timesection[hn][cr].B_IMEI_IMSI_GSM[j].size();k++){
-							int temp_hash_imei=atoi(tacstat_timesection[hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(tacstat_timesection[hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 							IMEI_IMSI tempim;
 							tempim.IMEI=tacstat_timesection[hn][cr].B_IMEI_IMSI_GSM[j][k].IMEI;
@@ -3197,10 +3207,10 @@ bool CombineTAC_TimeSectionCell(){
 					for(int j=0;j<tacstat_timesection[hn][cr].B_IMEI_IMSI_TD.size();j++){
 						if(j==0){
 							//只初始化一次
-							tempimei.B_IMEI_IMSI_TD.resize((int)pow((double)10,HASH_NUM_IMEI));
+							tempimei.B_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 						}
 						for(int k=0;k<tacstat_timesection[hn][cr].B_IMEI_IMSI_TD[j].size();k++){
-							int temp_hash_imei=atoi(tacstat_timesection[hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(START_HASH_INDEX_IMEI,HASH_NUM_IMEI).c_str());
+							int temp_hash_imei=atoi(tacstat_timesection[hn][cr].B_IMEI_IMSI_TD[j][k].IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 					
 							IMEI_IMSI tempim;
 							tempim.IMEI=tacstat_timesection[hn][cr].B_IMEI_IMSI_TD[j][k].IMEI;

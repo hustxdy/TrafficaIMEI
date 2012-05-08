@@ -16,11 +16,12 @@ vector<vector<CDR>> cdr;//文件读取CDR分文件存储
 vector<recordp> rp;//rp指针，为了使线程的处理cdr数目相同
 vector<vector<vector<IMEI_CDR_Statistic>>> imeicdrfile;//按线程平均分段统计imei的cdr
 vector<vector<vector<IMEI_CDR_Statistic>>> taccdrfile;//将计算好的imeicdrfile中在各自的线程里进行tac合并
-vector<vector<IMEI_CDR_Statistic>> imeistat;//将计算好的imeicdrfile中不同的线程fn合并生成imeistat
+//3vector<vector<IMEI_CDR_Statistic>> imeistat;//将计算好的imeicdrfile中不同的线程fn合并生成imeistat
 vector<vector<IMEI_CDR_Statistic>> tacstat;//将计算好的taccdrfile中不同的线程fn合并生成tacstat
-vector<vector<IMEI_CDR_Statistic>> imeistat_cell;//将imei统计按照cellid合并
+//vector<vector<IMEI_CDR_Statistic>> imeistat_cell;//将imei统计按照cellid合并
 vector<vector<IMEI_CDR_Statistic>> tacstat_timesectioncell;//将tacstat_timesection中不同的cell合并生成tacstat_timesectioncell
 vector<vector<IMEI_CDR_Statistic>> tacstat_timesection;//将计算好的tacstat中不同的TimeSection合并生成tacstat_timesection
+vector<vector<IMEI_CDR_Statistic>> temptacstat;//临时导入的tacstat
 //将字符串转化为time_t变量
 time_t FormatTime(const char * szTime)
 {
@@ -231,25 +232,29 @@ bool WorkModeSelection(string mode){
 }
 //负载在各个线程中分配
 bool WorkLoadDistribution(vector<string> fl,string workingdir){	
-	taccdrfile.clear();
-	taccdrfile.resize(cfg.THREADNUM);
+	
 	//每轮的tacstat存储的文件名
 	tacstatfilelist.clear();
-	//算每轮读FileBatchNum个文件进来，共需多少轮---ceil函数似乎变成了四舍五入的
-	int batchnum=(int)(ceil((double)(fl.size())/(double)(cfg.FileBatchNum))))+1;
+	//算每轮读FileBatchNum个文件进来，共需多少轮---ceil函数似乎变成了floor
+	int batchnum=(int)(ceil((double)(fl.size())/(double)(cfg.FileBatchNum)));
 	cout<<"Divide into "<<batchnum<<" Batch, Total "<<fl.size()<<" files."<<endl;
 	//开始
 	for(int bn=0;bn<batchnum;bn++){
 		cdr.clear();
 		cdr.resize(fl.size());
+		
 		//如果只要tac，那么清空imeicdrfile,或者第一轮运行时，初始化imeicdrfile
-		if(bIMEIOutput==false||bn==0){
+		if(cfg.bIMEIOutput==false||bn==0){
 			imeicdrfile.clear();
 			imeicdrfile.resize(cfg.THREADNUM);
+			taccdrfile.clear();
+			taccdrfile.resize(cfg.THREADNUM);
 			for(int threadn=0;threadn<cfg.THREADNUM;threadn++){
 				imeicdrfile[threadn].clear();
 				imeicdrfile[threadn].resize((int)pow((double)10,cfg.HASH_NUM_IMEI+cfg.HASH_NUM_CELLID));
+				taccdrfile[threadn].clear();
 			}
+			
 		}
 		//读取文件,并行
 		omp_set_num_threads(cfg.THREADNUM);
@@ -259,7 +264,7 @@ bool WorkLoadDistribution(vector<string> fl,string workingdir){
 			}
 		//创建基于record的列表，以平均分配任务给每个线程
 		rp.clear();
-		for(int fn=bn*FileBatchNum;fn<min((bn+1)*cfg.FileBatchNum,(int)fl.size());fn++){
+		for(int fn=bn*cfg.FileBatchNum;fn<min((bn+1)*cfg.FileBatchNum,(int)fl.size());fn++){
 			for(int j=0;j<cdr[fn].size();j++){
 				recordp temp_rp;
 				temp_rp.fn=fn;
@@ -296,7 +301,7 @@ bool WorkLoadDistribution(vector<string> fl,string workingdir){
 		vector<recordp>().swap(rp);
 		cout<<"Batch $"<<bn<<" Record vector is cleared"<<endl;
 		//如果只要tac，那么清空imeicdrfile
-		if(bIMEIOutput==false){
+		if(cfg.bIMEIOutput==false){
 			imeicdrfile.clear();
 			vector<vector<vector<IMEI_CDR_Statistic>>>().swap(imeicdrfile);
 			cout<<"IMEI_CDR_FILE vector is cleared"<<endl;
@@ -309,10 +314,10 @@ bool WorkLoadDistribution(vector<string> fl,string workingdir){
 		}
 		else{
 			string delresultpath=(string)"rmdir "+cfg.OutputDirectory+(string)" /q/s";
-			_mkdir(OutputDirectory.c_str());
-			if(_mkdir(OutputDirectory.c_str())==-1){
+			_mkdir(cfg.OutputDirectory.c_str());
+			if(_mkdir(cfg.OutputDirectory.c_str())==-1){
 				system(delresultpath.c_str());
-				_mkdir(OutputDirectory.c_str());
+				_mkdir(cfg.OutputDirectory.c_str());
 			}
 		}
 
@@ -462,8 +467,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	else{
 		if(cfg.filelist.size()>0){
 			cdr.clear();
-			cdr.resize(filelist.size());
-			cout<<"Number of CDR file to be processed is "<<filelist.size()<<endl;
+			cdr.resize(cfg.filelist.size());
+			cout<<"Number of CDR file to be processed is "<<cfg.filelist.size()<<endl;
 		}
 		else{
 			cout<<"File list is empty"<<endl;

@@ -202,7 +202,7 @@ bool MatchCellTypeList();
 ////将不同批次产生的tacstat文件合并成一个tacstat
 bool CombineMultiTACStat(vector<string> tacstatfilelist);
 //读取tacstat存储的文件
-bool ReadTACSTATFile(string tacstatfile, vector<vector<IMEI_CDR_Statistic>>& tacstat_temp);
+bool ReadTACSTATFile(string tacstatfile);
 //输出tacstat
 bool WriteTACFile(std::string temp_result_path_name);
 //将计算好的tacstat中不同的TimeSection合并生成tacstat_timesection
