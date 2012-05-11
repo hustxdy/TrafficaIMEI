@@ -90,9 +90,9 @@ bool WorkModeSelection(string mode){
 		if(!WorkLoadDistribution(cfg.filelist,cfg.CDRDirectory)){
 			cout<<"IMEI and TAC statistic computing is not complete due to error"<<endl;
 		}
-		CombineMultiTACStat(tacstatfilelist);
+		/*CombineMultiTACStat(tacstatfilelist);
 
-		CombineProcess();
+		CombineProcess();*/
 		/*
 		//开始按IMEI统计
 		//在已有的IMEI列表查找是否有相同的
@@ -213,12 +213,25 @@ bool WorkModeSelection(string mode){
 		return true;
 	}
 	else if(mode=="CombineTACStatistic"){
-		tacstatfilelist.clear();
-		tacstatfilelist.push_back("D:\\xudayong\\traffica20120326\\CombineTACCellstat.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\traffica20120326\\CombineTACCellstat_0.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\traffica20120326\\CombineTACCellstat_1.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\traffica20120326\\CombineTACCellstat_2.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\traffica20120326\\CombineTACCellstat_3.csv");
+		/*tacstatfilelist.clear();
+		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_0.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_1.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_2.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_3.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_4.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_5.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_6.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_7.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_8.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_9.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_10.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_11.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_12.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_13.csv");
+		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_14.csv");*/
+
+		ReadToCombineFileList(cfg.toCombineConfigFile);
 
 		CombineMultiTACStat(tacstatfilelist);
 

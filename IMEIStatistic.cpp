@@ -1091,8 +1091,9 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.B_IMEI_GSM=0;
 			tempcdrstat.B_IMEI_TD=0;
 
-			CAUSE_TYPE tempDXcause;
+			
 			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause!=DEFAULT_CAUSE_VALUE){
+				CAUSE_TYPE tempDXcause;
 				tempDXcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause;
 				tempDXcause.cause_num=1;
 				tempcdrstat.A_DX_Cause_GSM.push_back(tempDXcause);
@@ -1166,8 +1167,9 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.B_IMEI_GSM=0;
 			tempcdrstat.B_IMEI_TD=0;
 
-			CAUSE_TYPE tempDXcause;
+			
 			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause!=DEFAULT_CAUSE_VALUE){
+				CAUSE_TYPE tempDXcause;
 				tempDXcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause;
 				tempDXcause.cause_num=1;
 				tempcdrstat.A_DX_Cause_TD.push_back(tempDXcause);
@@ -1244,8 +1246,9 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.B_IMEI_GSM=0;
 			tempcdrstat.B_IMEI_TD=0;
 
-			CAUSE_TYPE tempcause;
+			
 			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause!=DEFAULT_CAUSE_VALUE){
+				CAUSE_TYPE tempcause;
 				tempcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause;
 				tempcause.cause_num=1;
 				tempcdrstat.B_BSSMAP_Cause.push_back(tempcause);
@@ -1337,8 +1340,9 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.B_IMEI_GSM=0;
 			tempcdrstat.B_IMEI_TD=0;
 			
-			CAUSE_TYPE tempcause;
+			
 			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=DEFAULT_CAUSE_VALUE){
+				CAUSE_TYPE tempcause;
 				tempcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext;
 				tempcause.cause_num=1;
 				tempcdrstat.B_RANAP_Cause.push_back(tempcause);
@@ -1573,8 +1577,9 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.B_IMEI_GSM=0;
 			tempcdrstat.B_IMEI_TD=0;
 
-			CAUSE_TYPE tempDXcause;
+			
 			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause!=DEFAULT_CAUSE_VALUE){
+				CAUSE_TYPE tempDXcause;
 				tempDXcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause;
 				tempDXcause.cause_num=1;
 				tempcdrstat.B_DX_Cause_GSM.push_back(tempDXcause);

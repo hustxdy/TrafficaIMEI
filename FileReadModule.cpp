@@ -56,6 +56,17 @@ bool ReadConfigFile(std::string configfile){
 			}
 			cfg.CDRDirectory=trim(str.substr(j,str.length()-j));
 		}
+		if(str.find("toCombineConfigFile=")!=string::npos){
+			int j=0;
+			while(str[j]!='='){
+				j++;
+			}
+			j++;
+			while(str[j]==' '){
+				j++;
+			}
+			cfg.toCombineConfigFile=trim(str.substr(j,str.length()-j));
+		}
 		if(str.find("OutputDirectory=")!=string::npos){
 			int j=0;
 			while(str[j]!='='){
@@ -314,6 +325,46 @@ bool ReadConfigFile(std::string configfile){
 	}
 	fi.close();
 	return true;
+}
+bool ReadToCombineFileList(std::string tocombinefile){
+	ifstream fi(tocombinefile.c_str());
+	if(!fi){
+		cout<<"No ToCombineConfigFile Information!"<<endl;
+		return false;
+	}
+	
+	string toCombineDir="";
+	tacstatfilelist.clear();
+	
+	string str;
+
+	while(getline(fi,str)){
+		if(str.find("ToCombineFileDirectory=")!=string::npos){
+			int j=0;
+			while(str[j]!='='){
+				j++;
+			}
+			j++;
+			while(str[j]==' '){
+				j++;
+			}
+			toCombineDir=trim(str.substr(j,str.length()-j));
+		}
+		if(str.find("ToCombineFile=")!=string::npos){
+			int j=0;
+			while(str[j]!='='){
+				j++;
+			}
+			j++;
+			while(str[j]==' '){
+				j++;
+			}
+			tacstatfilelist.push_back(toCombineDir+"\\"+trim(str.substr(j,str.length()-j)));
+		}
+	}
+
+	return true;
+
 }
 bool ReadTACFile(string tacfile){
 	ifstream fi(tacfile.c_str());

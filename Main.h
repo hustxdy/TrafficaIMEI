@@ -156,6 +156,7 @@ struct config{
 	bool bIMEIOutput;//是否输出IMEI级的统计文件
 	bool bComputeDistinctIMEI;//是否统计不重复的IMEI数
 	string workmode;//工作模式
+	string toCombineConfigFile;//Combine模式下的配置文件位置
 	int FileBatchNum;//每次处理的文件数，s主要是内存不足造成速度慢，所以分批次倒入CDR
 	int SHORTCALL_THRESHOLD_1;//短呼门限1段，即xx<SHORTCALL_THRESHOLD_1
 	int SHORTCALL_THRESHOLD_2;//短呼门限2段，即SHORTCALL_THRESHOLD_1<xx<SHORTCALL_THRESHOLD_2
@@ -182,8 +183,10 @@ bool WorkLoadDistribution(vector<string> fl,string workdir);//分配工作量
 bool CombineProcess();//最后的对tacstat按照timesection和cell进行合并的进程
 //==================文件读取=====
 bool ReadConfigFile(std::string configfile);//读取配置文件
+bool ReadToCombineFileList(std::string tocombinefile);//读取combine文件列表
 bool ReadCDRFile(int fn,string cdrfile);//读取文件列表中的CDR文件
 bool ReadTACFile(string tacfile);//读取TAC对应的品牌，型号和类型文件
+
 //读取cell类型的文件
 bool ReadCellTypeFile(string celltypefile);
 //在运行ReadCDRFile函数中，判决CDR是否有效，用于屏蔽和减少部分CDR数量

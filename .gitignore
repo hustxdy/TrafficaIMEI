@@ -29,3 +29,4 @@ _ReSharper*/
 objects/
 *.sample
 x64/Debug
+*.obj
