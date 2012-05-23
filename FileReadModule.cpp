@@ -334,11 +334,22 @@ bool ReadToCombineFileList(std::string tocombinefile){
 	}
 	
 	string toCombineDir="";
-	tacstatfilelist.clear();
+	cfg.tacstatfilelist.clear();
 	
 	string str;
 
 	while(getline(fi,str)){
+		if(str.find("CombineMode=")!=string::npos){
+			int j=0;
+			while(str[j]!='='){
+				j++;
+			}
+			j++;
+			while(str[j]==' '){
+				j++;
+			}
+			cfg.combinemode=trim(str.substr(j,str.length()-j));
+		}
 		if(str.find("ToCombineFileDirectory=")!=string::npos){
 			int j=0;
 			while(str[j]!='='){
@@ -359,7 +370,7 @@ bool ReadToCombineFileList(std::string tocombinefile){
 			while(str[j]==' '){
 				j++;
 			}
-			tacstatfilelist.push_back(toCombineDir+"\\"+trim(str.substr(j,str.length()-j)));
+			cfg.tacstatfilelist.push_back(toCombineDir+"\\"+trim(str.substr(j,str.length()-j)));
 		}
 	}
 
@@ -632,4 +643,547 @@ bool ReadCDRFile(int fn,string cdrfile){
 	cout<<"Reading File "<<cfg.filelist[fn]<<" with "<<cdr[fn].size()<<" Records in "<<difftime(end,start)<<" ms\n";
 	return true;
 }
+//读取tacstatfile到全局变量temptacstat
+bool ReadTACSTATFile(string tacstatfile){
+	
+	temptacstat.clear();
+	temptacstat.resize((int)pow((double)10,cfg.HASH_NUM_IMEI+cfg.HASH_NUM_CELLID));
 
+	time_t start,end;
+	ifstream fi(tacstatfile.c_str());
+	if(!fi){
+		cout<<"Reading File "<<tacstatfile<<" Error!!! "<<endl;
+		//return false;
+	}
+	else{
+		start=clock();
+		string sl;//每一行
+		getline(fi,sl);//取第一行xd
+		ReadItemList(sl,cfg.itemlist);//读取第一行，存到itemlist里
+		while(getline(fi,sl)){
+
+			IMEI_CDR_Statistic tempcdrstat;
+			tempcdrstat.IMEI="";
+			tempcdrstat.TAC="";
+			tempcdrstat.brand="";
+			tempcdrstat.name="";
+			tempcdrstat.type="";
+			tempcdrstat.cellid=0;
+			tempcdrstat.celltype="";
+			tempcdrstat.network="";
+			tempcdrstat.timeSection=0;
+//			tempcdrstat.timeSectionStartTime=FormatTime("");
+			tempcdrstat.A_call_attempt=0;
+			tempcdrstat.A_call_attempt_GSM=0;
+			tempcdrstat.A_call_attempt_TD=0;
+			tempcdrstat.A_shortcall_1=0;
+			tempcdrstat.A_shortcall_2=0;
+			tempcdrstat.A_shortcall_3=0;
+			tempcdrstat.B_call_attempt=0;
+			tempcdrstat.B_call_attempt_GSM=0;
+			tempcdrstat.B_call_attempt_TD=0;
+			tempcdrstat.B_shortcall_3=0;
+			tempcdrstat.B_shortcall_2=0;
+			tempcdrstat.B_shortcall_1=0;
+			tempcdrstat.A_BSSMAP_Cause.clear();
+			tempcdrstat.B_BSSMAP_Cause.clear();
+			tempcdrstat.A_RANAP_Cause.clear();
+			tempcdrstat.B_RANAP_Cause.clear();
+			tempcdrstat.A_DX_Cause_GSM.clear();
+			tempcdrstat.A_DX_Cause_TD.clear();
+			tempcdrstat.B_DX_Cause_GSM.clear();
+			tempcdrstat.B_DX_Cause_TD.clear();
+			tempcdrstat.A_BSSMAP_drop=0;
+			tempcdrstat.A_RANAP_drop=0;
+			tempcdrstat.B_BSSMAP_drop=0;
+			tempcdrstat.B_RANAP_drop=0;
+			tempcdrstat.A_DX_GSM_block=0;
+			tempcdrstat.A_DX_TD_block=0;
+			tempcdrstat.B_DX_GSM_block=0;
+			tempcdrstat.B_DX_TD_block=0;
+			tempcdrstat.A_call_first_cell_connected=0;
+			tempcdrstat.A_call_first_cell_connected_GSM=0;
+			tempcdrstat.A_call_first_cell_connected_TD=0;
+			tempcdrstat.B_call_first_cell_connected=0;
+			tempcdrstat.B_call_first_cell_connected_GSM=0;
+			tempcdrstat.B_call_first_cell_connected_TD=0;
+			tempcdrstat.A_call_last_cell_connected=0;
+			tempcdrstat.A_call_last_cell_connected_GSM=0;
+			tempcdrstat.A_call_last_cell_connected_TD=0;
+			tempcdrstat.B_call_last_cell_connected=0;
+			tempcdrstat.B_call_last_cell_connected_GSM=0;
+			tempcdrstat.B_call_last_cell_connected_TD=0;
+
+			vector<string> readitem;
+			readitem.clear();
+			
+			int i=0;//记录当前读取字段的开头
+			int j=0;//记录当前读取字段的结束
+			while(j<sl.size()){
+				i=j;//设置当前读取字段的新开头
+				while(j<sl.size()&&sl[j]!=','){
+					j++;//找寻下一个coma
+				}
+				if((j-i)>0){
+					readitem.push_back(sl.substr(i,j-i));
+				}
+				else if(j==i){
+					readitem.push_back("empty");
+				}
+				j++;//越过coma
+			}
+
+			for(int k=0;k<cfg.itemlist.size();k++){
+				int n=0;//记录=位置
+				while(n<cfg.itemlist[k].size()&&cfg.itemlist[k][n]!='='){
+					n++;//找寻=
+				}
+				if(n!=cfg.itemlist[k].size()){
+					string item=cfg.itemlist[k].substr(0,n);
+					int pos=atoi(trim(cfg.itemlist[k].substr(n+1,cfg.itemlist[k].size()-n-1)).c_str());
+					if(pos<readitem.size()){
+						if(item=="TAC"&&readitem[pos]!="empty"){
+							tempcdrstat.TAC=trim(readitem[pos]);
+						}
+						else if(item=="品牌"&&readitem[pos]!="empty"){
+							tempcdrstat.brand=trim(readitem[pos]);
+						}
+						else if(item=="型号"&&readitem[pos]!="empty"){
+							tempcdrstat.name=trim(readitem[pos]);
+						}
+						else if(item=="类别"&&readitem[pos]!="empty"){
+							tempcdrstat.type=trim(readitem[pos]);
+						}
+						else if(item=="CellID"&&readitem[pos]!="empty"){
+							tempcdrstat.cellid=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="小区分类"&&readitem[pos]!="empty"){
+							tempcdrstat.celltype=trim(readitem[pos]);
+						}
+						else if(item=="网络类型"&&readitem[pos]!="empty"){
+							tempcdrstat.network=trim(readitem[pos]);
+						}
+						else if(item=="timeSection"&&readitem[pos]!="empty"){
+							tempcdrstat.timeSection=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="timeSectionStartTime"&&readitem[pos]!="empty"){
+							tempcdrstat.timeSectionStartTime=FormatTime(trim(readitem[pos]).c_str());
+						}
+						else if(item=="A_shortcall_1"&&readitem[pos]!="empty"){
+							tempcdrstat.A_shortcall_1=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="A_shortcall_2"&&readitem[pos]!="empty"){
+							tempcdrstat.A_shortcall_2=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="A_shortcall_3"&&readitem[pos]!="empty"){
+							tempcdrstat.A_shortcall_3=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="A_call_attempt"&&readitem[pos]!="empty"){
+							tempcdrstat.A_call_attempt=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="A_call_attempt_GSM"&&readitem[pos]!="empty"){
+							tempcdrstat.A_call_attempt_GSM=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="A_call_attempt_TD"&&readitem[pos]!="empty"){
+							tempcdrstat.A_call_attempt_TD=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="B_shortcall_1"&&readitem[pos]!="empty"){
+							tempcdrstat.B_shortcall_1=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="B_shortcall_2"&&readitem[pos]!="empty"){
+							tempcdrstat.B_shortcall_2=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="B_shortcall_3"&&readitem[pos]!="empty"){
+							tempcdrstat.B_shortcall_3=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="B_call_attempt"&&readitem[pos]!="empty"){
+							tempcdrstat.B_call_attempt=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="B_call_attempt_GSM"&&readitem[pos]!="empty"){
+							tempcdrstat.B_call_attempt_GSM=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="B_call_attempt_TD"&&readitem[pos]!="empty"){
+							tempcdrstat.B_call_attempt_TD=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="A_call_first_cell_connected"&&readitem[pos]!="empty"){
+							tempcdrstat.A_call_first_cell_connected=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="A_call_first_cell_connected_GSM"&&readitem[pos]!="empty"){
+							tempcdrstat.A_call_first_cell_connected_GSM=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="A_call_first_cell_connected_TD"&&readitem[pos]!="empty"){
+							tempcdrstat.A_call_first_cell_connected_TD=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="A_call_last_cell_connected"&&readitem[pos]!="empty"){
+							tempcdrstat.A_call_last_cell_connected=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="A_call_last_cell_connected_GSM"&&readitem[pos]!="empty"){
+							tempcdrstat.A_call_last_cell_connected_GSM=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="A_call_last_cell_connected_TD"&&readitem[pos]!="empty"){
+							tempcdrstat.A_call_last_cell_connected_TD=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="B_call_last_cell_connected"&&readitem[pos]!="empty"){
+							tempcdrstat.B_call_last_cell_connected=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="B_call_last_cell_connected_GSM"&&readitem[pos]!="empty"){
+							tempcdrstat.B_call_last_cell_connected_GSM=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="B_call_last_cell_connected_TD"&&readitem[pos]!="empty"){
+							tempcdrstat.B_call_last_cell_connected_TD=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="B_call_first_cell_connected"&&readitem[pos]!="empty"){
+							tempcdrstat.B_call_first_cell_connected=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="B_call_first_cell_connected_GSM"&&readitem[pos]!="empty"){
+							tempcdrstat.B_call_first_cell_connected_GSM=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="B_call_first_cell_connected_TD"&&readitem[pos]!="empty"){
+							tempcdrstat.B_call_first_cell_connected_TD=atoi(trim(readitem[pos]).c_str());
+						}
+						else if(item=="A_BSSMAP_Cause"&&readitem[pos]!="empty"){
+							vector<string> colonlist;
+							colonlist.clear();
+			
+							int i=0;//记录当前读取字段的开头
+							int j=0;//记录当前读取字段的结束
+							while(j<readitem[pos].size()){
+								i=j;//设置当前读取字段的新开头
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
+									j++;//找寻下一个coma
+								}
+								if((j-i)>0){
+									/*cout<<readitem[pos].substr(i,j-i)<<endl;
+									cout<<i<<endl;
+									cout<<j<<endl;*/
+									colonlist.push_back(readitem[pos].substr(i,j-i));
+								}
+								else if(j==i){
+									colonlist.push_back("0");
+								}
+								j++;//越过分隔符
+							}
+							
+							for(int k=0;k<colonlist.size();k=k+2){
+								CAUSE_TYPE tempcause;
+								tempcause.cause_id=atoi(colonlist[k].c_str());
+								tempcause.cause_num=atoi(colonlist[k+1].c_str());
+								tempcdrstat.A_BSSMAP_Cause.push_back(tempcause);
+							}
+						}
+						else if(item=="A_RANAP_Cause"&&readitem[pos]!="empty"){
+							vector<string> colonlist;
+							colonlist.clear();
+			
+							int i=0;//记录当前读取字段的开头
+							int j=0;//记录当前读取字段的结束
+							while(j<readitem[pos].size()){
+								i=j;//设置当前读取字段的新开头
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
+									j++;//找寻下一个coma
+								}
+								if((j-i)>0){
+									colonlist.push_back(readitem[pos].substr(i,j-i));
+								}
+								else if(j==i){
+									colonlist.push_back("0");
+								}
+								j++;//越过分隔符
+							}
+
+							for(int k=0;k<colonlist.size();k=k+2){
+								CAUSE_TYPE tempcause;
+								tempcause.cause_id=atoi(colonlist[k].c_str());
+								tempcause.cause_num=atoi(colonlist[k+1].c_str());
+								tempcdrstat.A_RANAP_Cause.push_back(tempcause);
+							}
+						}
+						else if(item=="B_BSSMAP_Cause"&&readitem[pos]!="empty"){
+							vector<string> colonlist;
+							colonlist.clear();
+			
+							int i=0;//记录当前读取字段的开头
+							int j=0;//记录当前读取字段的结束
+							while(j<readitem[pos].size()){
+								i=j;//设置当前读取字段的新开头
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
+									j++;//找寻下一个coma
+								}
+								if((j-i)>0){
+									colonlist.push_back(readitem[pos].substr(i,j-i));
+								}
+								else if(j==i){
+									colonlist.push_back("0");
+								}
+								j++;//越过分隔符
+							}
+
+							for(int k=0;k<colonlist.size();k=k+2){
+								CAUSE_TYPE tempcause;
+								tempcause.cause_id=atoi(colonlist[k].c_str());
+								tempcause.cause_num=atoi(colonlist[k+1].c_str());
+								tempcdrstat.B_BSSMAP_Cause.push_back(tempcause);
+							}
+						}
+						else if(item=="B_RANAP_Cause"&&readitem[pos]!="empty"){
+							vector<string> colonlist;
+							colonlist.clear();
+			
+							int i=0;//记录当前读取字段的开头
+							int j=0;//记录当前读取字段的结束
+							while(j<readitem[pos].size()){
+								i=j;//设置当前读取字段的新开头
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
+									j++;//找寻下一个coma
+								}
+								if((j-i)>0){
+									colonlist.push_back(readitem[pos].substr(i,j-i));
+								}
+								else if(j==i){
+									colonlist.push_back("0");
+								}
+								j++;//越过分隔符
+							}
+
+							for(int k=0;k<colonlist.size();k=k+2){
+								CAUSE_TYPE tempcause;
+								tempcause.cause_id=atoi(colonlist[k].c_str());
+								tempcause.cause_num=atoi(colonlist[k+1].c_str());
+								tempcdrstat.B_RANAP_Cause.push_back(tempcause);
+							}
+						}
+						else if(item=="A_DX_Cause_GSM"&&readitem[pos]!="empty"){
+							vector<string> colonlist;
+							colonlist.clear();
+			
+							int i=0;//记录当前读取字段的开头
+							int j=0;//记录当前读取字段的结束
+							while(j<readitem[pos].size()){
+								i=j;//设置当前读取字段的新开头
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
+									j++;//找寻下一个coma
+								}
+								if((j-i)>0){
+									colonlist.push_back(readitem[pos].substr(i,j-i));
+								}
+								else if(j==i){
+									colonlist.push_back("0");
+								}
+								j++;//越过分隔符
+							}
+
+							for(int k=0;k<colonlist.size();k=k+2){
+								CAUSE_TYPE tempcause;
+								tempcause.cause_id=atoi(colonlist[k].c_str());
+								tempcause.cause_num=atoi(colonlist[k+1].c_str());
+								tempcdrstat.A_DX_Cause_GSM.push_back(tempcause);
+							}
+						}
+						else if(item=="A_DX_Cause_TD"&&readitem[pos]!="empty"){
+							vector<string> colonlist;
+							colonlist.clear();
+			
+							int i=0;//记录当前读取字段的开头
+							int j=0;//记录当前读取字段的结束
+							while(j<readitem[pos].size()){
+								i=j;//设置当前读取字段的新开头
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
+									j++;//找寻下一个coma
+								}
+								if((j-i)>0){
+									colonlist.push_back(readitem[pos].substr(i,j-i));
+								}
+								else if(j==i){
+									colonlist.push_back("0");
+								}
+								j++;//越过分隔符
+							}
+
+							for(int k=0;k<colonlist.size();k=k+2){
+								CAUSE_TYPE tempcause;
+								tempcause.cause_id=atoi(colonlist[k].c_str());
+								tempcause.cause_num=atoi(colonlist[k+1].c_str());
+								tempcdrstat.A_DX_Cause_TD.push_back(tempcause);
+							}
+						}
+						else if(item=="B_DX_Cause_GSM"&&readitem[pos]!="empty"){
+							vector<string> colonlist;
+							colonlist.clear();
+			
+							int i=0;//记录当前读取字段的开头
+							int j=0;//记录当前读取字段的结束
+							while(j<readitem[pos].size()){
+								i=j;//设置当前读取字段的新开头
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
+									j++;//找寻下一个coma
+								}
+								if((j-i)>0){
+									colonlist.push_back(readitem[pos].substr(i,j-i));
+								}
+								else if(j==i){
+									colonlist.push_back("0");
+								}
+								j++;//越过分隔符
+							}
+
+							for(int k=0;k<colonlist.size();k=k+2){
+								CAUSE_TYPE tempcause;
+								tempcause.cause_id=atoi(colonlist[k].c_str());
+								tempcause.cause_num=atoi(colonlist[k+1].c_str());
+								tempcdrstat.B_DX_Cause_GSM.push_back(tempcause);
+							}
+						}
+						else if(item=="B_DX_Cause_TD"&&readitem[pos]!="empty"){
+							vector<string> colonlist;
+							colonlist.clear();
+			
+							int i=0;//记录当前读取字段的开头
+							int j=0;//记录当前读取字段的结束
+							while(j<readitem[pos].size()){
+								i=j;//设置当前读取字段的新开头
+								while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
+									j++;//找寻下一个coma
+								}
+								if((j-i)>0){
+									colonlist.push_back(readitem[pos].substr(i,j-i));
+								}
+								else if(j==i){
+									colonlist.push_back("0");
+								}
+								j++;//越过分隔符
+							}
+
+							for(int k=0;k<colonlist.size();k=k+2){
+								CAUSE_TYPE tempcause;
+								tempcause.cause_id=atoi(colonlist[k].c_str());
+								tempcause.cause_num=atoi(colonlist[k+1].c_str());
+								tempcdrstat.B_DX_Cause_TD.push_back(tempcause);
+							}
+						}
+						//else if(item=="A_IMEI_IMSI_GSM"&&readitem[pos]!="empty"){
+						//	vector<string> colonlist;
+						//	colonlist.clear();
+			
+						//	int i=0;//记录当前读取字段的开头
+						//	int j=0;//记录当前读取字段的结束
+						//	while(j<readitem[pos].size()){
+						//		i=j;//设置当前读取字段的新开头
+						//		while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
+						//			j++;//找寻下一个coma
+						//		}
+						//		if((j-i)>0){
+						//			colonlist.push_back(readitem[pos].substr(i,j-i));
+						//		}
+						//		else if(j==i){
+						//			colonlist.push_back("0");
+						//		}
+						//		j++;//越过分隔符
+						//	}
+
+						//	tempcdrstat.A_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
+						//	for(int k=0;k<colonlist.size();k=k+2){
+						//		IMEI_IMSI tempimei;
+						//		tempimei.IMEI=trim(colonlist[k]);
+						//		tempimei.IMSI=trim(colonlist[k+1]);
+						//		int temp_hash_imei=atoi(tempimei.IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
+						//		tempcdrstat.A_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempimei);
+						//	}
+						//}
+						//else if(item=="A_IMEI_IMSI_TD"&&readitem[pos]!="empty"){
+						//	vector<string> colonlist;
+						//	colonlist.clear();
+			
+						//	int i=0;//记录当前读取字段的开头
+						//	int j=0;//记录当前读取字段的结束
+						//	while(j<readitem[pos].size()){
+						//		i=j;//设置当前读取字段的新开头
+						//		while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
+						//			j++;//找寻下一个coma
+						//		}
+						//		if((j-i)>0){
+						//			colonlist.push_back(readitem[pos].substr(i,j-i));
+						//		}
+						//		else if(j==i){
+						//			colonlist.push_back("0");
+						//		}
+						//		j++;//越过分隔符
+						//	}
+						//	tempcdrstat.A_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
+						//	for(int k=0;k<colonlist.size();k=k+2){
+						//		IMEI_IMSI tempimei;
+						//		tempimei.IMEI=trim(colonlist[k]);
+						//		tempimei.IMSI=trim(colonlist[k+1]);
+						//		int temp_hash_imei=atoi(tempimei.IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
+						//		tempcdrstat.A_IMEI_IMSI_TD[temp_hash_imei].push_back(tempimei);
+						//	}
+						//}
+						//else if(item=="B_IMEI_IMSI_GSM"&&readitem[pos]!="empty"){
+						//	vector<string> colonlist;
+						//	colonlist.clear();
+			
+						//	int i=0;//记录当前读取字段的开头
+						//	int j=0;//记录当前读取字段的结束
+						//	while(j<readitem[pos].size()){
+						//		i=j;//设置当前读取字段的新开头
+						//		while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
+						//			j++;//找寻下一个coma
+						//		}
+						//		if((j-i)>0){
+						//			colonlist.push_back(readitem[pos].substr(i,j-i));
+						//		}
+						//		else if(j==i){
+						//			colonlist.push_back("0");
+						//		}
+						//		j++;//越过分隔符
+						//	}
+						//	tempcdrstat.B_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
+						//	for(int k=0;k<colonlist.size();k=k+2){
+						//		IMEI_IMSI tempimei;
+						//		tempimei.IMEI=trim(colonlist[k]);
+						//		tempimei.IMSI=trim(colonlist[k+1]);
+						//		int temp_hash_imei=atoi(tempimei.IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
+						//		tempcdrstat.B_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempimei);
+						//	}
+						//}
+						//else if(item=="B_IMEI_IMSI_TD"&&readitem[pos]!="empty"){
+						//	vector<string> colonlist;
+						//	colonlist.clear();
+			
+						//	int i=0;//记录当前读取字段的开头
+						//	int j=0;//记录当前读取字段的结束
+						//	while(j<readitem[pos].size()){
+						//		i=j;//设置当前读取字段的新开头
+						//		while(j<readitem[pos].size()&&readitem[pos][j]!=';'){
+						//			j++;//找寻下一个coma
+						//		}
+						//		if((j-i)>0){
+						//			colonlist.push_back(readitem[pos].substr(i,j-i));
+						//		}
+						//		else if(j==i){
+						//			colonlist.push_back("0");
+						//		}
+						//		j++;//越过分隔符
+						//	}
+						//	tempcdrstat.B_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
+						//	for(int k=0;k<colonlist.size();k=k+2){
+						//		IMEI_IMSI tempimei;
+						//		tempimei.IMEI=trim(colonlist[k]);
+						//		tempimei.IMSI=trim(colonlist[k+1]);
+						//		int temp_hash_imei=atoi(tempimei.IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
+						//		tempcdrstat.B_IMEI_IMSI_TD[temp_hash_imei].push_back(tempimei);
+						//	}
+						//}
+					}
+				}			
+			}
+			
+			int temp_hash=(int)pow((double)10,cfg.HASH_NUM_CELLID)*atoi(tempcdrstat.TAC.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str())+tempcdrstat.cellid%((int)pow((double)10,cfg.HASH_NUM_CELLID));
+			
+			temptacstat[temp_hash].push_back(tempcdrstat);
+		}
+	}
+	
+	end=clock();
+	cout<<"Reading TAC statistic File "<<tacstatfile<<" in "<<difftime(end,start)<<"ms"<<endl;
+	return true;
+}

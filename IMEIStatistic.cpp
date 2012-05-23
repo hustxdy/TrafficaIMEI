@@ -27,46 +27,46 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 					if(imeicdrfile[fn][temp_hash][cr].timeSection==cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection&&imeicdrfile[fn][temp_hash][cr].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI&&imeicdrfile[fn][temp_hash][cr].cellid==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_cell&&imeicdrfile[fn][temp_hash][cr].network=="GSM"){
 						isExistAcallendGSM=true;
 						
-						if(cfg.bComputeDistinctIMEI==true){
-							bool isExistIMEI=false;
-							bool isExistIMEIandIMSI=false;
-							if(imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM.size()==(int)pow((double)10,cfg.HASH_NUM_IMEI)){
-								//按照IMEI进行hash
-								int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-								for(int i=0;i<imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM[temp_hash_imei].size();i++){
-									if(imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM[temp_hash_imei][i].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI){
-										isExistIMEI=true;
-										if(imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM[temp_hash_imei][i].IMSI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI){
-											isExistIMEIandIMSI=true;
-											break;
-										}
-									}
-								}
-								if(isExistIMEIandIMSI==false){
-									//如果IMEI和IMSI组成的对不重复，那么新增一个
-									IMEI_IMSI tempim;
-									tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI;
-									tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI;
-									imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempim);
-								}
-								if(isExistIMEI==false){
-									//如果IMEI不重复
-									imeicdrfile[fn][temp_hash][cr].A_IMEI_GSM++;
-								}
-							}
-							else{
-								//初始化
-								imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM.clear();
-								imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
-								//加入到A_IMEI_IMSI_GSM中
-								int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-								IMEI_IMSI tempim;
-								tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI;
-								tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI;
-								imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempim);
-								imeicdrfile[fn][temp_hash][cr].A_IMEI_GSM=1;
-							}
-						}
+						//if(cfg.bComputeDistinctIMEI==true){
+						//	bool isExistIMEI=false;
+						//	bool isExistIMEIandIMSI=false;
+						//	if(imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM.size()==(int)pow((double)10,cfg.HASH_NUM_IMEI)){
+						//		//按照IMEI进行hash
+						//		int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
+						//		for(int i=0;i<imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM[temp_hash_imei].size();i++){
+						//			if(imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM[temp_hash_imei][i].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI){
+						//				isExistIMEI=true;
+						//				if(imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM[temp_hash_imei][i].IMSI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI){
+						//					isExistIMEIandIMSI=true;
+						//					break;
+						//				}
+						//			}
+						//		}
+						//		if(isExistIMEIandIMSI==false){
+						//			//如果IMEI和IMSI组成的对不重复，那么新增一个
+						//			IMEI_IMSI tempim;
+						//			tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI;
+						//			tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI;
+						//			imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempim);
+						//		}
+						//		if(isExistIMEI==false){
+						//			//如果IMEI不重复
+						//			imeicdrfile[fn][temp_hash][cr].A_IMEI_GSM++;
+						//		}
+						//	}
+						//	else{
+						//		//初始化
+						//		imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM.clear();
+						//		imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
+						//		//加入到A_IMEI_IMSI_GSM中
+						//		int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
+						//		IMEI_IMSI tempim;
+						//		tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI;
+						//		tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI;
+						//		imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempim);
+						//		imeicdrfile[fn][temp_hash][cr].A_IMEI_GSM=1;
+						//	}
+						//}
 						
 						bool isExistCause=false;
 						for(int i=0;i<imeicdrfile[fn][temp_hash][cr].A_BSSMAP_Cause.size();i++){
@@ -83,7 +83,10 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 							tempcause.cause_num=1;
 							imeicdrfile[fn][temp_hash][cr].A_BSSMAP_Cause.push_back(tempcause);
 						}
-
+						if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time!=0){
+							imeicdrfile[fn][temp_hash][cr].A_call_last_cell_connected++;
+							imeicdrfile[fn][temp_hash][cr].A_call_last_cell_connected_GSM++;
+						}
 						
 						/*if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause==0){
 							imeicdrfile[fn][temp_hash][cr].A_cause0++;
@@ -112,46 +115,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				for(int cr=0;cr<imeicdrfile[fn][temp_hash].size();cr++){
 					if(imeicdrfile[fn][temp_hash][cr].timeSection==cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection&&imeicdrfile[fn][temp_hash][cr].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI&&imeicdrfile[fn][temp_hash][cr].cellid==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_sac&&imeicdrfile[fn][temp_hash][cr].network=="TD"){
 						isExistAcallendTD=true;
-						if(cfg.bComputeDistinctIMEI==true){
-							bool isExistIMEI=false;
-							bool isExistIMEIandIMSI=false;
-							if(imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_TD.size()==(int)pow((double)10,cfg.HASH_NUM_IMEI)){
-								//按照IMEI进行hash
-								int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-								for(int i=0;i<imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_TD[temp_hash_imei].size();i++){
-									if(imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_TD[temp_hash_imei][i].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI){
-										isExistIMEI=true;
-										if(imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_TD[temp_hash_imei][i].IMSI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI){
-											isExistIMEIandIMSI=true;
-											break;
-										}
-									}
-								}
-								if(isExistIMEIandIMSI==false){
-									//如果IMEI和IMSI组成的对不重复，那么新增一个
-									IMEI_IMSI tempim;
-									tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI;
-									tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI;
-									imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_TD[temp_hash_imei].push_back(tempim);
-								}
-								if(isExistIMEI==false){
-									//如果IMEI不重复
-									imeicdrfile[fn][temp_hash][cr].A_IMEI_TD++;
-								}
-							}
-							else{
-								//初始化
-								imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_TD.clear();
-								imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
-								//加入到A_IMEI_IMSI_GSM中
-								int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-								IMEI_IMSI tempim;
-								tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI;
-								tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI;
-								imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_TD[temp_hash_imei].push_back(tempim);
-								imeicdrfile[fn][temp_hash][cr].A_IMEI_TD=1;
-							}
-						}
+						
 						bool isExistCause=false;
 						for(int i=0;i<imeicdrfile[fn][temp_hash][cr].A_RANAP_Cause.size();i++){
 							if(imeicdrfile[fn][temp_hash][cr].A_RANAP_Cause[i].cause_id==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext){
@@ -166,61 +130,10 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 							tempcause.cause_num=1;
 							imeicdrfile[fn][temp_hash][cr].A_RANAP_Cause.push_back(tempcause);
 						}
-
-						
-						/*if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext==46){
-							imeicdrfile[fn][temp_hash][cr].A_causeTD46++;
-							imeicdrfile[fn][temp_hash][cr].A_causeTDRadioNetwork++;
-							imeicdrfile[fn][temp_hash][cr].A_causeTD++;
+						if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time!=0){
+							imeicdrfile[fn][temp_hash][cr].A_call_last_cell_connected++;
+							imeicdrfile[fn][temp_hash][cr].A_call_last_cell_connected_TD++;
 						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext!=46&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext>=1&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext<=64){
-							imeicdrfile[fn][temp_hash][cr].A_causeTDRadioNetwork++;
-							imeicdrfile[fn][temp_hash][cr].A_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext>=257&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext<=512){
-							imeicdrfile[fn][temp_hash][cr].A_causeTDRadioNetwork++;
-							imeicdrfile[fn][temp_hash][cr].A_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext>=65&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext<=80){
-							imeicdrfile[fn][temp_hash][cr].A_causeTDTransport++;
-							imeicdrfile[fn][temp_hash][cr].A_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext>=81&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext<=96){
-							imeicdrfile[fn][temp_hash][cr].A_causeTDNAS++;
-							imeicdrfile[fn][temp_hash][cr].A_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext>=97&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext<=112){
-							imeicdrfile[fn][temp_hash][cr].A_causeTDProtocol++;
-							imeicdrfile[fn][temp_hash][cr].A_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext>=113&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext<=128){
-							imeicdrfile[fn][temp_hash][cr].A_causeTDMisc++;
-							imeicdrfile[fn][temp_hash][cr].A_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext==176){
-							imeicdrfile[fn][temp_hash][cr].A_causeTD176++;
-							imeicdrfile[fn][temp_hash][cr].A_causeTDNonStandard++;
-							imeicdrfile[fn][temp_hash][cr].A_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext==192){
-							imeicdrfile[fn][temp_hash][cr].A_causeTD192++;
-							imeicdrfile[fn][temp_hash][cr].A_causeTDNonStandard++;
-							imeicdrfile[fn][temp_hash][cr].A_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext==209){
-							imeicdrfile[fn][temp_hash][cr].A_causeTD209++;
-							imeicdrfile[fn][temp_hash][cr].A_causeTDNonStandard++;
-							imeicdrfile[fn][temp_hash][cr].A_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext==239){
-							imeicdrfile[fn][temp_hash][cr].A_causeTD239++;
-							imeicdrfile[fn][temp_hash][cr].A_causeTDNonStandard++;
-							imeicdrfile[fn][temp_hash][cr].A_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext!=176&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext!=192&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext!=209&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext!=239&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext>=129&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext<=256){
-							imeicdrfile[fn][temp_hash][cr].A_causeTDNonStandard++;
-							imeicdrfile[fn][temp_hash][cr].A_causeTD++;
-						}*/
 						break;
 					}
 				}
@@ -233,47 +146,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				for(int cr=0;cr<imeicdrfile[fn][temp_hash].size();cr++){
 					if(imeicdrfile[fn][temp_hash][cr].timeSection==cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection&&imeicdrfile[fn][temp_hash][cr].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI&&imeicdrfile[fn][temp_hash][cr].cellid==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_first_cell&&imeicdrfile[fn][temp_hash][cr].network=="GSM"){
 						isExistAcallstartGSM=true;
-						if(cfg.bComputeDistinctIMEI==true){
-							bool isExistIMEI=false;
-							bool isExistIMEIandIMSI=false;
-							if(imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM.size()==(int)pow((double)10,cfg.HASH_NUM_IMEI)){
-								//按照IMEI进行hash
-								int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-								for(int i=0;i<imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM[temp_hash_imei].size();i++){
-									if(imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM[temp_hash_imei][i].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI){
-										isExistIMEI=true;
-										if(imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM[temp_hash_imei][i].IMSI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI){
-											isExistIMEIandIMSI=true;
-											break;
-										}
-									}
-								}
-								if(isExistIMEIandIMSI==false){
-									//如果IMEI和IMSI组成的对不重复，那么新增一个
-									IMEI_IMSI tempim;
-									tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI;
-									tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI;
-									imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempim);
-								}
-								if(isExistIMEI==false){
-									//如果IMEI不重复
-									imeicdrfile[fn][temp_hash][cr].A_IMEI_GSM++;
-								}
-							}
-							else{
-								//初始化
-								imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM.clear();
-								imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
-								//加入到A_IMEI_IMSI_GSM中
-								int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-								IMEI_IMSI tempim;
-								tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI;
-								tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI;
-								imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempim);
-								imeicdrfile[fn][temp_hash][cr].A_IMEI_GSM=1;
-							}
-						}
-						//记录DX_Cause
+						
 						bool isExistDXCause=false;
 						for(int i=0;i<imeicdrfile[fn][temp_hash][cr].A_DX_Cause_GSM.size();i++){
 							if(imeicdrfile[fn][temp_hash][cr].A_DX_Cause_GSM[i].cause_id==cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause){
@@ -288,6 +161,10 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 							tempcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause;
 							tempcause.cause_num=1;
 							imeicdrfile[fn][temp_hash][cr].A_DX_Cause_GSM.push_back(tempcause);
+						}
+						if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time!=0){
+							imeicdrfile[fn][temp_hash][cr].A_call_first_cell_connected++;
+							imeicdrfile[fn][temp_hash][cr].A_call_first_cell_connected_GSM++;
 						}
 						//记录短呼数
 						imeicdrfile[fn][temp_hash][cr].A_call_attempt++;
@@ -313,47 +190,10 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				for(int cr=0;cr<imeicdrfile[fn][temp_hash].size();cr++){
 					if(imeicdrfile[fn][temp_hash][cr].timeSection==cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection&&imeicdrfile[fn][temp_hash][cr].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI&&imeicdrfile[fn][temp_hash][cr].cellid==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_first_sac&&imeicdrfile[fn][temp_hash][cr].network=="TD"){
 						isExistAcallstartTD=true;
-						if(cfg.bComputeDistinctIMEI==true){
-							bool isExistIMEI=false;
-							bool isExistIMEIandIMSI=false;
-							if(imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_TD.size()==(int)pow((double)10,cfg.HASH_NUM_IMEI)){
-								//按照IMEI进行hash
-								int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-								for(int i=0;i<imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_TD[temp_hash_imei].size();i++){
-									if(imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_TD[temp_hash_imei][i].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI){
-										isExistIMEI=true;
-										if(imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_TD[temp_hash_imei][i].IMSI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI){
-											isExistIMEIandIMSI=true;
-											break;
-										}
-									}
-								}
-								if(isExistIMEIandIMSI==false){
-									//如果IMEI和IMSI组成的对不重复，那么新增一个
-									IMEI_IMSI tempim;
-									tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI;
-									tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI;
-									imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_TD[temp_hash_imei].push_back(tempim);
-								}
-								if(isExistIMEI==false){
-									//如果IMEI不重复
-									imeicdrfile[fn][temp_hash][cr].A_IMEI_TD++;
-								}
-							}
-							else{
-								//初始化
-								imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_TD.clear();
-								imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
-								//加入到A_IMEI_IMSI_GSM中
-								int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-								IMEI_IMSI tempim;
-								tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI;
-								tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI;
-								imeicdrfile[fn][temp_hash][cr].A_IMEI_IMSI_TD[temp_hash_imei].push_back(tempim);
-								imeicdrfile[fn][temp_hash][cr].A_IMEI_TD=1;
-							}
+						if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time!=0){
+							imeicdrfile[fn][temp_hash][cr].A_call_first_cell_connected++;
+							imeicdrfile[fn][temp_hash][cr].A_call_first_cell_connected_TD++;
 						}
-						//记录cause值
 						bool isExistDXCause=false;
 						for(int i=0;i<imeicdrfile[fn][temp_hash][cr].A_DX_Cause_TD.size();i++){
 							if(imeicdrfile[fn][temp_hash][cr].A_DX_Cause_TD[i].cause_id==cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause){
@@ -400,46 +240,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				for(int cr=0;cr<imeicdrfile[fn][temp_hash].size();cr++){
 					if(imeicdrfile[fn][temp_hash][cr].timeSection==cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection&&imeicdrfile[fn][temp_hash][cr].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI&&imeicdrfile[fn][temp_hash][cr].cellid==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_cell&&imeicdrfile[fn][temp_hash][cr].network=="GSM"){
 						isExistBcallendGSM=true;
-						if(cfg.bComputeDistinctIMEI==true){
-							bool isExistIMEI=false;
-							bool isExistIMEIandIMSI=false;
-							if(imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_GSM.size()==(int)pow((double)10,cfg.HASH_NUM_IMEI)){
-								//按照IMEI进行hash
-								int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-								for(int i=0;i<imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_GSM[temp_hash_imei].size();i++){
-									if(imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_GSM[temp_hash_imei][i].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI){
-										isExistIMEI=true;
-										if(imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_GSM[temp_hash_imei][i].IMSI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMSI){
-											isExistIMEIandIMSI=true;
-											break;
-										}
-									}
-								}
-								if(isExistIMEIandIMSI==false){
-									//如果IMEI和IMSI组成的对不重复，那么新增一个
-									IMEI_IMSI tempim;
-									tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI;
-									tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMSI;
-									imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempim);
-								}
-								if(isExistIMEI==false){
-									//如果IMEI不重复
-									imeicdrfile[fn][temp_hash][cr].B_IMEI_GSM++;
-								}
-							}
-							else{
-								//初始化
-								imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_GSM.clear();
-								imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
-								//加入到A_IMEI_IMSI_GSM中
-								int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-								IMEI_IMSI tempim;
-								tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI;
-								tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMSI;
-								imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempim);
-								imeicdrfile[fn][temp_hash][cr].B_IMEI_GSM=1;
-							}
-						}
+			
 						bool isExistCause=false;
 						for(int i=0;i<imeicdrfile[fn][temp_hash][cr].B_BSSMAP_Cause.size();i++){
 							if(imeicdrfile[fn][temp_hash][cr].B_BSSMAP_Cause[i].cause_id==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause){
@@ -455,24 +256,10 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 							tempcause.cause_num=1;
 							imeicdrfile[fn][temp_hash][cr].B_BSSMAP_Cause.push_back(tempcause);
 						}
-
-						
-						//if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause==0){
-						//	imeicdrfile[fn][temp_hash][cr].B_cause0++;
-						//	imeicdrfile[fn][temp_hash][cr].B_causeGSM++;
-						//}
-						//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause==1){
-						//	imeicdrfile[fn][temp_hash][cr].B_cause1++;
-						//	imeicdrfile[fn][temp_hash][cr].B_causeGSM++;
-						//}
-						//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause==20){
-						//	imeicdrfile[fn][temp_hash][cr].B_cause20++;
-						//	imeicdrfile[fn][temp_hash][cr].B_causeGSM++;
-						//}
-						//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause==60){
-						//	imeicdrfile[fn][temp_hash][cr].B_cause60++;
-						//	imeicdrfile[fn][temp_hash][cr].B_causeGSM++;
-						//}
+						if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time!=0){
+							imeicdrfile[fn][temp_hash][cr].B_call_last_cell_connected++;
+							imeicdrfile[fn][temp_hash][cr].B_call_last_cell_connected_GSM++;
+						}
 						break;
 					}
 				}
@@ -484,47 +271,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				for(int cr=0;cr<imeicdrfile[fn][temp_hash].size();cr++){
 					if(imeicdrfile[fn][temp_hash][cr].timeSection==cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection&&imeicdrfile[fn][temp_hash][cr].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI&&imeicdrfile[fn][temp_hash][cr].cellid==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_sac&&imeicdrfile[fn][temp_hash][cr].network=="TD"){
 						isExistBcallendTD=true;
-						if(cfg.bComputeDistinctIMEI==true){
-							bool isExistIMEI=false;
-							bool isExistIMEIandIMSI=false;
-							if(imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_TD.size()==(int)pow((double)10,cfg.HASH_NUM_IMEI)){
-								//按照IMEI进行hash
-								int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-								for(int i=0;i<imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_TD[temp_hash_imei].size();i++){
-									if(imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_TD[temp_hash_imei][i].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI){
-										isExistIMEI=true;
-										if(imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_TD[temp_hash_imei][i].IMSI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMSI){
-											isExistIMEIandIMSI=true;
-											break;
-										}
-									}
-								}
-								if(isExistIMEIandIMSI==false){
-									//如果IMEI和IMSI组成的对不重复，那么新增一个
-									IMEI_IMSI tempim;
-									tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI;
-									tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMSI;
-									imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_TD[temp_hash_imei].push_back(tempim);
-								}
-								if(isExistIMEI==false){
-									//如果IMEI不重复
-									imeicdrfile[fn][temp_hash][cr].B_IMEI_TD++;
-								}
-							}
-							else{
-								//初始化
-								imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_TD.clear();
-								imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
-								//加入到A_IMEI_IMSI_GSM中
-								int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-								IMEI_IMSI tempim;
-								tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI;
-								tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMSI;
-								imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_TD[temp_hash_imei].push_back(tempim);
-								imeicdrfile[fn][temp_hash][cr].B_IMEI_TD=1;
-							}
-						}
-						//记录cause值
+						
 						bool isExistCause=false;
 						for(int i=0;i<imeicdrfile[fn][temp_hash][cr].B_RANAP_Cause.size();i++){
 							if(imeicdrfile[fn][temp_hash][cr].B_RANAP_Cause[i].cause_id==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext){
@@ -540,61 +287,10 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 							tempcause.cause_num=1;
 							imeicdrfile[fn][temp_hash][cr].B_RANAP_Cause.push_back(tempcause);
 						}
-
-						
-						/*if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==46){
-							imeicdrfile[fn][temp_hash][cr].B_causeTD46++;
-							imeicdrfile[fn][temp_hash][cr].B_causeTDRadioNetwork++;
-							imeicdrfile[fn][temp_hash][cr].B_causeTD++;
+						if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time!=0){
+							imeicdrfile[fn][temp_hash][cr].B_call_last_cell_connected++;
+							imeicdrfile[fn][temp_hash][cr].B_call_last_cell_connected_TD++;
 						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=46&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=1&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=64){
-							imeicdrfile[fn][temp_hash][cr].B_causeTDRadioNetwork++;
-							imeicdrfile[fn][temp_hash][cr].B_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=257&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=512){
-							imeicdrfile[fn][temp_hash][cr].B_causeTDRadioNetwork++;
-							imeicdrfile[fn][temp_hash][cr].B_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=65&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=80){
-							imeicdrfile[fn][temp_hash][cr].B_causeTDTransport++;
-							imeicdrfile[fn][temp_hash][cr].B_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext>=81&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=96){
-							imeicdrfile[fn][temp_hash][cr].B_causeTDNAS++;
-							imeicdrfile[fn][temp_hash][cr].B_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=97&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=112){
-							imeicdrfile[fn][temp_hash][cr].B_causeTDProtocol++;
-							imeicdrfile[fn][temp_hash][cr].B_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=113&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=128){
-							imeicdrfile[fn][temp_hash][cr].B_causeTDMisc++;
-							imeicdrfile[fn][temp_hash][cr].B_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==176){
-							imeicdrfile[fn][temp_hash][cr].B_causeTD176++;
-							imeicdrfile[fn][temp_hash][cr].B_causeTDNonStandard++;
-							imeicdrfile[fn][temp_hash][cr].B_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==192){
-							imeicdrfile[fn][temp_hash][cr].B_causeTD192++;
-							imeicdrfile[fn][temp_hash][cr].B_causeTDNonStandard++;
-							imeicdrfile[fn][temp_hash][cr].B_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==209){
-							imeicdrfile[fn][temp_hash][cr].B_causeTD209++;
-							imeicdrfile[fn][temp_hash][cr].B_causeTDNonStandard++;
-							imeicdrfile[fn][temp_hash][cr].B_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==239){
-							imeicdrfile[fn][temp_hash][cr].B_causeTD239++;
-							imeicdrfile[fn][temp_hash][cr].B_causeTDNonStandard++;
-							imeicdrfile[fn][temp_hash][cr].B_causeTD++;
-						}
-						else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=176&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=192&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=209&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=239&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=129&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=256){
-							imeicdrfile[fn][temp_hash][cr].B_causeTDNonStandard++;
-							imeicdrfile[fn][temp_hash][cr].B_causeTD++;
-						}*/
 						break;
 					}
 				}
@@ -607,46 +303,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				for(int cr=0;cr<imeicdrfile[fn][temp_hash].size();cr++){
 					if(imeicdrfile[fn][temp_hash][cr].timeSection==cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection&&imeicdrfile[fn][temp_hash][cr].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI&&imeicdrfile[fn][temp_hash][cr].cellid==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_first_cell&&imeicdrfile[fn][temp_hash][cr].network=="GSM"){
 						isExistBcallstartGSM=true;
-						if(cfg.bComputeDistinctIMEI==true){
-							bool isExistIMEI=false;
-							bool isExistIMEIandIMSI=false;
-							if(imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_GSM.size()==(int)pow((double)10,cfg.HASH_NUM_IMEI)){
-								//按照IMEI进行hash
-								int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-								for(int i=0;i<imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_GSM[temp_hash_imei].size();i++){
-									if(imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_GSM[temp_hash_imei][i].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI){
-										isExistIMEI=true;
-										if(imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_GSM[temp_hash_imei][i].IMSI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMSI){
-											isExistIMEIandIMSI=true;
-											break;
-										}
-									}
-								}
-								if(isExistIMEIandIMSI==false){
-									//如果IMEI和IMSI组成的对不重复，那么新增一个
-									IMEI_IMSI tempim;
-									tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI;
-									tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMSI;
-									imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempim);
-								}
-								if(isExistIMEI==false){
-									//如果IMEI不重复
-									imeicdrfile[fn][temp_hash][cr].B_IMEI_GSM++;
-								}
-							}
-							else{
-								//初始化
-								imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_GSM.clear();
-								imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
-								//加入到A_IMEI_IMSI_GSM中
-								int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-								IMEI_IMSI tempim;
-								tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI;
-								tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMSI;
-								imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempim);
-								imeicdrfile[fn][temp_hash][cr].B_IMEI_GSM=1;
-							}
-						}
+						
 						bool isExistDXCause=false;
 						for(int i=0;i<imeicdrfile[fn][temp_hash][cr].B_DX_Cause_GSM.size();i++){
 							if(imeicdrfile[fn][temp_hash][cr].B_DX_Cause_GSM[i].cause_id==cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause){
@@ -661,6 +318,10 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 							tempcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause;
 							tempcause.cause_num=1;
 							imeicdrfile[fn][temp_hash][cr].B_DX_Cause_GSM.push_back(tempcause);
+						}
+						if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time!=0){
+							imeicdrfile[fn][temp_hash][cr].B_call_first_cell_connected++;
+							imeicdrfile[fn][temp_hash][cr].B_call_first_cell_connected_GSM++;
 						}
 						//记录短呼数
 						imeicdrfile[fn][temp_hash][cr].B_call_attempt++;
@@ -685,47 +346,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				for(int cr=0;cr<imeicdrfile[fn][temp_hash].size();cr++){
 					if(imeicdrfile[fn][temp_hash][cr].timeSection==cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection&&imeicdrfile[fn][temp_hash][cr].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI&&imeicdrfile[fn][temp_hash][cr].cellid==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_first_sac&&imeicdrfile[fn][temp_hash][cr].network=="TD"){
 						isExistBcallstartTD=true;
-						if(cfg.bComputeDistinctIMEI==true){
-							bool isExistIMEI=false;
-							bool isExistIMEIandIMSI=false;
-							if(imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_TD.size()==(int)pow((double)10,cfg.HASH_NUM_IMEI)){
-								//按照IMEI进行hash
-								int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-								for(int i=0;i<imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_TD[temp_hash_imei].size();i++){
-									if(imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_TD[temp_hash_imei][i].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI){
-										isExistIMEI=true;
-										if(imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_TD[temp_hash_imei][i].IMSI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMSI){
-											isExistIMEIandIMSI=true;
-											break;
-										}
-									}
-								}
-								if(isExistIMEIandIMSI==false){
-									//如果IMEI和IMSI组成的对不重复，那么新增一个
-									IMEI_IMSI tempim;
-									tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI;
-									tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMSI;
-									imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_TD[temp_hash_imei].push_back(tempim);
-								}
-								if(isExistIMEI==false){
-									//如果IMEI不重复
-									imeicdrfile[fn][temp_hash][cr].B_IMEI_TD++;
-								}
-							}
-							else{
-								//初始化
-								imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_TD.clear();
-								imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
-								//加入到A_IMEI_IMSI_GSM中
-								int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-								IMEI_IMSI tempim;
-								tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI;
-								tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMSI;
-								imeicdrfile[fn][temp_hash][cr].B_IMEI_IMSI_TD[temp_hash_imei].push_back(tempim);
-								imeicdrfile[fn][temp_hash][cr].B_IMEI_TD=1;
-							}
-						}
-						//记录cause值
+						
 						bool isExistDXCause=false;
 						for(int i=0;i<imeicdrfile[fn][temp_hash][cr].B_DX_Cause_TD.size();i++){
 							if(imeicdrfile[fn][temp_hash][cr].B_DX_Cause_TD[i].cause_id==cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause){
@@ -740,6 +361,10 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 							tempcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause;
 							tempcause.cause_num=1;
 							imeicdrfile[fn][temp_hash][cr].B_DX_Cause_TD.push_back(tempcause);
+						}
+						if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time!=0){
+							imeicdrfile[fn][temp_hash][cr].B_call_first_cell_connected++;
+							imeicdrfile[fn][temp_hash][cr].B_call_first_cell_connected_TD++;
 						}
 						//记录短呼数
 						imeicdrfile[fn][temp_hash][cr].B_call_attempt++;
@@ -788,14 +413,26 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.A_DX_Cause_TD.clear();
 			tempcdrstat.B_DX_Cause_GSM.clear();
 			tempcdrstat.B_DX_Cause_TD.clear();
-			tempcdrstat.A_IMEI_IMSI_GSM.clear();
-			tempcdrstat.A_IMEI_IMSI_TD.clear();
-			tempcdrstat.B_IMEI_IMSI_GSM.clear();
-			tempcdrstat.B_IMEI_IMSI_TD.clear();
-			tempcdrstat.A_IMEI_GSM=0;
-			tempcdrstat.A_IMEI_TD=0;
-			tempcdrstat.B_IMEI_GSM=0;
-			tempcdrstat.B_IMEI_TD=0;
+			tempcdrstat.A_BSSMAP_drop=0;
+			tempcdrstat.A_RANAP_drop=0;
+			tempcdrstat.B_BSSMAP_drop=0;
+			tempcdrstat.B_RANAP_drop=0;
+			tempcdrstat.A_DX_GSM_block=0;
+			tempcdrstat.A_DX_TD_block=0;
+			tempcdrstat.B_DX_GSM_block=0;
+			tempcdrstat.B_DX_TD_block=0;
+			tempcdrstat.A_call_first_cell_connected=0;
+			tempcdrstat.A_call_first_cell_connected_GSM=0;
+			tempcdrstat.A_call_first_cell_connected_TD=0;
+			tempcdrstat.B_call_first_cell_connected=0;
+			tempcdrstat.B_call_first_cell_connected_GSM=0;
+			tempcdrstat.B_call_first_cell_connected_TD=0;
+			tempcdrstat.A_call_last_cell_connected=0;
+			tempcdrstat.A_call_last_cell_connected_GSM=0;
+			tempcdrstat.A_call_last_cell_connected_TD=0;
+			tempcdrstat.B_call_last_cell_connected=0;
+			tempcdrstat.B_call_last_cell_connected_GSM=0;
+			tempcdrstat.B_call_last_cell_connected_TD=0;
 
 			CAUSE_TYPE tempcause;
 			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause!=DEFAULT_CAUSE_VALUE){
@@ -803,7 +440,7 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				tempcause.cause_num=1;
 				tempcdrstat.A_BSSMAP_Cause.push_back(tempcause);
 			}
-			if(cfg.bComputeDistinctIMEI==true){
+			/*if(cfg.bComputeDistinctIMEI==true){
 				tempcdrstat.A_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
 				int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
 				IMEI_IMSI tempim;
@@ -811,8 +448,11 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI;
 				tempcdrstat.A_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempim);
 				tempcdrstat.A_IMEI_GSM=1;
+			}*/
+			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time!=0){
+				tempcdrstat.A_call_last_cell_connected=1;
+				tempcdrstat.A_call_last_cell_connected_GSM=1;
 			}
-
 			int temp_hash=(int)pow((double)10,cfg.HASH_NUM_CELLID)*atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str())+cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_cell%((int)pow((double)10,cfg.HASH_NUM_CELLID));
 			imeicdrfile[fn][temp_hash].push_back(tempcdrstat);
 		}
@@ -846,14 +486,26 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.A_DX_Cause_TD.clear();
 			tempcdrstat.B_DX_Cause_GSM.clear();
 			tempcdrstat.B_DX_Cause_TD.clear();
-			tempcdrstat.A_IMEI_IMSI_GSM.clear();
-			tempcdrstat.A_IMEI_IMSI_TD.clear();
-			tempcdrstat.B_IMEI_IMSI_GSM.clear();
-			tempcdrstat.B_IMEI_IMSI_TD.clear();
-			tempcdrstat.A_IMEI_GSM=0;
-			tempcdrstat.A_IMEI_TD=0;
-			tempcdrstat.B_IMEI_GSM=0;
-			tempcdrstat.B_IMEI_TD=0;
+			tempcdrstat.A_BSSMAP_drop=0;
+			tempcdrstat.A_RANAP_drop=0;
+			tempcdrstat.B_BSSMAP_drop=0;
+			tempcdrstat.B_RANAP_drop=0;
+			tempcdrstat.A_DX_GSM_block=0;
+			tempcdrstat.A_DX_TD_block=0;
+			tempcdrstat.B_DX_GSM_block=0;
+			tempcdrstat.B_DX_TD_block=0;
+			tempcdrstat.A_call_first_cell_connected=0;
+			tempcdrstat.A_call_first_cell_connected_GSM=0;
+			tempcdrstat.A_call_first_cell_connected_TD=0;
+			tempcdrstat.B_call_first_cell_connected=0;
+			tempcdrstat.B_call_first_cell_connected_GSM=0;
+			tempcdrstat.B_call_first_cell_connected_TD=0;
+			tempcdrstat.A_call_last_cell_connected=0;
+			tempcdrstat.A_call_last_cell_connected_GSM=0;
+			tempcdrstat.A_call_last_cell_connected_TD=0;
+			tempcdrstat.B_call_last_cell_connected=0;
+			tempcdrstat.B_call_last_cell_connected_GSM=0;
+			tempcdrstat.B_call_last_cell_connected_TD=0;
 
 			CAUSE_TYPE tempcause;
 			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext!=DEFAULT_CAUSE_VALUE){
@@ -861,197 +513,10 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				tempcause.cause_num=1;
 				tempcdrstat.A_RANAP_Cause.push_back(tempcause);
 			}
-			if(cfg.bComputeDistinctIMEI==true){
-				tempcdrstat.A_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
-				int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-				IMEI_IMSI tempim;
-				tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI;
-				tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI;
-				tempcdrstat.A_IMEI_IMSI_TD[temp_hash_imei].push_back(tempim);
-				tempcdrstat.A_IMEI_TD=1;
+			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time!=0){
+				tempcdrstat.A_call_last_cell_connected=1;
+				tempcdrstat.A_call_last_cell_connected_TD=1;
 			}
-			/*if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext==46){
-				tempcdrstat.A_causeTD46=1;
-				tempcdrstat.A_causeTD176=0;
-				tempcdrstat.A_causeTD192=0;
-				tempcdrstat.A_causeTD209=0;
-				tempcdrstat.A_causeTD239=0;
-				tempcdrstat.A_causeTDRadioNetwork=1;
-				tempcdrstat.A_causeTD=1;
-				tempcdrstat.A_causeTDMisc=0;
-				tempcdrstat.A_causeTDNAS=0;
-				tempcdrstat.A_causeTDNonStandard=0;
-				tempcdrstat.A_causeTDProtocol=0;
-				tempcdrstat.A_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext!=46&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext>=1&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext<=64){
-				tempcdrstat.A_causeTDRadioNetwork=1;
-				tempcdrstat.A_causeTD=1;
-				tempcdrstat.A_causeTD46=0;
-				tempcdrstat.A_causeTD176=0;
-				tempcdrstat.A_causeTD192=0;
-				tempcdrstat.A_causeTD209=0;
-				tempcdrstat.A_causeTD239=0;
-				tempcdrstat.A_causeTDMisc=0;
-				tempcdrstat.A_causeTDNAS=0;
-				tempcdrstat.A_causeTDNonStandard=0;
-				tempcdrstat.A_causeTDProtocol=0;
-				tempcdrstat.A_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext>=257&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext<=512){
-				tempcdrstat.A_causeTDRadioNetwork=1;
-				tempcdrstat.A_causeTD=1;
-				tempcdrstat.A_causeTD46=0;
-				tempcdrstat.A_causeTD176=0;
-				tempcdrstat.A_causeTD192=0;
-				tempcdrstat.A_causeTD209=0;
-				tempcdrstat.A_causeTD239=0;
-				tempcdrstat.A_causeTDMisc=0;
-				tempcdrstat.A_causeTDNAS=0;
-				tempcdrstat.A_causeTDNonStandard=0;
-				tempcdrstat.A_causeTDProtocol=0;
-				tempcdrstat.A_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext>=65&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext<=80){
-				tempcdrstat.A_causeTDTransport=1;
-				tempcdrstat.A_causeTDRadioNetwork=0;
-				tempcdrstat.A_causeTD=1;
-				tempcdrstat.A_causeTD46=0;
-				tempcdrstat.A_causeTD176=0;
-				tempcdrstat.A_causeTD192=0;
-				tempcdrstat.A_causeTD209=0;
-				tempcdrstat.A_causeTD239=0;
-				tempcdrstat.A_causeTDMisc=0;
-				tempcdrstat.A_causeTDNAS=0;
-				tempcdrstat.A_causeTDNonStandard=0;
-				tempcdrstat.A_causeTDProtocol=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext>=81&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext<=96){
-				tempcdrstat.A_causeTDNAS=1;
-				tempcdrstat.A_causeTD=1;
-				tempcdrstat.A_causeTDRadioNetwork=0;
-				tempcdrstat.A_causeTD46=0;
-				tempcdrstat.A_causeTD176=0;
-				tempcdrstat.A_causeTD192=0;
-				tempcdrstat.A_causeTD209=0;
-				tempcdrstat.A_causeTD239=0;
-				tempcdrstat.A_causeTDMisc=0;
-				tempcdrstat.A_causeTDNonStandard=0;
-				tempcdrstat.A_causeTDProtocol=0;
-				tempcdrstat.A_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext>=97&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext<=112){
-				tempcdrstat.A_causeTDProtocol=1;
-				tempcdrstat.A_causeTD=1;
-				tempcdrstat.A_causeTDRadioNetwork=0;
-				tempcdrstat.A_causeTD46=0;
-				tempcdrstat.A_causeTD176=0;
-				tempcdrstat.A_causeTD192=0;
-				tempcdrstat.A_causeTD209=0;
-				tempcdrstat.A_causeTD239=0;
-				tempcdrstat.A_causeTDMisc=0;
-				tempcdrstat.A_causeTDNAS=0;
-				tempcdrstat.A_causeTDNonStandard=0;
-				tempcdrstat.A_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext>=113&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext<=128){
-				tempcdrstat.A_causeTDMisc=1;
-				tempcdrstat.A_causeTD=1;
-				tempcdrstat.A_causeTDRadioNetwork=0;
-				tempcdrstat.A_causeTD46=0;
-				tempcdrstat.A_causeTD176=0;
-				tempcdrstat.A_causeTD192=0;
-				tempcdrstat.A_causeTD209=0;
-				tempcdrstat.A_causeTD239=0;
-				tempcdrstat.A_causeTDNAS=0;
-				tempcdrstat.A_causeTDNonStandard=0;
-				tempcdrstat.A_causeTDProtocol=0;
-				tempcdrstat.A_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext==176){
-				tempcdrstat.A_causeTDNonStandard=1;
-				tempcdrstat.A_causeTD=1;
-				tempcdrstat.A_causeTDRadioNetwork=0;
-				tempcdrstat.A_causeTD46=0;
-				tempcdrstat.A_causeTD176=1;
-				tempcdrstat.A_causeTD192=0;
-				tempcdrstat.A_causeTD209=0;
-				tempcdrstat.A_causeTD239=0;
-				tempcdrstat.A_causeTDMisc=0;
-				tempcdrstat.A_causeTDNAS=0;
-				tempcdrstat.A_causeTDProtocol=0;
-				tempcdrstat.A_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext==192){
-				tempcdrstat.A_causeTDNonStandard=1;
-				tempcdrstat.A_causeTD=1;
-				tempcdrstat.A_causeTDRadioNetwork=0;
-				tempcdrstat.A_causeTD46=0;
-				tempcdrstat.A_causeTD176=0;
-				tempcdrstat.A_causeTD192=1;
-				tempcdrstat.A_causeTD209=0;
-				tempcdrstat.A_causeTD239=0;
-				tempcdrstat.A_causeTDMisc=0;
-				tempcdrstat.A_causeTDNAS=0;
-				tempcdrstat.A_causeTDProtocol=0;
-				tempcdrstat.A_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext==209){
-				tempcdrstat.A_causeTDNonStandard=1;
-				tempcdrstat.A_causeTD=1;
-				tempcdrstat.A_causeTDRadioNetwork=0;
-				tempcdrstat.A_causeTD46=0;
-				tempcdrstat.A_causeTD176=0;
-				tempcdrstat.A_causeTD192=0;
-				tempcdrstat.A_causeTD209=1;
-				tempcdrstat.A_causeTD239=0;
-				tempcdrstat.A_causeTDMisc=0;
-				tempcdrstat.A_causeTDNAS=0;
-				tempcdrstat.A_causeTDProtocol=0;
-				tempcdrstat.A_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext==239){
-				tempcdrstat.A_causeTDNonStandard=1;
-				tempcdrstat.A_causeTD=1;
-				tempcdrstat.A_causeTDRadioNetwork=0;
-				tempcdrstat.A_causeTD46=0;
-				tempcdrstat.A_causeTD176=0;
-				tempcdrstat.A_causeTD192=0;
-				tempcdrstat.A_causeTD209=0;
-				tempcdrstat.A_causeTD239=1;
-				tempcdrstat.A_causeTDMisc=0;
-				tempcdrstat.A_causeTDNAS=0;
-				tempcdrstat.A_causeTDProtocol=0;
-				tempcdrstat.A_causeTDTransport=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext!=176&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext!=192&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext!=209&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext!=239&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext>=129&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext<=256){
-				tempcdrstat.A_causeTDNonStandard=1;
-				tempcdrstat.A_causeTD=1;
-				tempcdrstat.A_causeTDRadioNetwork=0;
-				tempcdrstat.A_causeTD46=0;
-				tempcdrstat.A_causeTD176=0;
-				tempcdrstat.A_causeTD192=0;
-				tempcdrstat.A_causeTD209=0;
-				tempcdrstat.A_causeTD239=0;
-				tempcdrstat.A_causeTDMisc=0;
-				tempcdrstat.A_causeTDNAS=0;
-				tempcdrstat.A_causeTDProtocol=0;
-				tempcdrstat.A_causeTDTransport=0;
-			}
-			else{
-				tempcdrstat.A_causeTDNonStandard=0;
-				tempcdrstat.A_causeTD=0;
-				tempcdrstat.A_causeTDRadioNetwork=0;
-				tempcdrstat.A_causeTD46=0;
-				tempcdrstat.A_causeTD176=0;
-				tempcdrstat.A_causeTD192=0;
-				tempcdrstat.A_causeTD209=0;
-				tempcdrstat.A_causeTD239=0;
-				tempcdrstat.A_causeTDMisc=0;
-				tempcdrstat.A_causeTDNAS=0;
-				tempcdrstat.A_causeTDProtocol=0;
-				tempcdrstat.A_causeTDTransport=0;
-			}*/
 			int temp_hash=(int)pow((double)10,cfg.HASH_NUM_CELLID)*atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str())+cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_sac%((int)pow((double)10,cfg.HASH_NUM_CELLID));
 			imeicdrfile[fn][temp_hash].push_back(tempcdrstat);
 		}
@@ -1082,15 +547,26 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.A_DX_Cause_TD.clear();
 			tempcdrstat.B_DX_Cause_GSM.clear();
 			tempcdrstat.B_DX_Cause_TD.clear();
-			tempcdrstat.A_IMEI_IMSI_GSM.clear();
-			tempcdrstat.A_IMEI_IMSI_TD.clear();
-			tempcdrstat.B_IMEI_IMSI_GSM.clear();
-			tempcdrstat.B_IMEI_IMSI_TD.clear();
-			tempcdrstat.A_IMEI_GSM=0;
-			tempcdrstat.A_IMEI_TD=0;
-			tempcdrstat.B_IMEI_GSM=0;
-			tempcdrstat.B_IMEI_TD=0;
-
+			tempcdrstat.A_BSSMAP_drop=0;
+			tempcdrstat.A_RANAP_drop=0;
+			tempcdrstat.B_BSSMAP_drop=0;
+			tempcdrstat.B_RANAP_drop=0;
+			tempcdrstat.A_DX_GSM_block=0;
+			tempcdrstat.A_DX_TD_block=0;
+			tempcdrstat.B_DX_GSM_block=0;
+			tempcdrstat.B_DX_TD_block=0;
+			tempcdrstat.A_call_first_cell_connected=0;
+			tempcdrstat.A_call_first_cell_connected_GSM=0;
+			tempcdrstat.A_call_first_cell_connected_TD=0;
+			tempcdrstat.B_call_first_cell_connected=0;
+			tempcdrstat.B_call_first_cell_connected_GSM=0;
+			tempcdrstat.B_call_first_cell_connected_TD=0;
+			tempcdrstat.A_call_last_cell_connected=0;
+			tempcdrstat.A_call_last_cell_connected_GSM=0;
+			tempcdrstat.A_call_last_cell_connected_TD=0;
+			tempcdrstat.B_call_last_cell_connected=0;
+			tempcdrstat.B_call_last_cell_connected_GSM=0;
+			tempcdrstat.B_call_last_cell_connected_TD=0;
 			
 			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause!=DEFAULT_CAUSE_VALUE){
 				CAUSE_TYPE tempDXcause;
@@ -1098,14 +574,9 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				tempDXcause.cause_num=1;
 				tempcdrstat.A_DX_Cause_GSM.push_back(tempDXcause);
 			}
-			if(cfg.bComputeDistinctIMEI==true){
-				tempcdrstat.A_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
-				int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-				IMEI_IMSI tempim;
-				tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI;
-				tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI;
-				tempcdrstat.A_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempim);
-				tempcdrstat.A_IMEI_GSM=1;
+			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time!=0){
+				tempcdrstat.A_call_first_cell_connected=1;
+				tempcdrstat.A_call_first_cell_connected_GSM=1;
 			}
 
 			if(difftime(cdr[rp[cdrcount].fn][rp[cdrcount].rn].charging_end_time,cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time)<cfg.SHORTCALL_THRESHOLD_1){
@@ -1158,30 +629,36 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.A_DX_Cause_TD.clear();
 			tempcdrstat.B_DX_Cause_GSM.clear();
 			tempcdrstat.B_DX_Cause_TD.clear();
-			tempcdrstat.A_IMEI_IMSI_GSM.clear();
-			tempcdrstat.A_IMEI_IMSI_TD.clear();
-			tempcdrstat.B_IMEI_IMSI_GSM.clear();
-			tempcdrstat.B_IMEI_IMSI_TD.clear();
-			tempcdrstat.A_IMEI_GSM=0;
-			tempcdrstat.A_IMEI_TD=0;
-			tempcdrstat.B_IMEI_GSM=0;
-			tempcdrstat.B_IMEI_TD=0;
+			tempcdrstat.A_BSSMAP_drop=0;
+			tempcdrstat.A_RANAP_drop=0;
+			tempcdrstat.B_BSSMAP_drop=0;
+			tempcdrstat.B_RANAP_drop=0;
+			tempcdrstat.A_DX_GSM_block=0;
+			tempcdrstat.A_DX_TD_block=0;
+			tempcdrstat.B_DX_GSM_block=0;
+			tempcdrstat.B_DX_TD_block=0;
+			tempcdrstat.A_call_first_cell_connected=0;
+			tempcdrstat.A_call_first_cell_connected_GSM=0;
+			tempcdrstat.A_call_first_cell_connected_TD=0;
+			tempcdrstat.B_call_first_cell_connected=0;
+			tempcdrstat.B_call_first_cell_connected_GSM=0;
+			tempcdrstat.B_call_first_cell_connected_TD=0;
+			tempcdrstat.A_call_last_cell_connected=0;
+			tempcdrstat.A_call_last_cell_connected_GSM=0;
+			tempcdrstat.A_call_last_cell_connected_TD=0;
+			tempcdrstat.B_call_last_cell_connected=0;
+			tempcdrstat.B_call_last_cell_connected_GSM=0;
+			tempcdrstat.B_call_last_cell_connected_TD=0;
 
-			
 			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause!=DEFAULT_CAUSE_VALUE){
 				CAUSE_TYPE tempDXcause;
 				tempDXcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause;
 				tempDXcause.cause_num=1;
 				tempcdrstat.A_DX_Cause_TD.push_back(tempDXcause);
 			}
-			if(cfg.bComputeDistinctIMEI==true){
-				tempcdrstat.A_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
-				int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-				IMEI_IMSI tempim;
-				tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI;
-				tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMSI;
-				tempcdrstat.A_IMEI_IMSI_TD[temp_hash_imei].push_back(tempim);
-				tempcdrstat.A_IMEI_TD=1;
+			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time!=0){
+				tempcdrstat.A_call_first_cell_connected=1;
+				tempcdrstat.A_call_first_cell_connected_TD=1;
 			}
 
 			if(difftime(cdr[rp[cdrcount].fn][rp[cdrcount].rn].charging_end_time,cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time)<cfg.SHORTCALL_THRESHOLD_1){
@@ -1237,15 +714,26 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.A_DX_Cause_TD.clear();
 			tempcdrstat.B_DX_Cause_GSM.clear();
 			tempcdrstat.B_DX_Cause_TD.clear();
-			tempcdrstat.A_IMEI_IMSI_GSM.clear();
-			tempcdrstat.A_IMEI_IMSI_TD.clear();
-			tempcdrstat.B_IMEI_IMSI_GSM.clear();
-			tempcdrstat.B_IMEI_IMSI_TD.clear();
-			tempcdrstat.A_IMEI_GSM=0;
-			tempcdrstat.A_IMEI_TD=0;
-			tempcdrstat.B_IMEI_GSM=0;
-			tempcdrstat.B_IMEI_TD=0;
-
+			tempcdrstat.A_BSSMAP_drop=0;
+			tempcdrstat.A_RANAP_drop=0;
+			tempcdrstat.B_BSSMAP_drop=0;
+			tempcdrstat.B_RANAP_drop=0;
+			tempcdrstat.A_DX_GSM_block=0;
+			tempcdrstat.A_DX_TD_block=0;
+			tempcdrstat.B_DX_GSM_block=0;
+			tempcdrstat.B_DX_TD_block=0;
+			tempcdrstat.A_call_first_cell_connected=0;
+			tempcdrstat.A_call_first_cell_connected_GSM=0;
+			tempcdrstat.A_call_first_cell_connected_TD=0;
+			tempcdrstat.B_call_first_cell_connected=0;
+			tempcdrstat.B_call_first_cell_connected_GSM=0;
+			tempcdrstat.B_call_first_cell_connected_TD=0;
+			tempcdrstat.A_call_last_cell_connected=0;
+			tempcdrstat.A_call_last_cell_connected_GSM=0;
+			tempcdrstat.A_call_last_cell_connected_TD=0;
+			tempcdrstat.B_call_last_cell_connected=0;
+			tempcdrstat.B_call_last_cell_connected_GSM=0;
+			tempcdrstat.B_call_last_cell_connected_TD=0;
 			
 			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause!=DEFAULT_CAUSE_VALUE){
 				CAUSE_TYPE tempcause;
@@ -1253,51 +741,10 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				tempcause.cause_num=1;
 				tempcdrstat.B_BSSMAP_Cause.push_back(tempcause);
 			}
-			if(cfg.bComputeDistinctIMEI==true){
-				tempcdrstat.B_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
-				int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-				IMEI_IMSI tempim;
-				tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI;
-				tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMSI;
-				tempcdrstat.B_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempim);
-				tempcdrstat.B_IMEI_GSM=1;
+			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time!=0){
+				tempcdrstat.B_call_last_cell_connected=1;
+				tempcdrstat.B_call_last_cell_connected_GSM=1;
 			}
-			/*if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause==0){
-				tempcdrstat.B_cause0=1;
-				tempcdrstat.B_causeGSM=1;
-				tempcdrstat.B_cause1=0;
-				tempcdrstat.B_cause20=0;
-				tempcdrstat.B_cause60=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause==1){
-				tempcdrstat.B_cause1=1;
-				tempcdrstat.B_causeGSM=1;
-				tempcdrstat.B_cause0=0;
-				tempcdrstat.B_cause20=0;
-				tempcdrstat.B_cause60=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause==20){
-				tempcdrstat.B_cause20=1;
-				tempcdrstat.B_causeGSM=1;
-				tempcdrstat.B_cause1=0;
-				tempcdrstat.B_cause0=0;
-				tempcdrstat.B_cause60=0;
-			}
-			else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause==60){
-				tempcdrstat.B_cause60=1;
-				tempcdrstat.B_causeGSM=1;
-				tempcdrstat.B_cause1=0;
-				tempcdrstat.B_cause20=0;
-				tempcdrstat.B_cause0=0;
-			}
-			else{
-				tempcdrstat.B_cause60=0;
-				tempcdrstat.B_causeGSM=0;
-				tempcdrstat.B_cause1=0;
-				tempcdrstat.B_cause20=0;
-				tempcdrstat.B_cause0=0;
-			}*/
-			
 			int temp_hash=(int)pow((double)10,cfg.HASH_NUM_CELLID)*atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str())+cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_cell%((int)pow((double)10,cfg.HASH_NUM_CELLID));
 			imeicdrfile[fn][temp_hash].push_back(tempcdrstat);
 		}
@@ -1331,213 +778,37 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.A_DX_Cause_TD.clear();
 			tempcdrstat.B_DX_Cause_GSM.clear();
 			tempcdrstat.B_DX_Cause_TD.clear();
-			tempcdrstat.A_IMEI_IMSI_GSM.clear();
-			tempcdrstat.A_IMEI_IMSI_TD.clear();
-			tempcdrstat.B_IMEI_IMSI_GSM.clear();
-			tempcdrstat.B_IMEI_IMSI_TD.clear();
-			tempcdrstat.A_IMEI_GSM=0;
-			tempcdrstat.A_IMEI_TD=0;
-			tempcdrstat.B_IMEI_GSM=0;
-			tempcdrstat.B_IMEI_TD=0;
-			
-			
+			tempcdrstat.A_BSSMAP_drop=0;
+			tempcdrstat.A_RANAP_drop=0;
+			tempcdrstat.B_BSSMAP_drop=0;
+			tempcdrstat.B_RANAP_drop=0;
+			tempcdrstat.A_DX_GSM_block=0;
+			tempcdrstat.A_DX_TD_block=0;
+			tempcdrstat.B_DX_GSM_block=0;
+			tempcdrstat.B_DX_TD_block=0;
+			tempcdrstat.A_call_first_cell_connected=0;
+			tempcdrstat.A_call_first_cell_connected_GSM=0;
+			tempcdrstat.A_call_first_cell_connected_TD=0;
+			tempcdrstat.B_call_first_cell_connected=0;
+			tempcdrstat.B_call_first_cell_connected_GSM=0;
+			tempcdrstat.B_call_first_cell_connected_TD=0;
+			tempcdrstat.A_call_last_cell_connected=0;
+			tempcdrstat.A_call_last_cell_connected_GSM=0;
+			tempcdrstat.A_call_last_cell_connected_TD=0;
+			tempcdrstat.B_call_last_cell_connected=0;
+			tempcdrstat.B_call_last_cell_connected_GSM=0;
+			tempcdrstat.B_call_last_cell_connected_TD=0;
+						
 			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=DEFAULT_CAUSE_VALUE){
 				CAUSE_TYPE tempcause;
 				tempcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext;
 				tempcause.cause_num=1;
 				tempcdrstat.B_RANAP_Cause.push_back(tempcause);
 			}
-			if(cfg.bComputeDistinctIMEI==true){
-				tempcdrstat.B_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
-				int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-				IMEI_IMSI tempim;
-				tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI;
-				tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMSI;
-				tempcdrstat.B_IMEI_IMSI_TD[temp_hash_imei].push_back(tempim);
-				tempcdrstat.B_IMEI_TD=1;
+			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time!=0){
+				tempcdrstat.B_call_last_cell_connected=1;
+				tempcdrstat.B_call_last_cell_connected_TD=1;
 			}
-			//if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext==46){
-			//	tempcdrstat.B_causeTD46=1;
-			//	tempcdrstat.B_causeTD176=0;
-			//	tempcdrstat.B_causeTD192=0;
-			//	tempcdrstat.B_causeTD209=0;
-			//	tempcdrstat.B_causeTD239=0;
-			//	tempcdrstat.B_causeTDRadioNetwork=1;
-			//	tempcdrstat.B_causeTD=1;
-			//	tempcdrstat.B_causeTDMisc=0;
-			//	tempcdrstat.B_causeTDNAS=0;
-			//	tempcdrstat.B_causeTDNonStandard=0;
-			//	tempcdrstat.B_causeTDProtocol=0;
-			//	tempcdrstat.B_causeTDTransport=0;
-			//}
-			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=46&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=1&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_BSSMAP_cause_ext<=64){
-			//	tempcdrstat.B_causeTDRadioNetwork=1;
-			//	tempcdrstat.B_causeTD=1;
-			//	tempcdrstat.B_causeTD46=0;
-			//	tempcdrstat.B_causeTD176=0;
-			//	tempcdrstat.B_causeTD192=0;
-			//	tempcdrstat.B_causeTD209=0;
-			//	tempcdrstat.B_causeTD239=0;
-			//	tempcdrstat.B_causeTDMisc=0;
-			//	tempcdrstat.B_causeTDNAS=0;
-			//	tempcdrstat.B_causeTDNonStandard=0;
-			//	tempcdrstat.B_causeTDProtocol=0;
-			//	tempcdrstat.B_causeTDTransport=0;
-			//}
-			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=257&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=512){
-			//	tempcdrstat.B_causeTDRadioNetwork=1;
-			//	tempcdrstat.B_causeTD=1;
-			//	tempcdrstat.B_causeTD46=0;
-			//	tempcdrstat.B_causeTD176=0;
-			//	tempcdrstat.B_causeTD192=0;
-			//	tempcdrstat.B_causeTD209=0;
-			//	tempcdrstat.B_causeTD239=0;
-			//	tempcdrstat.B_causeTDMisc=0;
-			//	tempcdrstat.B_causeTDNAS=0;
-			//	tempcdrstat.B_causeTDNonStandard=0;
-			//	tempcdrstat.B_causeTDProtocol=0;
-			//	tempcdrstat.B_causeTDTransport=0;
-			//}
-			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=65&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=80){
-			//	tempcdrstat.B_causeTDTransport=1;
-			//	tempcdrstat.B_causeTDRadioNetwork=0;
-			//	tempcdrstat.B_causeTD=1;
-			//	tempcdrstat.B_causeTD46=0;
-			//	tempcdrstat.B_causeTD176=0;
-			//	tempcdrstat.B_causeTD192=0;
-			//	tempcdrstat.B_causeTD209=0;
-			//	tempcdrstat.B_causeTD239=0;
-			//	tempcdrstat.B_causeTDMisc=0;
-			//	tempcdrstat.B_causeTDNAS=0;
-			//	tempcdrstat.B_causeTDNonStandard=0;
-			//	tempcdrstat.B_causeTDProtocol=0;
-			//}
-			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=81&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=96){
-			//	tempcdrstat.B_causeTDNAS=1;
-			//	tempcdrstat.B_causeTD=1;
-			//	tempcdrstat.B_causeTDRadioNetwork=0;
-			//	tempcdrstat.B_causeTD46=0;
-			//	tempcdrstat.B_causeTD176=0;
-			//	tempcdrstat.B_causeTD192=0;
-			//	tempcdrstat.B_causeTD209=0;
-			//	tempcdrstat.B_causeTD239=0;
-			//	tempcdrstat.B_causeTDMisc=0;
-			//	tempcdrstat.B_causeTDNonStandard=0;
-			//	tempcdrstat.B_causeTDProtocol=0;
-			//	tempcdrstat.B_causeTDTransport=0;
-			//}
-			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=97&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=112){
-			//	tempcdrstat.B_causeTDProtocol=1;
-			//	tempcdrstat.B_causeTD=1;
-			//	tempcdrstat.B_causeTDRadioNetwork=0;
-			//	tempcdrstat.B_causeTD46=0;
-			//	tempcdrstat.B_causeTD176=0;
-			//	tempcdrstat.B_causeTD192=0;
-			//	tempcdrstat.B_causeTD209=0;
-			//	tempcdrstat.B_causeTD239=0;
-			//	tempcdrstat.B_causeTDMisc=0;
-			//	tempcdrstat.B_causeTDNAS=0;
-			//	tempcdrstat.B_causeTDNonStandard=0;
-			//	tempcdrstat.B_causeTDTransport=0;
-			//}
-			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=113&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=128){
-			//	tempcdrstat.B_causeTDMisc=1;
-			//	tempcdrstat.B_causeTD=1;
-			//	tempcdrstat.B_causeTDRadioNetwork=0;
-			//	tempcdrstat.B_causeTD46=0;
-			//	tempcdrstat.B_causeTD176=0;
-			//	tempcdrstat.B_causeTD192=0;
-			//	tempcdrstat.B_causeTD209=0;
-			//	tempcdrstat.B_causeTD239=0;
-			//	tempcdrstat.B_causeTDNAS=0;
-			//	tempcdrstat.B_causeTDNonStandard=0;
-			//	tempcdrstat.B_causeTDProtocol=0;
-			//	tempcdrstat.B_causeTDTransport=0;
-			//}
-			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==176){
-			//	tempcdrstat.B_causeTDNonStandard=1;
-			//	tempcdrstat.B_causeTD=1;
-			//	tempcdrstat.B_causeTDRadioNetwork=0;
-			//	tempcdrstat.B_causeTD46=0;
-			//	tempcdrstat.B_causeTD176=1;
-			//	tempcdrstat.B_causeTD192=0;
-			//	tempcdrstat.B_causeTD209=0;
-			//	tempcdrstat.B_causeTD239=0;
-			//	tempcdrstat.B_causeTDMisc=0;
-			//	tempcdrstat.B_causeTDNAS=0;
-			//	tempcdrstat.B_causeTDProtocol=0;
-			//	tempcdrstat.B_causeTDTransport=0;
-			//}
-			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==192){
-			//	tempcdrstat.B_causeTDNonStandard=1;
-			//	tempcdrstat.B_causeTD=1;
-			//	tempcdrstat.B_causeTDRadioNetwork=0;
-			//	tempcdrstat.B_causeTD46=0;
-			//	tempcdrstat.B_causeTD176=0;
-			//	tempcdrstat.B_causeTD192=1;
-			//	tempcdrstat.B_causeTD209=0;
-			//	tempcdrstat.B_causeTD239=0;
-			//	tempcdrstat.B_causeTDMisc=0;
-			//	tempcdrstat.B_causeTDNAS=0;
-			//	tempcdrstat.B_causeTDProtocol=0;
-			//	tempcdrstat.B_causeTDTransport=0;
-			//}
-			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==209){
-			//	tempcdrstat.B_causeTDNonStandard=1;
-			//	tempcdrstat.B_causeTD=1;
-			//	tempcdrstat.B_causeTDRadioNetwork=0;
-			//	tempcdrstat.B_causeTD46=0;
-			//	tempcdrstat.B_causeTD176=0;
-			//	tempcdrstat.B_causeTD192=0;
-			//	tempcdrstat.B_causeTD209=1;
-			//	tempcdrstat.B_causeTD239=0;
-			//	tempcdrstat.B_causeTDMisc=0;
-			//	tempcdrstat.B_causeTDNAS=0;
-			//	tempcdrstat.B_causeTDProtocol=0;
-			//	tempcdrstat.B_causeTDTransport=0;
-			//}
-			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext==239){
-			//	tempcdrstat.B_causeTDNonStandard=1;
-			//	tempcdrstat.B_causeTD=1;
-			//	tempcdrstat.B_causeTDRadioNetwork=0;
-			//	tempcdrstat.B_causeTD46=0;
-			//	tempcdrstat.B_causeTD176=0;
-			//	tempcdrstat.B_causeTD192=0;
-			//	tempcdrstat.B_causeTD209=0;
-			//	tempcdrstat.B_causeTD239=1;
-			//	tempcdrstat.B_causeTDMisc=0;
-			//	tempcdrstat.B_causeTDNAS=0;
-			//	tempcdrstat.B_causeTDProtocol=0;
-			//	tempcdrstat.B_causeTDTransport=0;
-			//}
-			//else if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=176&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=192&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=209&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext!=239&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext>=129&&cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_BSSMAP_cause_ext<=256){
-			//	tempcdrstat.B_causeTDNonStandard=1;
-			//	tempcdrstat.B_causeTD=1;
-			//	tempcdrstat.B_causeTDRadioNetwork=0;
-			//	tempcdrstat.B_causeTD46=0;
-			//	tempcdrstat.B_causeTD176=0;
-			//	tempcdrstat.B_causeTD192=0;
-			//	tempcdrstat.B_causeTD209=0;
-			//	tempcdrstat.B_causeTD239=0;
-			//	tempcdrstat.B_causeTDMisc=0;
-			//	tempcdrstat.B_causeTDNAS=0;
-			//	tempcdrstat.B_causeTDProtocol=0;
-			//	tempcdrstat.B_causeTDTransport=0;
-			//}
-			//else{
-			//	tempcdrstat.B_causeTDNonStandard=0;
-			//	tempcdrstat.B_causeTD=0;
-			//	tempcdrstat.B_causeTDRadioNetwork=0;
-			//	tempcdrstat.B_causeTD46=0;
-			//	tempcdrstat.B_causeTD176=0;
-			//	tempcdrstat.B_causeTD192=0;
-			//	tempcdrstat.B_causeTD209=0;
-			//	tempcdrstat.B_causeTD239=0;
-			//	tempcdrstat.B_causeTDMisc=0;
-			//	tempcdrstat.B_causeTDNAS=0;
-			//	tempcdrstat.B_causeTDProtocol=0;
-			//	tempcdrstat.B_causeTDTransport=0;
-			//}
 			int temp_hash=(int)pow((double)10,cfg.HASH_NUM_CELLID)*atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str())+cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_sac%((int)pow((double)10,cfg.HASH_NUM_CELLID));
 			imeicdrfile[fn][temp_hash].push_back(tempcdrstat);
 		}
@@ -1568,15 +839,26 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.A_DX_Cause_TD.clear();
 			tempcdrstat.B_DX_Cause_GSM.clear();
 			tempcdrstat.B_DX_Cause_TD.clear();
-			tempcdrstat.A_IMEI_IMSI_GSM.clear();
-			tempcdrstat.A_IMEI_IMSI_TD.clear();
-			tempcdrstat.B_IMEI_IMSI_GSM.clear();
-			tempcdrstat.B_IMEI_IMSI_TD.clear();
-			tempcdrstat.A_IMEI_GSM=0;
-			tempcdrstat.A_IMEI_TD=0;
-			tempcdrstat.B_IMEI_GSM=0;
-			tempcdrstat.B_IMEI_TD=0;
-
+			tempcdrstat.A_BSSMAP_drop=0;
+			tempcdrstat.A_RANAP_drop=0;
+			tempcdrstat.B_BSSMAP_drop=0;
+			tempcdrstat.B_RANAP_drop=0;
+			tempcdrstat.A_DX_GSM_block=0;
+			tempcdrstat.A_DX_TD_block=0;
+			tempcdrstat.B_DX_GSM_block=0;
+			tempcdrstat.B_DX_TD_block=0;
+			tempcdrstat.A_call_first_cell_connected=0;
+			tempcdrstat.A_call_first_cell_connected_GSM=0;
+			tempcdrstat.A_call_first_cell_connected_TD=0;
+			tempcdrstat.B_call_first_cell_connected=0;
+			tempcdrstat.B_call_first_cell_connected_GSM=0;
+			tempcdrstat.B_call_first_cell_connected_TD=0;
+			tempcdrstat.A_call_last_cell_connected=0;
+			tempcdrstat.A_call_last_cell_connected_GSM=0;
+			tempcdrstat.A_call_last_cell_connected_TD=0;
+			tempcdrstat.B_call_last_cell_connected=0;
+			tempcdrstat.B_call_last_cell_connected_GSM=0;
+			tempcdrstat.B_call_last_cell_connected_TD=0;
 			
 			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause!=DEFAULT_CAUSE_VALUE){
 				CAUSE_TYPE tempDXcause;
@@ -1584,14 +866,9 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 				tempDXcause.cause_num=1;
 				tempcdrstat.B_DX_Cause_GSM.push_back(tempDXcause);
 			}
-			if(cfg.bComputeDistinctIMEI==true){
-				tempcdrstat.B_IMEI_IMSI_GSM.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
-				int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-				IMEI_IMSI tempim;
-				tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI;
-				tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMSI;
-				tempcdrstat.B_IMEI_IMSI_GSM[temp_hash_imei].push_back(tempim);
-				tempcdrstat.B_IMEI_GSM=1;
+			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time!=0){
+				tempcdrstat.B_call_first_cell_connected=1;
+				tempcdrstat.B_call_first_cell_connected_GSM=1;
 			}
 
 			if(difftime(cdr[rp[cdrcount].fn][rp[cdrcount].rn].charging_end_time,cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time)<cfg.SHORTCALL_THRESHOLD_1){
@@ -1644,29 +921,36 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 			tempcdrstat.A_DX_Cause_TD.clear();
 			tempcdrstat.B_DX_Cause_GSM.clear();
 			tempcdrstat.B_DX_Cause_TD.clear();
-			tempcdrstat.A_IMEI_IMSI_GSM.clear();
-			tempcdrstat.A_IMEI_IMSI_TD.clear();
-			tempcdrstat.B_IMEI_IMSI_GSM.clear();
-			tempcdrstat.B_IMEI_IMSI_TD.clear();
-			tempcdrstat.A_IMEI_GSM=0;
-			tempcdrstat.A_IMEI_TD=0;
-			tempcdrstat.B_IMEI_GSM=0;
-			tempcdrstat.B_IMEI_TD=0;
-			
+			tempcdrstat.A_BSSMAP_drop=0;
+			tempcdrstat.A_RANAP_drop=0;
+			tempcdrstat.B_BSSMAP_drop=0;
+			tempcdrstat.B_RANAP_drop=0;
+			tempcdrstat.A_DX_GSM_block=0;
+			tempcdrstat.A_DX_TD_block=0;
+			tempcdrstat.B_DX_GSM_block=0;
+			tempcdrstat.B_DX_TD_block=0;
+			tempcdrstat.A_call_first_cell_connected=0;
+			tempcdrstat.A_call_first_cell_connected_GSM=0;
+			tempcdrstat.A_call_first_cell_connected_TD=0;
+			tempcdrstat.B_call_first_cell_connected=0;
+			tempcdrstat.B_call_first_cell_connected_GSM=0;
+			tempcdrstat.B_call_first_cell_connected_TD=0;
+			tempcdrstat.A_call_last_cell_connected=0;
+			tempcdrstat.A_call_last_cell_connected_GSM=0;
+			tempcdrstat.A_call_last_cell_connected_TD=0;
+			tempcdrstat.B_call_last_cell_connected=0;
+			tempcdrstat.B_call_last_cell_connected_GSM=0;
+			tempcdrstat.B_call_last_cell_connected_TD=0;
+
 			CAUSE_TYPE tempDXcause;
 			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause!=DEFAULT_CAUSE_VALUE){
 				tempDXcause.cause_id=cdr[rp[cdrcount].fn][rp[cdrcount].rn].DX_cause;
 				tempDXcause.cause_num=1;
 				tempcdrstat.B_DX_Cause_TD.push_back(tempDXcause);
 			}
-			if(cfg.bComputeDistinctIMEI==true){
-				tempcdrstat.B_IMEI_IMSI_TD.resize((int)pow((double)10,cfg.HASH_NUM_IMEI));
-				int temp_hash_imei=atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str());
-				IMEI_IMSI tempim;
-				tempim.IMEI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMEI;
-				tempim.IMSI=cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_IMSI;
-				tempcdrstat.B_IMEI_IMSI_TD[temp_hash_imei].push_back(tempim);
-				tempcdrstat.B_IMEI_TD=1;
+			if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time!=0){
+				tempcdrstat.B_call_first_cell_connected=1;
+				tempcdrstat.B_call_first_cell_connected_TD=1;
 			}
 
 			if(difftime(cdr[rp[cdrcount].fn][rp[cdrcount].rn].charging_end_time,cdr[rp[cdrcount].fn][rp[cdrcount].rn].B_answered_time)<cfg.SHORTCALL_THRESHOLD_1){
@@ -2179,4 +1463,22 @@ bool ComputeIMEIStatistic(int fn,int startnum,int endnum){
 		}
 	}
 	return true;
+}
+
+bool ComputeDistinctIMEI(int fn,int startnum,int endnum){
+	time_t start,end;
+	start=clock();
+	for(int cdrcount=startnum;cdrcount<=endnum;cdrcount++){
+		bool isExistA=false;
+		bool isExistB=false;
+		if(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.size()>=MIN_IMEI_LENGTH){
+			int temp_hash=(int)pow((double)10,cfg.HASH_NUM_CELLID)*atoi(cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI.substr(cfg.START_HASH_INDEX_IMEI,cfg.HASH_NUM_IMEI).c_str())+cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_cell%((int)pow((double)10,cfg.HASH_NUM_CELLID));
+
+			for(int cr=0;cr<imeidistinct[fn][temp_hash].size();cr++){
+				if(imeicdrfile[fn][temp_hash][cr].timeSection==cdr[rp[cdrcount].fn][rp[cdrcount].rn].timeSection&&imeicdrfile[fn][temp_hash][cr].IMEI==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_IMEI&&imeicdrfile[fn][temp_hash][cr].cellid==cdr[rp[cdrcount].fn][rp[cdrcount].rn].A_cell&&imeicdrfile[fn][temp_hash][cr].network=="GSM"){
+					isExistA=true;
+				}
+			}
+		}
+	}
 }

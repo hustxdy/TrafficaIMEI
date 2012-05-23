@@ -86,10 +86,18 @@ struct IMEI_CDR_Statistic{
 	string celltype;//小区类型
 	int timeSection;//时段号
 	time_t timeSectionStartTime;//某一时段的起始时间
+	int A_BSSMAP_drop;//有问题的结束原因数
+	int A_RANAP_drop;//有问题的结束原因数
+	int B_BSSMAP_drop;//有问题的结束原因数
+	int B_RANAP_drop;//有问题的结束原因数
 	vector<CAUSE_TYPE> A_BSSMAP_Cause;//主叫在GSM结束原因的分类统计
 	vector<CAUSE_TYPE> A_RANAP_Cause;//主叫在TD结束时原因的分类统计
 	vector<CAUSE_TYPE> B_BSSMAP_Cause;//被叫在GSM结束时原因的分类统计
 	vector<CAUSE_TYPE> B_RANAP_Cause;//被叫在TD结束时原因的分类统计
+	int A_DX_GSM_block;//有问题的起呼数
+	int A_DX_TD_block;//有问题的起呼数
+	int B_DX_GSM_block;//有问题的起呼数
+	int B_DX_TD_block;//有问题的起呼数
 	vector<CAUSE_TYPE> A_DX_Cause_GSM;//GSM起呼时DX_Cause的分类统计
 	vector<CAUSE_TYPE> A_DX_Cause_TD;//TD起呼时DX_Cause的分类统计
 	vector<CAUSE_TYPE> B_DX_Cause_GSM;//GSM结束时DX_Cause的分类统计
@@ -98,14 +106,14 @@ struct IMEI_CDR_Statistic{
 	//int A_causeTD;//作为主叫时RANAP_cause值不为0的次数
 	//int B_causeGSM;//作为被叫时BSSMAP_cause值为0,1,20,60其中某一个的次数
 	//int B_causeTD;//作为被叫时RANAP_cause值不为0的次数
-	vector<vector<IMEI_IMSI>> A_IMEI_IMSI_GSM;//IMEI，IMSI对
-	vector<vector<IMEI_IMSI>> A_IMEI_IMSI_TD;//IMEI，IMSI对
-	vector<vector<IMEI_IMSI>> B_IMEI_IMSI_GSM;//IMEI，IMSI对
-	vector<vector<IMEI_IMSI>> B_IMEI_IMSI_TD;//IMEI，IMSI对
-	int A_IMEI_TD;//distinct的IMEI数
-	int A_IMEI_GSM;//distinct的IMEI数
-	int B_IMEI_GSM;//distinct的IMEI数
-	int B_IMEI_TD;//distinct的IMEI数
+	//vector<vector<IMEI_IMSI>> A_IMEI_IMSI_GSM;//IMEI，IMSI对
+	//vector<vector<IMEI_IMSI>> A_IMEI_IMSI_TD;//IMEI，IMSI对
+	//vector<vector<IMEI_IMSI>> B_IMEI_IMSI_GSM;//IMEI，IMSI对
+	//vector<vector<IMEI_IMSI>> B_IMEI_IMSI_TD;//IMEI，IMSI对
+	//int A_IMEI_TD;//distinct的IMEI数
+	//int A_IMEI_GSM;//distinct的IMEI数
+	//int B_IMEI_GSM;//distinct的IMEI数
+	//int B_IMEI_TD;//distinct的IMEI数
 	//int A_cause0;//作为主叫时BSSMAP_cause值为0
 	//int A_cause1;//作为主叫时BSSMAP_cause值为1
 	//int A_cause20;//作为主叫时BSSMAP_cause值为20
@@ -143,12 +151,45 @@ struct IMEI_CDR_Statistic{
 	int A_call_attempt;//call的次数
 	int A_call_attempt_TD;//TD的call次数
 	int A_call_attempt_GSM;//GSM的call次数
+	int A_call_first_cell_connected;//起呼小区call接通的次数
+	int A_call_first_cell_connected_TD;//起呼小区TD的call接通次数 
+	int A_call_first_cell_connected_GSM;//起呼小区GSM的call接通次数
+	int A_call_last_cell_connected;//结束小区call接通的次数
+	int A_call_last_cell_connected_TD;//结束小区TD的call接通次数 
+	int A_call_last_cell_connected_GSM;//结束小区GSM的call接通次数
 	int B_shortcall_1;//作为被叫时通话时间<SHORTCALL_THRESHOLD_1
 	int B_shortcall_2;//作为被叫时通话时间<SHORTCALL_THRESHOLD_2
 	int B_shortcall_3;//作为被叫时通话时间<SHORTCALL_THRESHOLD_3
 	int B_call_attempt;//call的次数
 	int B_call_attempt_TD;//TD的call次数
 	int B_call_attempt_GSM;//GSM的call次数
+	int B_call_first_cell_connected;//起呼小区call接通的次数
+	int B_call_first_cell_connected_TD;//起呼小区TD的call接通次数 
+	int B_call_first_cell_connected_GSM;//起呼小区GSM的call接通次数
+	int B_call_last_cell_connected;//结束小区call接通的次数
+	int B_call_last_cell_connected_TD;//结束小区TD的call接通次数 
+	int B_call_last_cell_connected_GSM;//结束小区GSM的call接通次数
+};
+//统计不重复的IMEI数
+struct IMEI_Distinct_Count{
+	string TAC;//TAC号
+	string brand;//中文品牌
+	string name;//型号
+	string type;//类型
+	string IMEI;//IMEI号
+	int cellid;//主叫小区
+	string network;//是TD还是GSM
+	string celltype;//小区类型
+	int timeSection;//时段号
+	time_t timeSectionStartTime;//某一时段的起始时间
+	vector<vector<IMEI_IMSI>> A_IMEI_IMSI_GSM;//IMEI，IMSI对
+	vector<vector<IMEI_IMSI>> A_IMEI_IMSI_TD;//IMEI，IMSI对
+	vector<vector<IMEI_IMSI>> B_IMEI_IMSI_GSM;//IMEI，IMSI对
+	vector<vector<IMEI_IMSI>> B_IMEI_IMSI_TD;//IMEI，IMSI对
+	int A_IMEI_TD;//distinct的IMEI数
+	int A_IMEI_GSM;//distinct的IMEI数
+	int B_IMEI_GSM;//distinct的IMEI数
+	int B_IMEI_TD;//distinct的IMEI数
 };
 //程序参数
 struct config{
@@ -156,6 +197,7 @@ struct config{
 	bool bIMEIOutput;//是否输出IMEI级的统计文件
 	bool bComputeDistinctIMEI;//是否统计不重复的IMEI数
 	string workmode;//工作模式
+	string combinemode;//combine的工作方式
 	string toCombineConfigFile;//Combine模式下的配置文件位置
 	int FileBatchNum;//每次处理的文件数，s主要是内存不足造成速度慢，所以分批次倒入CDR
 	int SHORTCALL_THRESHOLD_1;//短呼门限1段，即xx<SHORTCALL_THRESHOLD_1
@@ -174,25 +216,38 @@ struct config{
 	string TACFILE;//tac类型的文件
 	vector<string> itemlist;//字段位置列表
 	vector<string> filelist;//要处理的CDR文件列表
+	//vector<int> filecurpos;//当前读取到的位置
+	vector<string> tacstatfilelist;//tac输出的文件名
+	//vector<int> tacstatfilecurpos;//当前读取到的位置
 };
 //通用函数定义
 time_t FormatTime(const char * szTime);//从字符串转换为时间
 
 bool WorkModeSelection(string mode);//工作模式选择
 bool WorkLoadDistribution(vector<string> fl,string workdir);//分配工作量
-bool CombineProcess();//最后的对tacstat按照timesection和cell进行合并的进程
+bool MatchProcess();//tacstat和输入的taclist和celltypelist匹配
+bool CombineProcess(std::string mode);//最后的对tacstat按照timesection和cell进行合并的进程
 //==================文件读取=====
+//在运行ReadCDRFile函数中，判决CDR是否有效，用于屏蔽和减少部分CDR数量
+bool isValidCDR(CDR cdr);
 bool ReadConfigFile(std::string configfile);//读取配置文件
 bool ReadToCombineFileList(std::string tocombinefile);//读取combine文件列表
 bool ReadCDRFile(int fn,string cdrfile);//读取文件列表中的CDR文件
 bool ReadTACFile(string tacfile);//读取TAC对应的品牌，型号和类型文件
-
 //读取cell类型的文件
 bool ReadCellTypeFile(string celltypefile);
-//在运行ReadCDRFile函数中，判决CDR是否有效，用于屏蔽和减少部分CDR数量
-bool isValidCDR(CDR cdr);
+//读取tacstat存储的文件
+bool ReadTACSTATFile(string tacstatfile);
+//==================文件写入=====
+//输出tacstat
+bool WriteTACFile(std::string temp_result_path_name);
+//输出tacstat_timesection
+bool WriteTACFile_TimeSection(std::string temp_result_path_name);
+//输出tacstat_cell
+bool WriteTACFile_TimeSectionCell(std::string temp_result_path_name);
 //==================IMEI相关=========================
 bool ComputeIMEIStatistic(int fn,int startnum,int endnum);//生成imeicdrfile
+bool ComputeDistinctIMEI(int fn,int startnum,int endnum);//生成imeidistinct
 //==================TAC相关=======================
 //从计算好的imeicdrfile中根据TAC合并生成taccdrfile
 bool ComputeTACStatistic(int fn);
@@ -204,18 +259,16 @@ bool MatchTACList();
 bool MatchCellTypeList();
 ////将不同批次产生的tacstat文件合并成一个tacstat
 bool CombineMultiTACStat(vector<string> tacstatfilelist);
-//读取tacstat存储的文件
-bool ReadTACSTATFile(string tacstatfile);
-//输出tacstat
-bool WriteTACFile(std::string temp_result_path_name);
+
 //将计算好的tacstat中不同的TimeSection合并生成tacstat_timesection
 bool CombineTAC_TimeSection();
 //将tacstat_timesection中不同的cell合并生成tacstat_timesectioncell
 bool CombineTAC_TimeSectionCell();
-//输出tacstat_timesection
-bool WriteTACFile_TimeSection(std::string temp_result_path_name);
-//输出tacstat_cell
-bool WriteTACFile_TimeSectionCell(std::string temp_result_path_name);
+//==================功能函数=======================
+bool IsDropCauseGSM(int causeid);
+bool IsDropCauseTD(int causeid);
+bool IsDXblockGSM(int causeid);
+bool IsDXblockTD(int causeid);
 //用于读取第一列名
 bool ReadItemList(string sl,vector<string>& readitem);
 //全局变量
@@ -224,8 +277,8 @@ extern vector<recordp> rp;//rp指针
 extern config cfg;//程序参数集
 //基础的全局变量
 extern vector<vector<vector<IMEI_CDR_Statistic>>> imeicdrfile;//按文件统计imei的cdr
+extern vector<vector<vector<IMEI_Distinct_Count>>> imeidistinct;//按文件统计不重复imei
 extern vector<vector<CDR>> cdr;//文件读取CDR分文件存储
-extern vector<string> tacstatfilelist;//tac输出的文件名
 extern vector<TAC_NAME> taclist;//TAC对应的品牌，型号和类型
 extern vector<CELL_TYPE> celltypelist;//CELL对应的类型
 //inline函数

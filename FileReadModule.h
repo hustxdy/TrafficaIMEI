@@ -14,5 +14,5 @@
 
 //全局变量
 extern config cfg;//程序运行参数集
-
+extern vector<vector<IMEI_CDR_Statistic>> temptacstat;//临时导入的tacstat
 #endif

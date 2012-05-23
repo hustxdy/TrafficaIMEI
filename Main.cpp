@@ -7,7 +7,7 @@ using namespace std;
 //全局变量
 config cfg;//程序运行参数集
 
-vector<string> tacstatfilelist;//tac输出的文件名
+//vector<string> tacstatfilelist;//tac输出的文件名
 
 vector<TAC_NAME> taclist;//TAC对应的品牌，型号和类型
 vector<CELL_TYPE> celltypelist;//CELL对应的类型
@@ -15,10 +15,11 @@ vector<CELL_TYPE> celltypelist;//CELL对应的类型
 vector<vector<CDR>> cdr;//文件读取CDR分文件存储
 vector<recordp> rp;//rp指针，为了使线程的处理cdr数目相同
 vector<vector<vector<IMEI_CDR_Statistic>>> imeicdrfile;//按线程平均分段统计imei的cdr
+vector<vector<vector<IMEI_Distinct_Count>>> imeidistinct;//按线程平均分段统计不重复imei
 vector<vector<vector<IMEI_CDR_Statistic>>> taccdrfile;//将计算好的imeicdrfile中在各自的线程里进行tac合并
-//3vector<vector<IMEI_CDR_Statistic>> imeistat;//将计算好的imeicdrfile中不同的线程fn合并生成imeistat
-vector<vector<IMEI_CDR_Statistic>> tacstat;//将计算好的taccdrfile中不同的线程fn合并生成tacstat
+//vector<vector<IMEI_CDR_Statistic>> imeistat;//将计算好的imeicdrfile中不同的线程fn合并生成imeistat
 //vector<vector<IMEI_CDR_Statistic>> imeistat_cell;//将imei统计按照cellid合并
+vector<vector<IMEI_CDR_Statistic>> tacstat;//将计算好的taccdrfile中不同的线程fn合并生成tacstat
 vector<vector<IMEI_CDR_Statistic>> tacstat_timesectioncell;//将tacstat_timesection中不同的cell合并生成tacstat_timesectioncell
 vector<vector<IMEI_CDR_Statistic>> tacstat_timesection;//将计算好的tacstat中不同的TimeSection合并生成tacstat_timesection
 vector<vector<IMEI_CDR_Statistic>> temptacstat;//临时导入的tacstat
@@ -79,7 +80,8 @@ bool WorkModeSelection(string mode){
 	time_t start,end;
 	start=clock();
 	if(mode=="MatchCellType"){
-		
+		//ReadToCombineFileList(cfg.toCombineConfigFile);
+
 		return true;
 	}
 	else if(mode=="MatchTACList"){
@@ -90,6 +92,7 @@ bool WorkModeSelection(string mode){
 		if(!WorkLoadDistribution(cfg.filelist,cfg.CDRDirectory)){
 			cout<<"IMEI and TAC statistic computing is not complete due to error"<<endl;
 		}
+		
 		/*CombineMultiTACStat(tacstatfilelist);
 
 		CombineProcess();*/
@@ -213,29 +216,15 @@ bool WorkModeSelection(string mode){
 		return true;
 	}
 	else if(mode=="CombineTACStatistic"){
-		/*tacstatfilelist.clear();
-		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_0.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_1.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_2.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_3.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_4.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_5.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_6.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_7.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_8.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_9.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_10.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_11.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_12.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_13.csv");
-		tacstatfilelist.push_back("D:\\xudayong\\ToCombineTACstat_14.csv");*/
 
 		ReadToCombineFileList(cfg.toCombineConfigFile);
 
-		CombineMultiTACStat(tacstatfilelist);
+		CombineMultiTACStat(cfg.tacstatfilelist);
 
-		CombineProcess();
+		if(cfg.combinemode.find("Match")!=string::npos){
+			MatchProcess();
+		}
+		CombineProcess(cfg.combinemode);
 
 		end=clock();
 		cout<<"TAC Statistic File Combining complete in total "<<difftime(end,start)/1000<<"s "<<endl;
@@ -247,7 +236,7 @@ bool WorkModeSelection(string mode){
 bool WorkLoadDistribution(vector<string> fl,string workingdir){	
 	
 	//每轮的tacstat存储的文件名
-	tacstatfilelist.clear();
+	cfg.tacstatfilelist.clear();
 	//算每轮读FileBatchNum个文件进来，共需多少轮---ceil函数似乎变成了floor
 	int batchnum=(int)(ceil((double)(fl.size())/(double)(cfg.FileBatchNum)));
 	cout<<"Divide into "<<batchnum<<" Batch, Total "<<fl.size()<<" files."<<endl;
@@ -359,10 +348,11 @@ bool WorkLoadDistribution(vector<string> fl,string workingdir){
 			taccdrfile.clear();
 			vector<vector<vector<IMEI_CDR_Statistic>>>().swap(taccdrfile);
 			cout<<"TAC_CDR_FILE vector is cleared"<<endl;
-
+			//tacstat和输入的taclist和celltypelist匹配
+			MatchProcess();
 			//开始写文件
 			cout<<"Batch $"<<bn<<" Start writing file "<<result_combinetacfile_name1<<endl;
-			tacstatfilelist.push_back(result_combinetacfile_name1);
+			cfg.tacstatfilelist.push_back(result_combinetacfile_name1);
 			WriteTACFile(result_combinetacfile_name1);
 
 			//清空tacstat
@@ -376,16 +366,11 @@ bool WorkLoadDistribution(vector<string> fl,string workingdir){
 	return true;
 
 }
-
-bool CombineProcess(){
+//-----------------不同级别的合并-----------------------
+bool CombineProcess(std::string mode){
 		
-		//已经生成了tacstat，开始match tac with brand, name and type
-		cout<<"Start Matching TAC with brand, name and type "<<endl;
-		MatchTACList();
-		//已经生成tacstat,开始match cell with celltype
-		cout<<"Start Matching Cell with celltype"<<endl;
-		MatchCellTypeList();
-
+		
+	if(mode.find("Cell")!=string::npos){
 		//经过n轮后进行各轮tacstat的合并后的tacstat按照timesection和cell进行，合并后释放tacstat
 		if(CombineTAC_TimeSection()!=true){
 			cout<<"TAC with Same TimeSection combining is not complete due to error"<<endl;
@@ -393,10 +378,7 @@ bool CombineProcess(){
 		else{
 			cout<<"TAC with Same TimeSection combining complete!!!"<<endl;
 			
-			//清空tacstat
-			tacstat.clear();
-			vector<vector<IMEI_CDR_Statistic>>().swap(tacstat);
-			cout<<"TAC_STAT vector is cleared"<<endl;
+			
 
 			string result_filename=cfg.OutputDirectory+"\\TACstat_Cell";
 			string result_filename1=cfg.OutputDirectory+"\\TACstat_Cell.csv";
@@ -414,20 +396,20 @@ bool CombineProcess(){
 
 			cout<<"Start writing file "<<result_filename1<<endl;
 			WriteTACFile_TimeSection(result_filename1);
-		}
-		
 
+			//清空tacstat_timesection
+			tacstat_timesection.clear();
+			vector<vector<IMEI_CDR_Statistic>>().swap(tacstat_timesection);
+			cout<<"TAC_STAT_TIMESECTION vector is cleared"<<endl;
+		}
+	}
+
+	if(mode.find("TAC")!=string::npos){
 		if(CombineTAC_TimeSectionCell()!=true){
 			cout<<"TAC with Cell combining is not complete due to error"<<endl;
 		}
 		else{
 			cout<<"TAC with Cell combining complete!!!"<<endl;
-
-			//清空tacstat_timesectioncell
-			tacstat_timesection.clear();
-			vector<vector<IMEI_CDR_Statistic>>().swap(tacstat_timesection);
-			cout<<"TAC_STAT_TIMESECTION vector is cleared"<<endl;
-
 
 			string result_filename=cfg.OutputDirectory+"\\TACstat";
 			string result_filename1=cfg.OutputDirectory+"\\TACstat.csv";
@@ -451,6 +433,22 @@ bool CombineProcess(){
 			cout<<"TAC_STAT_TIMESECTION_CELL vector is cleared"<<endl;
 
 		}
+	}
+
+	//清空tacstat
+	tacstat.clear();
+	vector<vector<IMEI_CDR_Statistic>>().swap(tacstat_timesection);
+	cout<<"TAC_STAT_TIMESECTION vector is cleared"<<endl;
+	return true;
+}
+//______________________最后进行tacstat和输入的taclist和celltypelist合并__________________________
+bool MatchProcess(){
+	//已经生成了tacstat，开始match tac with brand, name and type
+	cout<<"Start Matching TAC with brand, name and type "<<endl;
+	MatchTACList();
+	//已经生成tacstat,开始match cell with celltype
+	cout<<"Start Matching Cell with celltype"<<endl;
+	MatchCellTypeList();
 	return true;
 }
 //入口函数
