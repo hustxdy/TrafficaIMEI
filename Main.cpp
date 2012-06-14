@@ -325,12 +325,12 @@ bool WorkLoadDistribution(vector<string> fl,string workingdir){
 
 		//生成tacstat本轮的输出文件名
 		string result_combinetacfile_name=cfg.OutputDirectory+"\\ToCombineTACstat";
-		string result_combinetacfile_name1=cfg.OutputDirectory+"\\ToCombineTACstat.csv";
+		string result_combinetacfile_name1=cfg.OutputDirectory+"\\ToCombineTACstat"+cfg.OutputFilePostFix+".csv";
 		int i=0;
 		char num[64];
 		while(_access(result_combinetacfile_name1.c_str(),0)==0){//如果结果文档存在，则最后的标号加1，这是为了保存以前的计算结果
 			sprintf_s(num,"%d",i);
-			string result_combinetacfile_name_new=result_combinetacfile_name+(string)"_"+(string)num+".csv";
+			string result_combinetacfile_name_new=result_combinetacfile_name+(string)"_"+(string)num+cfg.OutputFilePostFix+".csv";
 			if(_access(result_combinetacfile_name_new.c_str(),0)!=0){
 				result_combinetacfile_name1=result_combinetacfile_name_new;
 				break;
@@ -381,12 +381,12 @@ bool CombineProcess(std::string mode){
 			
 
 			string result_filename=cfg.OutputDirectory+"\\TACstat_Cell";
-			string result_filename1=cfg.OutputDirectory+"\\TACstat_Cell.csv";
+			string result_filename1=cfg.OutputDirectory+"\\TACstat_Cell"+cfg.OutputFilePostFix+".csv";
 			int i=0;
 			char num[64];
 			while(_access(result_filename1.c_str(),0)==0){//如果结果文档存在，则最后的标号加1，这是为了保存以前的计算结果
 				sprintf_s(num,"%d",i);
-				string result_filename_new=result_filename+(string)"_"+(string)num+".csv";
+				string result_filename_new=result_filename+(string)"_"+(string)num+cfg.OutputFilePostFix+".csv";
 				if(_access(result_filename_new.c_str(),0)!=0){
 					result_filename1=result_filename_new;
 					break;
@@ -412,12 +412,12 @@ bool CombineProcess(std::string mode){
 			cout<<"TAC with Cell combining complete!!!"<<endl;
 
 			string result_filename=cfg.OutputDirectory+"\\TACstat";
-			string result_filename1=cfg.OutputDirectory+"\\TACstat.csv";
+			string result_filename1=cfg.OutputDirectory+"\\TACstat"+cfg.OutputFilePostFix+".csv";
 			int i=0;
 			char num[64];
 			while(_access(result_filename1.c_str(),0)==0){//如果结果文档存在，则最后的标号加1，这是为了保存以前的计算结果
 				sprintf_s(num,"%d",i);
-				string result_filename_new=result_filename+(string)"_"+(string)num+".csv";
+				string result_filename_new=result_filename+(string)"_"+(string)num+cfg.OutputFilePostFix+".csv";
 				if(_access(result_filename_new.c_str(),0)!=0){
 					result_filename1=result_filename_new;
 					break;

@@ -78,6 +78,17 @@ bool ReadConfigFile(std::string configfile){
 			}
 			cfg.OutputDirectory=trim(str.substr(j,str.length()-j));
 		}
+		if(str.find("OutputFilePostFix=")!=string::npos){
+			int j=0;
+			while(str[j]!='='){
+				j++;
+			}
+			j++;
+			while(str[j]==' '){
+				j++;
+			}
+			cfg.OutputFilePostFix=trim(str.substr(j,str.length()-j));
+		}
 		if(str.find("TACFILE=")!=string::npos){
 			int j=0;
 			while(str[j]!='='){

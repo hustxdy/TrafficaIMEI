@@ -211,7 +211,8 @@ struct config{
 	int TIME_SECTION_UNIT;//在统计时按时段的间隔，以秒为单位，如果为0，则无时段间隔。
 	vector<string> CDR_SCREEN_B_NUMBER_INITIAL_LIST;//如果被叫号码的前缀在这个LIST（逗号分隔)中，那么不计入CDR，主要是为了除掉彩玲
 	string CDRDirectory;//要处理的CDR文件所在的文件夹
-	string OutputDirectory;//最后输出的统计文件存放的目录
+	string OutputDirectory;//最后输出的统计文件存放的目录是硕士
+	string OutputFilePostFix;//最后输出的统计文件的后缀
 	string CELLFILE;//cell类型的文件
 	string TACFILE;//tac类型的文件
 	vector<string> itemlist;//字段位置列表

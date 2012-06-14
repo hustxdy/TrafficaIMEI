@@ -139,7 +139,7 @@ bool WriteTACFile_TimeSectionCell(std::string temp_result_path_name){
 					<<tacstat_timesectioncell[hn][i].B_shortcall_1<<","<<tacstat_timesectioncell[hn][i].B_shortcall_2<<","<<tacstat_timesectioncell[hn][i].B_shortcall_3<<","\
 					<<tacstat_timesectioncell[hn][i].B_call_attempt<<","<<tacstat_timesectioncell[hn][i].B_call_attempt_GSM<<","<<tacstat_timesectioncell[hn][i].B_call_attempt_TD<<","\
 					<<tacstat_timesectioncell[hn][i].A_BSSMAP_drop<<","<<tacstat_timesectioncell[hn][i].A_RANAP_drop<<","<<tacstat_timesectioncell[hn][i].B_BSSMAP_drop<<","<<tacstat_timesectioncell[hn][i].B_RANAP_drop<<","\
-					<<tacstat_timesectioncell[hn][i].A_DX_GSM_block<<","<<tacstat_timesectioncell[hn][i].A_DX_TD_block<<","<<tacstat_timesectioncell[hn][i].B_DX_GSM_block<<","<<tacstat_timesectioncell[hn][i].B_DX_TD_block\
+					<<tacstat_timesectioncell[hn][i].A_DX_GSM_block<<","<<tacstat_timesectioncell[hn][i].A_DX_TD_block<<","<<tacstat_timesectioncell[hn][i].B_DX_GSM_block<<","<<tacstat_timesectioncell[hn][i].B_DX_TD_block<<","\
 					<<tacstat_timesectioncell[hn][i].A_call_first_cell_connected<<","<<tacstat_timesectioncell[hn][i].A_call_first_cell_connected_TD<<","<<tacstat_timesectioncell[hn][i].A_call_first_cell_connected_GSM<<","\
 					<<tacstat_timesectioncell[hn][i].A_call_last_cell_connected<<","<<tacstat_timesectioncell[hn][i].A_call_last_cell_connected_TD<<","<<tacstat_timesectioncell[hn][i].A_call_last_cell_connected_GSM<<","\
 					<<tacstat_timesectioncell[hn][i].B_call_first_cell_connected<<","<<tacstat_timesectioncell[hn][i].B_call_first_cell_connected_TD<<","<<tacstat_timesectioncell[hn][i].B_call_first_cell_connected_GSM<<","\
